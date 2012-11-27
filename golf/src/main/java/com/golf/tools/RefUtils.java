@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.golf.dao.Person;
-
 /**
  * 
  * @author Thunder.Hsu
@@ -134,29 +132,6 @@ public class RefUtils {
             System.out.println(clazz);
         }
         System.out.println();
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        Person obj = new Person();
-        try {
-            System.out.println(RefUtils.getFieldValue(obj, "personId"));
-            System.out.println(RefUtils.getFieldValue(obj, "personName"));
-            System.out.println(RefUtils.getFieldValue(obj, "age"));
-
-            RefUtils.setFieldValue(obj, "personId", "123");
-            RefUtils.setFieldValue(obj, "personName", "123");
-            RefUtils.setFieldValue(obj, "age", 123);
-
-            System.out.println(RefUtils.getFieldValue(obj, "personId"));
-            System.out.println(RefUtils.getFieldValue(obj, "personName"));
-            System.out.println(RefUtils.getFieldValue(obj, "age"));
-
-        } catch (Exception e) {
-        }
-
     }
 
 }
