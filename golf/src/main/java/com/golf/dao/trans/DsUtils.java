@@ -1,6 +1,7 @@
 package com.golf.dao.trans;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -8,13 +9,17 @@ import java.util.Map;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dom4j.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.golf.Golf;
-import com.golf.tools.XmlUtils;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 public class DsUtils {
@@ -27,40 +32,115 @@ public class DsUtils {
     static {
         try {
             ic = new InitialContext();
-            // 初始化数据源
-            InputStream dsIn = ClassLoader.getSystemResourceAsStream(Golf.DATASOURCE_FILE_NAME);
-            if (null == dsIn) {
-                dsIn = Thread.currentThread().getContextClassLoader().getResourceAsStream(Golf.DATASOURCE_FILE_NAME);
-            }
-            Document doc = XmlUtils.load(dsIn);
-            Map DataSources = (Map) XmlUtils.doc2Map(doc).get("DataSources");
-            Object obj = DataSources.get("DataSource");
-            if (obj instanceof Map) {
-                Map<String, String> ds = (Map) obj;
+            List<Map<String, String>> dss = getDsConfig();
+            for (Map<String, String> ds : dss) {
                 String jndi = ds.get("jndi");
                 if (null == jndi || jndi.isEmpty()) {
                     cache.put(ds.get("code"), initDs(ds));
                 } else {
                     cache.put(ds.get("code"), (DataSource) ic.lookup(jndi));
                 }
-            } else if (obj instanceof List) {
-                List<Map<String, String>> dss = (List<Map<String, String>>) obj;
-                for (Map<String, String> ds : dss) {
-                    String jndi = ds.get("jndi");
-                    if (null == jndi || jndi.isEmpty()) {
-                        cache.put(ds.get("code"), initDs(ds));
-                    } else {
-                        cache.put(ds.get("code"), (DataSource) ic.lookup(jndi));
-                    }
-                }
             }
-        } catch (RuntimeException e) {
-            log.error("初始化数据源错误!", e);
-            throw e;
         } catch (Exception e) {
             log.error("初始化数据源错误!", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private static List<Map<String, String>> getDsConfig() throws Exception {
+        List<Map<String, String>> dss = new ArrayList<Map<String, String>>();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docbuilder = dbf.newDocumentBuilder();// 创建解析者
+
+        // 初始化数据源
+        InputStream is = ClassLoader.getSystemResourceAsStream(Golf.DATASOURCE_FILE_NAME);
+        if (null == is) {
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Golf.DATASOURCE_FILE_NAME);
+        }
+        Document doc = docbuilder.parse(is);
+        NodeList nl = doc.getElementsByTagName("DataSource");
+        int len = nl.getLength();
+        for (int i = 0; i < len; i++) {
+            Map<String, String> map = new HashMap<String, String>();
+            dss.add(map);
+            Element ds = (Element) nl.item(i);
+            String code = getNodeValue(ds, "code");
+            if (null == code) {
+                throw new Exception("数据源配置文件DataSource.xml格式错误!code节点不能为空!");
+            }
+            map.put("code", code);
+
+            String jndi = getNodeValue(ds, "jndi");
+            if (null != jndi) {
+                map.put("jndi", jndi);
+                continue;
+            }
+
+            String driverClass = getNodeValue(ds, "driverClass");
+            if (null == driverClass) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时driverClass节点不能为空!");
+            }
+            map.put("driverClass", driverClass);
+
+            String jdbcUrl = getNodeValue(ds, "jdbcUrl");
+            if (null == jdbcUrl) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时jdbcUrl节点不能为空!");
+            }
+            map.put("jdbcUrl", jdbcUrl);
+
+            String username = getNodeValue(ds, "username");
+            if (null == username) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时username节点不能为空!");
+            }
+            map.put("username", username);
+
+            String password = getNodeValue(ds, "password");
+            if (null == password) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时password节点不能为空!");
+            }
+            map.put("password", password);
+
+            String maxConnectionAgeInSeconds = getNodeValue(ds, "maxConnectionAgeInSeconds");
+            if (null == maxConnectionAgeInSeconds) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时maxConnectionAgeInSeconds节点不能为空!");
+            }
+            map.put("maxConnectionAgeInSeconds", maxConnectionAgeInSeconds);
+
+            String partitionCount = getNodeValue(ds, "partitionCount");
+            if (null == partitionCount) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时partitionCount节点不能为空!");
+            }
+            map.put("partitionCount", partitionCount);
+
+            String minConnectionsPerPartition = getNodeValue(ds, "minConnectionsPerPartition");
+            if (null == minConnectionsPerPartition) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时minConnectionsPerPartition节点不能为空!");
+            }
+            map.put("minConnectionsPerPartition", minConnectionsPerPartition);
+
+            String maxConnectionsPerPartition = getNodeValue(ds, "maxConnectionsPerPartition");
+            if (null == maxConnectionsPerPartition) {
+                throw new Exception("数据源配置文件DataSource.xml配置错误!jndi为空时maxConnectionsPerPartition节点不能为空!");
+            }
+            map.put("maxConnectionsPerPartition", maxConnectionsPerPartition);
+        }
+
+        return dss;
+    }
+
+    private static String getNodeValue(Element el, String tagName) throws Exception {
+        NodeList jndiNodeList = el.getElementsByTagName(tagName);
+        if (null == jndiNodeList || jndiNodeList.getLength() < 1) {
+            return null;
+        }
+        if (jndiNodeList.getLength() > 1) {
+            throw new Exception("数据源配置文件DataSource.xml格式错误!节点[" + tagName + "]出现多次!");
+        }
+        Node node = jndiNodeList.item(0);
+        if (null == node || null == node.getFirstChild()) {
+            return null;
+        }
+        return node.getFirstChild().getNodeValue();
     }
 
     private static DataSource initDs(Map<String, String> map) throws RuntimeException {

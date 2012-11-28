@@ -10,11 +10,11 @@
  */
 package com.golf.dao.sql;
 
-import static org.junit.Assert.*;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.golf.dao.Student;
 
 /**
  * @author Thunder.Hsu
@@ -38,34 +38,38 @@ public class SqlUtilsTest {
 
     /**
      * Test method for {@link com.golf.dao.sql.SqlUtils#getInsertSql(java.lang.Class)}.
+     * @throws Exception 
      */
     @Test
-    public void testGetInsertSql() {
-        fail("Not yet implemented");
+    public void testGetInsertSql() throws Exception {
+        System.out.println(SqlUtils.getInsertSql(Student.class));
     }
 
     /**
      * Test method for {@link com.golf.dao.sql.SqlUtils#getSelectSql(java.lang.Class)}.
+     * @throws Exception 
      */
     @Test
-    public void testGetSelectSql() {
-        fail("Not yet implemented");
+    public void testGetSelectSql() throws Exception {
+        System.out.println(SqlUtils.getSelectSql(Student.class));
     }
 
     /**
      * Test method for {@link com.golf.dao.sql.SqlUtils#getUpdateSql(java.lang.Class)}.
+     * @throws Exception 
      */
     @Test
-    public void testGetUpdateSql() {
-        fail("Not yet implemented");
+    public void testGetUpdateSql() throws Exception {
+        System.out.println(SqlUtils.getUpdateSql(Student.class));
     }
 
     /**
      * Test method for {@link com.golf.dao.sql.SqlUtils#getDeleteSql(java.lang.Class)}.
+     * @throws Exception 
      */
     @Test
-    public void testGetDeleteSql() {
-        fail("Not yet implemented");
+    public void testGetDeleteSql() throws Exception {
+        System.out.println(SqlUtils.getDeleteSql(Student.class));
     }
 
 }

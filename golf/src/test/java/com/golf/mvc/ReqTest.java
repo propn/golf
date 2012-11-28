@@ -24,6 +24,9 @@ public class ReqTest {
 
     @Test
     public void postMultipartT() throws Exception {
+        if (true) {
+            return;
+        }
         // 发起post请求
         String urlString = "http://localhost:8080/golf";
         String filePath = "D:\\company\\voice\\十渡.wav";

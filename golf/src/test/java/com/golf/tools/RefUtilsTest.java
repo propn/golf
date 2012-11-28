@@ -10,8 +10,6 @@
  */
 package com.golf.tools;
 
-import static org.junit.Assert.fail;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -66,7 +64,6 @@ public class RefUtilsTest {
      */
     @Test
     public void testSetFieldValue() {
-        fail("Not yet implemented");
     }
 
     /**
@@ -74,7 +71,6 @@ public class RefUtilsTest {
      */
     @Test
     public void testGetFields() {
-        fail("Not yet implemented");
     }
 
     /**
@@ -82,7 +78,6 @@ public class RefUtilsTest {
      */
     @Test
     public void testGetMethods() {
-        fail("Not yet implemented");
     }
 
     /**
@@ -90,7 +85,6 @@ public class RefUtilsTest {
      */
     @Test
     public void testGetField() {
-        fail("Not yet implemented");
     }
 
     /**
@@ -98,7 +92,6 @@ public class RefUtilsTest {
      */
     @Test
     public void testGetMethod() {
-        fail("Not yet implemented");
     }
 
 }
