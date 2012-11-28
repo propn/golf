@@ -52,7 +52,7 @@ public class GolfFilter extends Golf implements Filter {
         String[] pkgs = null;
         if (null == packages) {
             pkgs = getPkgs();
-            log.debug("Packages : [{}]", StringUtils.array2Strig(pkgs, ","));
+            log.debug("Packages : [{}]", StringUtils.array2Strig(pkgs, ";"));
         } else {
             pkgs = packages.split(";");
             log.debug("Packages : " + packages);

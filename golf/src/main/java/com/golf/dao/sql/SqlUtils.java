@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.golf.dao.Student;
 import com.golf.tools.Cache;
 import com.golf.tools.RefUtils;
 import com.golf.tools.StringUtils;
