@@ -36,6 +36,9 @@ public class StringUtils {
     }
 
     public static String array2Strig(String[] array, String split) {
+        if (null == array) {
+            return null;
+        }
         StringBuffer sb = new StringBuffer();
         for (String str : array) {
             sb.append(str).append(split);

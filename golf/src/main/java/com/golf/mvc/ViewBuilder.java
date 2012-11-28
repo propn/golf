@@ -112,7 +112,7 @@ public class ViewBuilder {
             response.setContentType(MediaType.APPLICATION_XML);
             PrintWriter out = response.getWriter();
             try {
-                out.append(XmlUtils.toXml(rst));
+                out.append(JaxbUtils.toXml(rst));
             } catch (JAXBException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

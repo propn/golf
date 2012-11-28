@@ -15,9 +15,9 @@ import java.util.Set;
 import javax.xml.bind.JAXBException;
 
 import com.golf.dao.PoUtils;
+import com.golf.mvc.JaxbUtils;
 import com.golf.tools.JsonUtils;
 import com.golf.tools.RefUtils;
-import com.golf.tools.XmlUtils;
 
 /**
  * @author Thunder.Hsu
@@ -63,7 +63,7 @@ public abstract class Po implements Serializable, Cloneable {
     }
 
     public String toXml() throws JAXBException, IOException, ClassNotFoundException {
-        return XmlUtils.toXml(this);
+        return JaxbUtils.toXml(this);
     }
 
     // 数据库操作CRUD

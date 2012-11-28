@@ -103,6 +103,7 @@ public class SqlMapExe {
             rs = stmt.executeQuery(sql);
             while (rs.first()) {
                 rst = String.valueOf(rs.getObject(1));
+                break;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,7 +114,27 @@ public class SqlMapExe {
         return rst;
     }
 
-    public static Object qryOne(Connection conn, String sql, Object[] params) throws Exception {
+    public static long qryLong(Connection conn, String sql) throws SQLException {
+        long rst = 0;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = stmt.executeQuery(sql);
+            while (rs.first()) {
+                rst = rs.getLong(1);
+                break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResultSet(rs);
+            closeStatement(stmt);
+        }
+        return rst;
+    }
+
+    public static Object qryOne(Connection conn, String sql, Object[] params) throws SQLException {
         Object rst = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -139,8 +160,10 @@ public class SqlMapExe {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement(sql);
-            for (int i = 0; i < params.length; i++) {
-                setParam(stmt, i + 1, params[i]);
+            if (null != params && params.length > 0) {
+                for (int i = 0; i < params.length; i++) {
+                    setParam(stmt, i + 1, params[i]);
+                }
             }
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -155,12 +178,16 @@ public class SqlMapExe {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement(sql);
-            for (Iterator<Object[]> it = args.iterator(); it.hasNext();) {
-                Object[] params = it.next();
-                for (int i = 0; i < params.length; i++) {
-                    setParam(stmt, i + 1, params[i]);
+            if (null != args) {
+                for (Iterator<Object[]> it = args.iterator(); it.hasNext();) {
+                    Object[] params = it.next();
+                    if (null != params) {
+                        for (int i = 0; i < params.length; i++) {
+                            setParam(stmt, i + 1, params[i]);
+                        }
+                    }
+                    stmt.addBatch();
                 }
-                stmt.addBatch();
             }
             stmt.executeBatch();
         } catch (SQLException e) {
@@ -171,8 +198,8 @@ public class SqlMapExe {
         }
     }
 
-    public static String getSeqNextVal(Connection conn, String seqName) throws SQLException {
-        return qryString(conn, "select " + seqName + ".nextval from dual");
+    public static long getSeqNextVal(Connection conn, String seqName) throws SQLException {
+        return qryLong(conn, "select " + seqName + ".nextval from dual");
     }
 
     /**

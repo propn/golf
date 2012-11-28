@@ -26,7 +26,7 @@ public class XmlViewTest {
             st.set("personName", "徐雷");
             st.set("age", 18);
             // marshaller.marshal(st, System.out);
-            System.out.println(XmlUtils.toXml(st));
+            System.out.println(JaxbUtils.toXml(st));
 
             Teacher t = new Teacher();
             t.set("personId", "03023001");
@@ -34,7 +34,7 @@ public class XmlViewTest {
             t.set("age", 43);
             t.set("hight", 12);
 
-            System.out.println(XmlUtils.toXml(t));
+            System.out.println(JaxbUtils.toXml(t));
 
             System.out.println(JsonUtils.toJson(st));
         } catch (JAXBException e) {

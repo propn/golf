@@ -71,5 +71,7 @@ public class SqlUtilsTest {
     public void testGetDeleteSql() throws Exception {
         System.out.println(SqlUtils.getDeleteSql(Student.class));
     }
+    
+    
 
 }
