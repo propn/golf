@@ -30,14 +30,6 @@ public class ViewBuilderFactory {
      */
     public static Builder getBuilder(String mediaType, Object rst) throws ServletException {
 
-        if (rst instanceof Throwable) {
-            return new ErrorViewBuilder();
-        }
-
-        if (rst instanceof File) {
-            return new DownloadViewBuilder();
-        }
-
         if (rst instanceof View) {
             View v = (View) rst;
             Vkind vkind = v.getKind();
@@ -51,6 +43,14 @@ public class ViewBuilderFactory {
             default:
                 throw new ServletException("系统不支持视图 vkind:" + vkind);
             }
+        }
+
+        if (rst instanceof Throwable) {
+            return new ErrorViewBuilder();
+        }
+
+        if (rst instanceof File) {
+            return new DownloadViewBuilder();
         }
 
         // application/json
