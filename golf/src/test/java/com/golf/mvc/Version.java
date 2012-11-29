@@ -122,7 +122,7 @@ public class Version {
     String personId, @FormParam(value = "personName")
     String personName) {
         response.setHeader("userId", personId);
-        View view = new View(Vkind.forward, "/index.jsp", null);
+        View view = new View(Vkind.forward, "/index.jsp");
         return view;
     }
 
@@ -137,14 +137,14 @@ public class Version {
             System.out.println(fileInfo.getFileName());
             fileInfo.WriteTO("C:\\" + fileInfo.getFileName());
         }
-        return new View(Vkind.forward, "/index.jsp", null);
+        return new View(Vkind.forward, "/index.jsp");
     }
 
     @GET
     @Path("/toLogin")
     @Produces({ MediaType.TEXT_HTML })
     public View toLogin() throws Exception {
-        View view = new View(Vkind.forward, "/login/login.jsp", null);
+        View view = new View(Vkind.forward, "/login/login.jsp");
         return view;
     }
 }

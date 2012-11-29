@@ -11,25 +11,33 @@
 package com.golf.mvc.view;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Administrator
- *
+ * @author Thunder.Hsu
+ * 
  */
 public class RedirectViewBuilder implements Builder {
 
-    /* (non-Javadoc)
-     * @see com.golf.mvc.view.Builder#build(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.String, java.lang.Object)
-     */
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException, ServletException {
-        // TODO Auto-generated method stub
-
+        View v = (View) rst;
+        String path = v.getPath();
+        Map<String, List<Object>> model = v.getModel();
+        String ctx = request.getContextPath();
+        StringBuffer sb = new StringBuffer(ctx);
+        sb.append(path);
+        sb.append("?");
+        for (Entry<String, ?> p : model.entrySet()) {
+            sb.append(p.getKey()).append("=").append(p.getValue());
+        }
+        response.sendRedirect(sb.toString());
     }
-
 }

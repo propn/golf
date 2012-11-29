@@ -11,7 +11,7 @@
 package com.golf.mvc.view;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.servlet.RequestDispatcher;
@@ -19,6 +19,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
+
+import com.golf.tools.MultMap;
 
 /**
  * @author Administrator
@@ -36,8 +38,8 @@ public class ForwardViewBuilder implements Builder {
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException, ServletException {
         View v = (View) rst;
-        Map<String, Object> model = v.getModel();
-        for (Entry<String, Object> entry : model.entrySet()) {
+        MultMap<String,Object> model = v.getModel();
+        for (Entry<String, List<Object>> entry : model.entrySet()) {
             request.setAttribute(entry.getKey(), entry.getValue());
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher(v.getPath());
