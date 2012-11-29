@@ -37,39 +37,39 @@ public class SqlUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlUtils#getInsertSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.sql.PoSqls#getInsertSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
     public void testGetInsertSql() throws Exception {
-        System.out.println(SqlUtils.getInsertSql(Student.class));
+        System.out.println(PoSqls.getInsertSql(Student.class));
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlUtils#getSelectSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.sql.PoSqls#getSelectSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
     public void testGetSelectSql() throws Exception {
-        System.out.println(SqlUtils.getSelectSql(Student.class));
+        System.out.println(PoSqls.getSelectSql(Student.class));
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlUtils#getUpdateSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.sql.PoSqls#getUpdateSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
     public void testGetUpdateSql() throws Exception {
-        System.out.println(SqlUtils.getUpdateSql(Student.class));
+        System.out.println(PoSqls.getUpdateSql(Student.class));
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlUtils#getDeleteSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.sql.PoSqls#getDeleteSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
     public void testGetDeleteSql() throws Exception {
-        System.out.println(SqlUtils.getDeleteSql(Student.class));
+        System.out.println(PoSqls.getDeleteSql(Student.class));
     }
     
     

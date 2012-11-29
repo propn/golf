@@ -23,7 +23,7 @@ import com.golf.tools.StringUtils;
 
 /**
  * <pre>
- * 功能描述：Sql工具
+ * 功能描述：Sql语句执行工具
  * 1.
  * 2.
  * </pre>
@@ -33,6 +33,68 @@ import com.golf.tools.StringUtils;
  * @Version : 1.0
  */
 public class SqlMapExe {
+
+    public static long qryLong(Connection conn, String sql) throws SQLException {
+        long rst = 0;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = stmt.executeQuery(sql);
+            while (rs.first()) {
+                rst = rs.getLong(1);
+                break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeRst(rs);
+            closeStmt(stmt);
+        }
+        return rst;
+    }
+
+    public static String qryString(Connection conn, String sql) throws SQLException {
+        String rst = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = stmt.executeQuery(sql);
+            while (rs.first()) {
+                rst = String.valueOf(rs.getObject(1));
+                break;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeRst(rs);
+            closeStmt(stmt);
+        }
+        return rst;
+    }
+
+    public static Object qryOne(Connection conn, String sql, Object[] params) throws SQLException {
+        Object rst = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            if (null != params && params.length > 0) {
+                for (int i = 0; i < params.length; i++) {
+                    setParam(stmt, i + 1, params[i]);
+                }
+            }
+            rs = stmt.executeQuery(sql);
+            rst = rs.getObject(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeRst(rs);
+            closeStmt(stmt);
+        }
+        return rst;
+    }
 
     /**
      * 查询返回一个Map
@@ -58,8 +120,8 @@ public class SqlMapExe {
         } catch (SQLException e) {
             throw e;
         } finally {
-            closeResultSet(rs);
-            closeStatement(stmt);
+            closeRst(rs);
+            closeStmt(stmt);
         }
         return rstMap;
     }
@@ -84,76 +146,14 @@ public class SqlMapExe {
                 }
             }
             rs = stmt.executeQuery();
-            rstList = resultSet2ListMap(rs);
+            rstList = rst2ListMap(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeResultSet(rs);
-            closeStatement(stmt);
+            closeRst(rs);
+            closeStmt(stmt);
         }
         return rstList;
-    }
-
-    public static String qryString(Connection conn, String sql) throws SQLException {
-        String rst = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery(sql);
-            while (rs.first()) {
-                rst = String.valueOf(rs.getObject(1));
-                break;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResultSet(rs);
-            closeStatement(stmt);
-        }
-        return rst;
-    }
-
-    public static long qryLong(Connection conn, String sql) throws SQLException {
-        long rst = 0;
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = stmt.executeQuery(sql);
-            while (rs.first()) {
-                rst = rs.getLong(1);
-                break;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResultSet(rs);
-            closeStatement(stmt);
-        }
-        return rst;
-    }
-
-    public static Object qryOne(Connection conn, String sql, Object[] params) throws SQLException {
-        Object rst = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            if (null != params && params.length > 0) {
-                for (int i = 0; i < params.length; i++) {
-                    setParam(stmt, i + 1, params[i]);
-                }
-            }
-            rs = stmt.executeQuery(sql);
-            rst = rs.getObject(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeResultSet(rs);
-            closeStatement(stmt);
-        }
-        return rst;
     }
 
     public static int excuteUpdate(Connection conn, String sql, Object[] params) throws SQLException {
@@ -170,7 +170,7 @@ public class SqlMapExe {
             e.printStackTrace();
             throw e;
         } finally {
-            closeStatement(stmt);
+            closeStmt(stmt);
         }
     }
 
@@ -194,12 +194,8 @@ public class SqlMapExe {
             e.printStackTrace();
             throw e;
         } finally {
-            closeStatement(stmt);
+            closeStmt(stmt);
         }
-    }
-
-    public static long getSeqNextVal(Connection conn, String seqName) throws SQLException {
-        return qryLong(conn, "select " + seqName + ".nextval from dual");
     }
 
     /**
@@ -371,7 +367,7 @@ public class SqlMapExe {
      * @return
      * @throws SQLException
      */
-    private static List<Map<String, Object>> resultSet2ListMap(ResultSet rs) throws SQLException {
+    private static List<Map<String, Object>> rst2ListMap(ResultSet rs) throws SQLException {
         if (rs == null) {
             return null;
         }
@@ -434,21 +430,23 @@ public class SqlMapExe {
         return rst;
     }
 
-    private static void closeResultSet(ResultSet result) throws SQLException {
-        if (result != null) {
-            result.close();
+    private static void closeRst(ResultSet rst) {
+        if (rst != null) {
+            try {
+                rst.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private static void closeStatement(Statement stmt) throws SQLException {
+    private static void closeStmt(Statement stmt) {
         if (stmt != null) {
-            stmt.close();
-        }
-    }
-
-    private static void closeConnection(Connection conn) throws SQLException {
-        if (conn != null) {
-            conn.close();
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

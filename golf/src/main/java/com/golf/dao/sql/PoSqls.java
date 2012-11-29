@@ -16,7 +16,7 @@ import com.golf.tools.StringUtils;
 /**
  * 
  */
-public class SqlUtils {
+public class PoSqls {
     private static Cache cache = new Cache();
 
     public static String getInsertSql(Class clz) throws Exception {

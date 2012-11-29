@@ -10,10 +10,10 @@ import java.util.Map;
 
 import com.golf.dao.sql.InsertSqlParser;
 import com.golf.dao.sql.Po;
+import com.golf.dao.sql.PoSqls;
 import com.golf.dao.sql.SelectSqlParser;
 import com.golf.dao.sql.SqlFilter;
 import com.golf.dao.sql.SqlMapExe;
-import com.golf.dao.sql.SqlUtils;
 import com.golf.dao.sql.UpdateSqlParser;
 import com.golf.dao.trans.ConnUtils;
 
@@ -24,7 +24,7 @@ import com.golf.dao.trans.ConnUtils;
 public class PoUtils {
 
     public static void intsert(Po po) throws Exception {
-        String sql = SqlUtils.getInsertSql(po.getClass());
+        String sql = PoSqls.getInsertSql(po.getClass());
         SqlFilter filter = new InsertSqlParser();
         Object[] param = filter.doFilter(sql, po);
         Connection conn = ConnUtils.getConn();
@@ -32,7 +32,7 @@ public class PoUtils {
     }
 
     public static <T> List<T> qryPoList(Po obj) throws Exception {
-        String sql = SqlUtils.getSelectSql(obj.getClass());
+        String sql = PoSqls.getSelectSql(obj.getClass());
         SqlFilter filter = new SelectSqlParser();
         Object[] param = filter.doFilter(sql, obj);
         Connection conn = ConnUtils.getConn();
@@ -48,7 +48,7 @@ public class PoUtils {
     }
 
     public static int update(Po po) throws Exception {
-        String sql = SqlUtils.getUpdateSql(po.getClass());
+        String sql = PoSqls.getUpdateSql(po.getClass());
         SqlFilter filter = new UpdateSqlParser();
         Object[] param = filter.doFilter(sql, po);
         Connection conn = ConnUtils.getConn();
@@ -56,7 +56,7 @@ public class PoUtils {
     }
 
     public static int delete(Po po) throws Exception {
-        String sql = SqlUtils.getDeleteSql(po.getClass());
+        String sql = PoSqls.getDeleteSql(po.getClass());
         SqlFilter filter = new UpdateSqlParser();
         Object[] param = filter.doFilter(sql, po);
         Connection conn = ConnUtils.getConn();
