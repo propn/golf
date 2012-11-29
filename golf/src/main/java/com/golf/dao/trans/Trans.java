@@ -21,12 +21,12 @@ public abstract class Trans implements Callable<Object> {
     /* 嵌套事务,同一个Connection,由上下文事务一起Commit */
     static int NEST = 2;
 
-    public static Object transNest(Trans atom) throws Exception {
-        return call(NEST, atom);
+    public static Object transNest(Trans trans) throws Exception {
+        return call(NEST, trans);
     }
 
-    public static Object transNew(Trans atom) throws Exception {
-        return call(NEW, atom);
+    public static Object transNew(Trans trans) throws Exception {
+        return call(NEW, trans);
     }
 
     /**

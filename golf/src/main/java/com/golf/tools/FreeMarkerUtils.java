@@ -1,12 +1,14 @@
 /**
  * 
  */
-package com.golf.mvc;
+package com.golf.tools;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
+
+import com.golf.mvc.GolfFilter;
 
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;

@@ -15,7 +15,7 @@ import java.util.Set;
 import javax.xml.bind.JAXBException;
 
 import com.golf.dao.PoUtils;
-import com.golf.mvc.JaxbUtils;
+import com.golf.tools.JaxbUtils;
 import com.golf.tools.JsonUtils;
 import com.golf.tools.RefUtils;
 

@@ -11,9 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.golf.ioc.BeanUtils;
-import com.golf.mvc.JaxbUtils;
 import com.golf.mvc.ResUtils;
 import com.golf.tools.ClassUtils;
+import com.golf.tools.JaxbUtils;
 
 /**
  * @author Thunder.Hsu

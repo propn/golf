@@ -9,12 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,8 +22,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.golf.dao.Person;
 import com.golf.dao.Student;
-import com.golf.mvc.View;
 import com.golf.mvc.multipart.UpFile;
+import com.golf.mvc.view.View;
+import com.golf.mvc.view.Vkind;
 
 @Path("/version")
 @Consumes({ MediaType.TEXT_PLAIN, MediaType.TEXT_HTML })
@@ -123,7 +122,7 @@ public class Version {
     String personId, @FormParam(value = "personName")
     String personName) {
         response.setHeader("userId", personId);
-        View view = new View(View.jsp, "/index.jsp", null);
+        View view = new View(Vkind.forward, "/index.jsp", null);
         return view;
     }
 
@@ -138,14 +137,14 @@ public class Version {
             System.out.println(fileInfo.getFileName());
             fileInfo.WriteTO("C:\\" + fileInfo.getFileName());
         }
-        return new View(View.jsp, "/index.jsp", null);
+        return new View(Vkind.forward, "/index.jsp", null);
     }
 
     @GET
     @Path("/toLogin")
     @Produces({ MediaType.TEXT_HTML })
     public View toLogin() throws Exception {
-        View view = new View(View.jsp, "/login/login.jsp", null);
+        View view = new View(Vkind.forward, "/login/login.jsp", null);
         return view;
     }
 }

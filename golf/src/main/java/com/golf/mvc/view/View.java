@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golf.mvc;
+package com.golf.mvc.view;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,17 +12,12 @@ import java.util.Map;
  */
 public class View {
 
-    public static final String redirect = "redirect";
-    public static final String jsp = "jsp";
-    public static final String html = "html";
-    public static final String freeMarker = "FreeMarker";
-
-    private String kind;
+    private Vkind vkind;
     private String path;
     private Map<String, Object> model = new HashMap<String, Object>();
 
-    public View(String kind, String path, Map<String, Object> model) {
-        this.kind = kind;
+    public View(Vkind vkind, String path, Map<String, Object> model) {
+        this.vkind = vkind;
         this.path = path;
         if (null != model) {
             this.model = model;
@@ -33,8 +28,8 @@ public class View {
         return path;
     }
 
-    public String getKind() {
-        return kind;
+    public Vkind getKind() {
+        return vkind;
     }
 
     public Map<String, Object> getModel() {
