@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
-import com.golf.mvc.view.ViewBuilderFactory;
+import com.golf.mvc.view.BuilderFactory;
 import com.golf.tools.StringUtils;
 
 /**
@@ -122,7 +122,7 @@ public class GolfFilter extends Golf implements Filter {
             // FutureTask
             throw new RuntimeException(e);
         }
-        ViewBuilderFactory.getBuilder(mediaType, rst).build(request, response, mediaType, rst);
+        BuilderFactory.getBuilder(mediaType, rst).build(request, response, mediaType, rst);
     }
 
     private boolean validate(final HttpServletRequest request, HttpServletResponse response, Resource res)

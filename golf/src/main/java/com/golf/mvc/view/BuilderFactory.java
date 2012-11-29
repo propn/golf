@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
  * @author Thunder.Hsu
  * 
  */
-public class ViewBuilderFactory {
+public class BuilderFactory {
 
     /**
      * 
