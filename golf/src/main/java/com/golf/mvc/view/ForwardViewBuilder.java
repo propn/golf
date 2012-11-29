@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import com.golf.Golf;
 import com.golf.tools.MultMap;
 
 /**
@@ -27,22 +28,16 @@ import com.golf.tools.MultMap;
  * 
  */
 public class ForwardViewBuilder implements Builder {
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.golf.mvc.view.Builder#build(javax.servlet.http.HttpServletRequest,
-     * javax.servlet.http.HttpServletResponse, java.lang.String, java.lang.Object)
-     */
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException, ServletException {
         View v = (View) rst;
-        MultMap<String,Object> model = v.getModel();
+        MultMap<String, Object> model = v.getModel();
         for (Entry<String, List<Object>> entry : model.entrySet()) {
             request.setAttribute(entry.getKey(), entry.getValue());
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher(v.getPath());
+        response.setCharacterEncoding(Golf.charsetName);
+        RequestDispatcher dispatcher = request.getRequestDispatcher(request.getContextPath() + v.getPath());
         response.setContentType(MediaType.TEXT_HTML);
         // dispatcher.include(request, response);
         dispatcher.forward(request, response);

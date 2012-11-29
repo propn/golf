@@ -19,6 +19,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.golf.Golf;
+
 /**
  * @author Thunder.Hsu
  * 
@@ -38,6 +40,7 @@ public class RedirectViewBuilder implements Builder {
         for (Entry<String, ?> p : model.entrySet()) {
             sb.append(p.getKey()).append("=").append(p.getValue());
         }
+        response.setCharacterEncoding(Golf.charsetName);
         response.sendRedirect(sb.toString());
     }
 }

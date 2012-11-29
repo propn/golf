@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
+import com.golf.Golf;
 import com.golf.mvc.GolfFilter;
 
 import freemarker.template.Configuration;
@@ -34,8 +35,8 @@ public class FreeMarkerUtils {
         cfg.setTemplateUpdateDelay(0);
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
         cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setOutputEncoding("UTF-8");
+        cfg.setDefaultEncoding(Golf.charsetName);
+        cfg.setOutputEncoding(Golf.charsetName);
         cfg.setLocale(Locale.CHINA);
     }
 

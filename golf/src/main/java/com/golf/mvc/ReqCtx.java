@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.golf.Golf;
 import com.golf.mvc.multipart.FilePart;
 import com.golf.mvc.multipart.MultipartParser;
 import com.golf.mvc.multipart.ParamPart;
@@ -37,7 +38,7 @@ import com.golf.tools.StringUtils;
  * 
  */
 public class ReqCtx {
-    static final String charsetName = "UTF-8";
+
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
 
     private static InheritableThreadLocal<Map<String, Object>> ctx = new InheritableThreadLocal<Map<String, Object>>();
@@ -176,7 +177,7 @@ public class ReqCtx {
             String param = params[i];
             if (param.startsWith("{") && param.endsWith("}")) {
                 param = param.substring(1, param.length() - 1);
-                String v = URLDecoder.decode(paths[i], charsetName);
+                String v = URLDecoder.decode(paths[i], Golf.charsetName);
                 pathParam.put(param, v);
                 log.debug("PathParam [" + param + "=" + v + "]");
             }
@@ -191,8 +192,8 @@ public class ReqCtx {
         String[] parms = queryString.split("&");
         for (String parm : parms) {
             String[] pv = parm.split("=");
-            String p = URLDecoder.decode(pv[0], charsetName);
-            String v = URLDecoder.decode(pv[1], charsetName);
+            String p = URLDecoder.decode(pv[0], Golf.charsetName);
+            String v = URLDecoder.decode(pv[1], Golf.charsetName);
             mMap.put(p, v);
             log.debug("QueryParam [" + p + "=" + v + "]");
         }
@@ -204,19 +205,19 @@ public class ReqCtx {
             ByteArrayInputStream bin = (ByteArrayInputStream) getContext("InputStream");
             byte[] b = new byte[bin.available()];
             bin.read(b, 0, bin.available());
-            String entity = new String(b, charsetName);
+            String entity = new String(b, Golf.charsetName);
             final StringTokenizer tokenizer = new StringTokenizer(entity, "&");
             String token;
             while (tokenizer.hasMoreTokens()) {
                 token = tokenizer.nextToken();
                 int idx = token.indexOf('=');
                 if (idx < 0) {
-                    String param = URLDecoder.decode(token, charsetName);
-                    mMap.put(URLDecoder.decode(token, charsetName), null);
+                    String param = URLDecoder.decode(token, Golf.charsetName);
+                    mMap.put(URLDecoder.decode(token, Golf.charsetName), null);
                     log.debug("FormParam [" + param + "=" + null + "]");
                 } else if (idx > 0) {
-                    String param = URLDecoder.decode(token.substring(0, idx), charsetName);
-                    String v = URLDecoder.decode(token.substring(idx + 1), charsetName);
+                    String param = URLDecoder.decode(token.substring(0, idx), Golf.charsetName);
+                    String v = URLDecoder.decode(token.substring(idx + 1), Golf.charsetName);
                     mMap.put(param, v);
                     log.debug("FormParam [" + param + "=" + v + "]");
                 }
@@ -256,7 +257,7 @@ public class ReqCtx {
         if (null != request.getContentType() && request.getContentType().contains(MediaType.MULTIPART_FORM_DATA)) {
             if (request.getContentLength() > 10487600) {
                 // 413 Request Entity Too Large
-                response.setCharacterEncoding("UTF-8");
+                response.setCharacterEncoding(Golf.charsetName);
                 response.setStatus(413);
                 PrintWriter out = response.getWriter();
                 out.print("Request Entity Too Large,Max Upload 10M!");
@@ -266,7 +267,7 @@ public class ReqCtx {
             }
 
             MultipartParser mp = new MultipartParser(request, 10487600);// 1024 * 1024 * 10
-            mp.setEncoding("utf-8");
+            mp.setEncoding(Golf.charsetName);
             Part part;
             List<UpFile> fileParts = new ArrayList<UpFile>();
             while ((part = mp.readNextPart()) != null) {

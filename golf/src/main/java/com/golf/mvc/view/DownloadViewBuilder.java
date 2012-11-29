@@ -19,6 +19,8 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.golf.Golf;
+
 /**
  * @author Administrator
  * 
@@ -36,7 +38,7 @@ public class DownloadViewBuilder implements Builder {
             throws IOException {
         File file = (File) rst;
         response.setContentType("application/x-msdownload");
-        String filename = java.net.URLEncoder.encode(file.getName(), "UTF-8");
+        String filename = java.net.URLEncoder.encode(file.getName(), Golf.charsetName);
         response.setContentLength((int) file.length());
         response.setHeader("Content-Disposition", "attachment;filename=" + filename);
         FileInputStream fis = new FileInputStream(file);

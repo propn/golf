@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletInputStream;
 
+import com.golf.Golf;
+
 /**
  * 字符串工具类
  * 
@@ -24,7 +26,7 @@ import javax.servlet.ServletInputStream;
  */
 public class StringUtils {
 
-    public static final String charsetName = "UTF-8";
+    public static final String charsetName = Golf.charsetName;
     public static final int BUFFER_SIZE = 8192;
 
     public static boolean isBlank(String str) {

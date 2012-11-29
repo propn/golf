@@ -10,6 +10,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
+import com.golf.Golf;
+
 public class ReqTest {
 
     @Test
@@ -69,7 +71,7 @@ public class ReqTest {
         int read;
         StringBuffer inputb = new StringBuffer();
         InputStream is = conn.getInputStream();
-        InputStreamReader inputStreamReader = new InputStreamReader(is, "UTF-8");
+        InputStreamReader inputStreamReader = new InputStreamReader(is, Golf.charsetName);
         while ((read = inputStreamReader.read()) >= 0) {
             inputb.append((char) read);
         }

@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
+import com.golf.Golf;
 import com.golf.mvc.ResUtils;
 
 /**
@@ -44,7 +45,7 @@ import com.golf.mvc.ResUtils;
  */
 public class XmlUtils {
     private static final Logger log = LoggerFactory.getLogger(ResUtils.class);
-    private static final String ENCODING = "UTF-8";
+    private static final String ENCODING = Golf.charsetName;
 
     /**
      * 将字符串转为XML

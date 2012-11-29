@@ -21,9 +21,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class FreeMarkerViewBuilder implements Builder {
 
-    /* (non-Javadoc)
-     * @see com.golf.mvc.view.Builder#build(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.String, java.lang.Object)
-     */
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {

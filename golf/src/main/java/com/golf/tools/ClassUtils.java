@@ -15,6 +15,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
+import com.golf.Golf;
+
 public class ClassUtils {
 
     /**
@@ -89,7 +91,7 @@ public class ClassUtils {
                 URL url = dirs.nextElement();
                 String protocol = url.getProtocol();
                 if ("file".equals(protocol)) {
-                    String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
+                    String filePath = URLDecoder.decode(url.getFile(), Golf.charsetName);
                     doScanPackageClassesByFile(classes, packageName, filePath, recursive);
                 } else if ("jar".equals(protocol)) {
                     doScanPackageClassesByJar(packageName, url, recursive, classes);

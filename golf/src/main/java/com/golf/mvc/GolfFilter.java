@@ -136,11 +136,11 @@ public class GolfFilter extends Golf implements Filter {
             return false;
         }
         String encoding = request.getCharacterEncoding();
-        if (null != encoding && !encoding.equals("UTF-8")) {
+        if (null != encoding && !encoding.equals(Golf.charsetName)) {
             // 405 Method Not Allowed
             response.setStatus(400);
             response.setContentType(MediaType.TEXT_PLAIN);
-            response.setHeader("Allow", "UTF-8");
+            response.setHeader("Allow", Golf.charsetName);
             response.getWriter().append("CharacterEncoding Not Allowed!").flush();// Allow
             response.getWriter().close();
             return false;

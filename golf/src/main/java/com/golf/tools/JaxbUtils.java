@@ -36,7 +36,7 @@ import com.golf.Golf;
  */
 public class JaxbUtils {
     private static final Logger log = LoggerFactory.getLogger(JaxbUtils.class);
-    private static final String ENCODING = "UTF-8";
+    private static final String ENCODING = Golf.charsetName;
     private static JAXBContext context = null;
     private static Marshaller marshaller = null;
     private static Unmarshaller unmarshaller = null;
