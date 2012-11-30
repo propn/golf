@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 
+import com.golf.Golf;
 import com.golf.tools.JaxbUtils;
 
 /**
@@ -35,6 +36,7 @@ public class XmlViewBuilder implements Builder {
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {
+        response.setCharacterEncoding(Golf.charsetName);
         response.setContentType(MediaType.APPLICATION_XML);
         PrintWriter out = response.getWriter();
         try {

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @author Thunder.xu
  * 
  */
-public class SelectSqlParser extends SqlFilter {
+public class SelectSqlParser extends SqlParser {
 
     @Override
     public String dealOptParam(String sql, Map param) throws Exception {

@@ -22,26 +22,22 @@ import javax.servlet.http.HttpServletResponse;
 import com.golf.Golf;
 
 /**
- * @author Administrator
+ * @author Thunder.Hsu
  * 
  */
-public class DownloadViewBuilder implements Builder {
+public class FileViewBuilder implements Builder {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.golf.mvc.view.Builder#build(javax.servlet.http.HttpServletRequest,
-     * javax.servlet.http.HttpServletResponse, java.lang.String, java.lang.Object)
-     */
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {
-        File file = (File) rst;
+        response.setCharacterEncoding(Golf.charsetName);
         response.setContentType("application/x-msdownload");
+        File file = (File) rst;
         String filename = java.net.URLEncoder.encode(file.getName(), Golf.charsetName);
         response.setContentLength((int) file.length());
         response.setHeader("Content-Disposition", "attachment;filename=" + filename);
         FileInputStream fis = new FileInputStream(file);
+
         BufferedInputStream buff = new BufferedInputStream(fis);
         byte[] b = new byte[1024];
         long i = 0;
@@ -51,9 +47,9 @@ public class DownloadViewBuilder implements Builder {
             i += j;
             outs.write(b, 0, j);
         }
+        fis.close();
         outs.flush();
-        return;
-
+        outs.close();
     }
 
 }

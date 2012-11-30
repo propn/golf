@@ -32,16 +32,38 @@ public class ConvertUtils {
     }
 
     private static Object convert(Class<? extends Object> src, Object obj, Class dist) throws Exception {
+        if (obj instanceof String) {
+            return convert(dist, (String) obj);
+        }
+
         if (obj instanceof BigDecimal) {
             return convert(dist, (BigDecimal) obj);
         }
         if (obj instanceof Vector) {
             return convert(dist, (Vector) obj);
         }
-        if (obj.getClass() == Integer.class) {
+        if (obj instanceof Integer) {
             return convert(dist, (Integer) obj);
         }
         throw new Exception(obj.getClass() + " 转 " + dist + "未实现!");
+    }
+
+    // String
+    private static Object convert(Class distClass, String obj) throws Exception {
+
+        if (distClass.equals(long.class)) {
+            return Long.valueOf(obj).longValue();
+        }
+
+        if (distClass.equals(int.class)) {
+            return Integer.valueOf(obj).intValue();
+        }
+
+        if (distClass.equals(double.class)) {
+            return Double.valueOf(obj).doubleValue();
+        }
+
+        throw new Exception(obj.getClass() + " 转 " + distClass + "未实现!");
     }
 
     // Integer
@@ -61,6 +83,11 @@ public class ConvertUtils {
         if (distClass.equals(int.class)) {
             return obj.intValue();
         }
+
+        if (distClass.equals(long.class)) {
+            return obj.longValue();
+        }
+
         if (distClass == String.class) {
             return String.valueOf(obj);
         }

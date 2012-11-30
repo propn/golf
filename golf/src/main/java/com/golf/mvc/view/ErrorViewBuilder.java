@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import com.golf.Golf;
+
 /**
  * @author Administrator
  * 
@@ -33,6 +35,7 @@ public class ErrorViewBuilder implements Builder {
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {
+        response.setCharacterEncoding(Golf.charsetName);
         response.setContentType(MediaType.TEXT_PLAIN);
         Throwable e = (Throwable) rst;
         PrintWriter out = response.getWriter();

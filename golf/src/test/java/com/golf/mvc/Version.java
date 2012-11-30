@@ -135,7 +135,7 @@ public class Version {
         System.out.println(text);
         for (UpFile fileInfo : files) {
             System.out.println(fileInfo.getFileName());
-            fileInfo.WriteTO("C:\\" + fileInfo.getFileName());
+            fileInfo.writeTo("C:\\" + fileInfo.getFileName());
         }
         return new View(Vkind.forward, "/index.jsp");
     }

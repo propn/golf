@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import com.golf.Golf;
 import com.golf.tools.JsonUtils;
 
 /**
@@ -34,6 +35,7 @@ public class JsonViewBuilder implements Builder {
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {
+        response.setCharacterEncoding(Golf.charsetName);
         response.setContentType(MediaType.APPLICATION_JSON);
         PrintWriter out = response.getWriter();
         out.append(JsonUtils.toJson(rst));

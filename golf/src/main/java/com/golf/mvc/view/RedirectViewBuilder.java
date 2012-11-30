@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 
 import com.golf.Golf;
 
@@ -30,9 +31,12 @@ public class RedirectViewBuilder implements Builder {
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException, ServletException {
+        response.setCharacterEncoding(Golf.charsetName);
+        response.setContentType(MediaType.TEXT_HTML);
+
         View v = (View) rst;
         String path = v.getPath();
-        Map<String, List<Object>> model = v.getModel();
+        Map<String, Object> model = v.getModel();
         String ctx = request.getContextPath();
         StringBuffer sb = new StringBuffer(ctx);
         sb.append(path);
@@ -40,7 +44,6 @@ public class RedirectViewBuilder implements Builder {
         for (Entry<String, ?> p : model.entrySet()) {
             sb.append(p.getKey()).append("=").append(p.getValue());
         }
-        response.setCharacterEncoding(Golf.charsetName);
         response.sendRedirect(sb.toString());
     }
 }

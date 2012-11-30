@@ -1,3 +1,6 @@
+// Copyright (C) 1999-2001 by Jason Hunter <jhunter_AT_acm_DOT_org>.
+// All rights reserved.  Use of this class is limited.
+// Please see the LICENSE for more information.
 
 package com.golf.mvc.multipart;
 
@@ -10,8 +13,18 @@ import java.io.OutputStream;
 
 import javax.servlet.ServletInputStream;
 
-
-public class FilePart extends Part implements UpFile {
+/**
+ * A <code>FilePart</code> is an upload part which represents a <code>INPUT TYPE="file"</code> form parameter. Note that
+ * because file upload data arrives via a single InputStream, each FilePart's contents must be read before moving onto
+ * the next part. Don't try to store a FilePart object for later processing because by then their content will have been
+ * passed by.
+ * 
+ * @author Geoff Soutter
+ * @version 1.2, 2001/01/22, getFilePath() addition thanks to Stefan Eissing
+ * @version 1.1, 2000/11/26, writeTo() bug fix thanks to Mike Shivas
+ * @version 1.0, 2000/10/27, initial revision
+ */
+public class FilePart extends Part {
 
     /** "file system" name of the file */
     private String fileName;
@@ -67,7 +80,6 @@ public class FilePart extends Part implements UpFile {
      * 
      * @see Part#getName()
      */
-    @Override
     public String getFileName() {
         return fileName;
     }
@@ -90,7 +102,6 @@ public class FilePart extends Part implements UpFile {
      * 
      * @return content type of the file data.
      */
-    @Override
     public String getContentType() {
         return contentType;
     }
@@ -120,17 +131,11 @@ public class FilePart extends Part implements UpFile {
 
         OutputStream fileOut = null;
         try {
-            // Only do something if this part contains a file
             if (fileName != null) {
-                // Check if user supplied directory
                 File file;
                 if (fileOrDirectory.isDirectory()) {
-                    // Write it to that dir the user supplied,
-                    // with the filename it arrived with
                     file = new File(fileOrDirectory, fileName);
                 } else {
-                    // Write it to the file the user supplied,
-                    // ignoring the filename it arrived with
                     file = fileOrDirectory;
                 }
                 if (policy != null) {
@@ -189,26 +194,7 @@ public class FilePart extends Part implements UpFile {
      * 
      * @return true.
      */
-    @Override
     public boolean isFile() {
         return true;
-    }
-
-    @Override
-    public File WriteTO(String filePath) throws IOException {
-        File file = new File(filePath);
-        OutputStream fileOut = null;
-        try {
-            if (file.exists()) {
-                file.delete();
-            }
-            fileOut = new BufferedOutputStream(new FileOutputStream(file));
-            write(fileOut);
-        } finally {
-            if (fileOut != null) {
-                fileOut.close();
-            }
-        }
-        return file;
     }
 }

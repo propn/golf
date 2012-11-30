@@ -50,7 +50,7 @@ public class BuilderFactory {
         }
 
         if (rst instanceof File) {
-            return new DownloadViewBuilder();
+            return new FileViewBuilder();
         }
 
         // application/json

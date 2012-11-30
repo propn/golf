@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.golf.dao.sql.Po;
+import com.golf.dao.po.Po;
 
 
 /**

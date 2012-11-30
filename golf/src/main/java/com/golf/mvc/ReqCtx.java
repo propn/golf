@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
 import com.golf.mvc.multipart.FilePart;
-import com.golf.mvc.multipart.MultipartParser;
+import com.golf.mvc.multipart.MultParser;
 import com.golf.mvc.multipart.ParamPart;
 import com.golf.mvc.multipart.Part;
 import com.golf.mvc.multipart.UpFile;
@@ -92,7 +92,7 @@ public class ReqCtx {
         return pathParam;
     }
 
-    public static List getPathParam(String parmName) {
+    public static List<?> getPathParam(String parmName) {
         return getPathParam().get(parmName);
     }
 
@@ -106,7 +106,7 @@ public class ReqCtx {
         return queryParam;
     }
 
-    public static List getQueryParam(String parmName) {
+    public static List<?> getQueryParam(String parmName) {
         return getQueryParam().get(parmName);
     }
 
@@ -120,7 +120,7 @@ public class ReqCtx {
         return formParam;
     }
 
-    public static List getFormParam(String parmName) {
+    public static List<?> getFormParam(String parmName) {
         return getFormParam().get(parmName);
     }
 
@@ -134,7 +134,7 @@ public class ReqCtx {
         return headerParam;
     }
 
-    public static List getHeaderParam(String parmName) {
+    public static List<?> getHeaderParam(String parmName) {
         return getHeaderParam().get(parmName);
     }
 
@@ -148,7 +148,7 @@ public class ReqCtx {
         return cookieParam;
     }
 
-    public static List getCookieParam(String parmName) {
+    public static List<?> getCookieParam(String parmName) {
         return getCookieParam().get(parmName);
     }
 
@@ -156,14 +156,20 @@ public class ReqCtx {
         Map<String, Object> context = getContext();
         context.put("HttpServletRequest", request);
         context.put("HttpServletResponse", response);
-        if (null != request.getContentType() && request.getContentType().contains(MediaType.MULTIPART_FORM_DATA)) {
+        context.put("Cookie[]", request.getCookies());
+
+        String contentType = getContentType(request);
+        if (null == contentType) {
+            return;
+        }
+        if (contentType.contains(MediaType.MULTIPART_FORM_DATA)) {
             context.put("InputStream", request.getInputStream());
         } else {
             // 非文件上传,则转换为ByteArrayInputStream
             ByteArrayInputStream bin = StringUtils.servletInputStream2ByteArrayInputStream(request.getInputStream());
             context.put("InputStream", bin);
         }
-        context.put("Cookie[]", request.getCookies());
+
     }
 
     private static void initPathParam(String servletPath, String path) throws UnsupportedEncodingException {
@@ -201,7 +207,8 @@ public class ReqCtx {
 
     private static void initFormParam(HttpServletRequest request) throws IOException {
         MultMap<String, Object> mMap = getFormParam();
-        if (null != request.getContentType() && MediaType.APPLICATION_FORM_URLENCODED.equals(request.getContentType())) {
+        String contentType = getContentType(request);
+        if (null != contentType && MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
             ByteArrayInputStream bin = (ByteArrayInputStream) getContext("InputStream");
             byte[] b = new byte[bin.available()];
             bin.read(b, 0, bin.available());
@@ -254,7 +261,15 @@ public class ReqCtx {
     }
 
     private static void initMultipart(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (null != request.getContentType() && request.getContentType().contains(MediaType.MULTIPART_FORM_DATA)) {
+        String contentType = getContentType(request);
+        if (null == contentType) {
+            return;
+        }
+        if (contentType.toLowerCase().contains(MediaType.MULTIPART_FORM_DATA)) {
+            String boundary = getBoundary(contentType);
+            if (null == boundary) {
+                return;// 错误的上传内容!
+            }
             if (request.getContentLength() > 10487600) {
                 // 413 Request Entity Too Large
                 response.setCharacterEncoding(Golf.charsetName);
@@ -266,10 +281,10 @@ public class ReqCtx {
                 throw new RuntimeException("Request Entity Too Large,Max Upload 10M!");
             }
 
-            MultipartParser mp = new MultipartParser(request, 10487600);// 1024 * 1024 * 10
-            mp.setEncoding(Golf.charsetName);
-            Part part;
             List<UpFile> fileParts = new ArrayList<UpFile>();
+
+            MultParser mp = new MultParser(request, contentType, boundary, Golf.charsetName);
+            Part part;
             while ((part = mp.readNextPart()) != null) {
                 String name = part.getName();
                 if (part.isParam()) {
@@ -278,12 +293,15 @@ public class ReqCtx {
                     getFormParam().put(name, value);
                     log.debug("FormParam [" + name + "=" + value + "]");
                 } else if (part.isFile()) {
-                    FilePart fp = (FilePart) part;
-                    if (null != fp.getFileName()) {
-                        fileParts.add(fp);
+                    FilePart filePart = (FilePart) part;
+                    String fileName = filePart.getFileName();
+                    if (fileName != null) {
+                        UpFile upFile = new UpFile(filePart);
+                        fileParts.add(upFile);
                     }
                 }
             }
+
             UpFile[] files = new UpFile[fileParts.size()];
             int i = 0;
             for (UpFile fileInfo : fileParts) {
@@ -292,5 +310,33 @@ public class ReqCtx {
             }
             getContext().put("UpFile[]", files);
         }
+    }
+
+    private static String getContentType(HttpServletRequest request) {
+        String type = null;
+        String type1 = request.getHeader("Content-Type");
+        String type2 = request.getContentType();
+        if (type1 == null && type2 != null) {
+            type = type2;
+        } else if (type2 == null && type1 != null) {
+            type = type1;
+        } else if (type1 != null && type2 != null) {
+            type = (type1.length() > type2.length() ? type1 : type2);
+        }
+        return type;
+    }
+
+    private static String getBoundary(String contentType) {
+        int index = contentType.lastIndexOf("boundary=");
+        if (index == -1) {
+            return null;
+        }
+        String boundary = contentType.substring(index + 9); // 9 for "boundary="
+        if (boundary.charAt(0) == '"') {
+            index = boundary.lastIndexOf('"');
+            boundary = boundary.substring(1, index);
+        }
+        boundary = "--" + boundary;
+        return boundary;
     }
 }

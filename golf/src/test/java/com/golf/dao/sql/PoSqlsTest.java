@@ -10,18 +10,19 @@
  */
 package com.golf.dao.sql;
 
+import java.util.Map;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.golf.dao.Student;
 import com.golf.dao.po.PoSqls;
 
 /**
- * @author Thunder.Hsu
- *
+ * @author Administrator
+ * 
  */
-public class SqlUtilsTest {
+public class PoSqlsTest {
 
     /**
      * @throws java.lang.Exception
@@ -39,40 +40,42 @@ public class SqlUtilsTest {
 
     /**
      * Test method for {@link com.golf.dao.po.PoSqls#getInsertSql(java.lang.Class)}.
-     * @throws Exception 
      */
     @Test
-    public void testGetInsertSql() throws Exception {
-        System.out.println(PoSqls.getInsertSql(Student.class));
+    public void testGetInsertSql() {
+
     }
 
     /**
      * Test method for {@link com.golf.dao.po.PoSqls#getSelectSql(java.lang.Class)}.
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     @Test
     public void testGetSelectSql() throws Exception {
-        System.out.println(PoSqls.getSelectSql(Student.class));
+        String a = PoSqls.getSelectSql(FileInfo.class);
+        System.out.println(a);
+        SqlParser sp = new SelectSqlParser();
+        FileInfo f = new FileInfo();
+        Map m = f.toMap();
+        a = sp.dealOptParam(a, m);
+        System.out.println(a);
     }
 
     /**
      * Test method for {@link com.golf.dao.po.PoSqls#getUpdateSql(java.lang.Class)}.
-     * @throws Exception 
      */
     @Test
-    public void testGetUpdateSql() throws Exception {
-        System.out.println(PoSqls.getUpdateSql(Student.class));
+    public void testGetUpdateSql() {
+
     }
 
     /**
      * Test method for {@link com.golf.dao.po.PoSqls#getDeleteSql(java.lang.Class)}.
-     * @throws Exception 
      */
     @Test
-    public void testGetDeleteSql() throws Exception {
-        System.out.println(PoSqls.getDeleteSql(Student.class));
+    public void testGetDeleteSql() {
+
     }
-    
-    
 
 }

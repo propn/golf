@@ -10,11 +10,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.golf.dao.po.Po;
+
 /**
  * @author Thunder.xu
  * 
  */
-public abstract class SqlFilter implements Filter {
+public abstract class SqlParser implements Filter {
 
     // 查找变量的正则表达式，如${var1}这样的格式
     public static final String VARIABLE_REXP = "\\u0024\\u007B\\S+?}";

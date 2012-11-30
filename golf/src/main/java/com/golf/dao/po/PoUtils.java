@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golf.dao;
+package com.golf.dao.po;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.golf.dao.sql.InsertSqlParser;
-import com.golf.dao.sql.Po;
-import com.golf.dao.sql.PoSqls;
 import com.golf.dao.sql.SelectSqlParser;
-import com.golf.dao.sql.SqlFilter;
+import com.golf.dao.sql.SqlParser;
 import com.golf.dao.sql.SqlMapExe;
 import com.golf.dao.sql.UpdateSqlParser;
 import com.golf.dao.trans.ConnUtils;
@@ -25,7 +23,7 @@ public class PoUtils {
 
     public static void intsert(Po po) throws Exception {
         String sql = PoSqls.getInsertSql(po.getClass());
-        SqlFilter filter = new InsertSqlParser();
+        SqlParser filter = new InsertSqlParser();
         Object[] param = filter.doFilter(sql, po);
         Connection conn = ConnUtils.getConn();
         SqlMapExe.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
@@ -33,7 +31,7 @@ public class PoUtils {
 
     public static <T> List<T> qryPoList(Po obj) throws Exception {
         String sql = PoSqls.getSelectSql(obj.getClass());
-        SqlFilter filter = new SelectSqlParser();
+        SqlParser filter = new SelectSqlParser();
         Object[] param = filter.doFilter(sql, obj);
         Connection conn = ConnUtils.getConn();
         List<Map<String, Object>> maps = SqlMapExe.qryMapList(conn, (String) param[0], (Object[]) param[1]);
@@ -49,7 +47,7 @@ public class PoUtils {
 
     public static int update(Po po) throws Exception {
         String sql = PoSqls.getUpdateSql(po.getClass());
-        SqlFilter filter = new UpdateSqlParser();
+        SqlParser filter = new UpdateSqlParser();
         Object[] param = filter.doFilter(sql, po);
         Connection conn = ConnUtils.getConn();
         return SqlMapExe.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
@@ -57,7 +55,7 @@ public class PoUtils {
 
     public static int delete(Po po) throws Exception {
         String sql = PoSqls.getDeleteSql(po.getClass());
-        SqlFilter filter = new UpdateSqlParser();
+        SqlParser filter = new UpdateSqlParser();
         Object[] param = filter.doFilter(sql, po);
         Connection conn = ConnUtils.getConn();
         return SqlMapExe.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);

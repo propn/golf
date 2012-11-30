@@ -1,6 +1,6 @@
 package com.golf.dao;
 
-import com.golf.dao.sql.Po;
+import com.golf.dao.po.Po;
 import com.golf.dao.trans.Trans;
 
 public class PersonTest {

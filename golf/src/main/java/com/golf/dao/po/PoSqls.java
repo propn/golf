@@ -1,4 +1,4 @@
-package com.golf.dao.sql;
+package com.golf.dao.po;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class PoSqls {
         // Where
         List<Field> ids = getIdFields(clz);
         if (!ids.isEmpty()) {
-            sqlStr.append(" WHERE ");
+            sqlStr.append(" [ WHERE ");
             for (Field field : ids) {
                 String column = field.getAnnotation(Column.class).name().toUpperCase();
                 if (StringUtils.isBlank(column)) {
@@ -161,7 +161,7 @@ public class PoSqls {
                 }
                 sqlStr.append(column).append("=${").append(field.getName()).append("}").append(" AND ");
             }
-            sqlStr.replace(sqlStr.length() - 4, sqlStr.length(), "");
+            sqlStr.replace(sqlStr.length() - 4, sqlStr.length(), "]");
         }
         return sqlStr.toString();
     }

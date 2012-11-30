@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golf.dao.sql;
+package com.golf.dao.po;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,7 +14,6 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import com.golf.dao.PoUtils;
 import com.golf.tools.JaxbUtils;
 import com.golf.tools.JsonUtils;
 import com.golf.tools.RefUtils;
@@ -42,15 +41,24 @@ public abstract class Po implements Serializable, Cloneable {
         }
     }
 
-    Map toMap() throws Exception {
-        Map<String, Object> map = new HashMap();
+    public Map<String, Object> toMap() throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Field> fields = RefUtils.getFields(this.getClass());
-        for (Iterator it = fields.values().iterator(); it.hasNext();) {
+        for (Iterator<Field> it = fields.values().iterator(); it.hasNext();) {
             Field field = (Field) it.next();
             Object v = field.get(this);
+            if (null == v) {
+                continue;
+            }
             if (v instanceof Po) {
                 map.put(field.getName(), ((Po) v).toMap());
             } else {
+                // 默认值处理
+                if (field.getType() == long.class || field.getType() == int.class || field.getType() == double.class) {
+                    if (String.valueOf(v).equals("0")) {
+                        continue;
+                    }
+                }
                 map.put(field.getName(), v);
             }
         }
@@ -69,11 +77,6 @@ public abstract class Po implements Serializable, Cloneable {
     // 数据库操作CRUD
     public void save() throws Exception {
         PoUtils.intsert(this);
-    }
-
-    public <T> T getById(Object id) {
-        // 校验主键
-        return null;
     }
 
     public <T> T getOne() throws Exception {
