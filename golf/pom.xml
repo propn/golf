@@ -1,14 +1,49 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com</groupId>
 	<artifactId>golf</artifactId>
 	<version>0.a.6</version>
 	<packaging>jar</packaging>
-
-	<name>golf</name>
-	<url>http://golf.propn.com</url>
+	<description>Golf is a Framework based JavaEE application reference architecture. </description>
+	<name>Golf</name>
+	<url>https://github.com/propn/golf</url>
+	<inceptionYear>2012-</inceptionYear>
+	<organization>
+		<name>Golf</name>
+		<url>https://github.com/propn/golf</url>
+	</organization>
+	<developers>
+		<developer>
+			<id>propn</id>
+			<name>Thunder.Hsu</name>
+			<email>xulei33@msn.com</email>
+			<organization>ZTESoft</organization>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+8</timezone>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://ec2-107-22-29-7.compute-1.amazonaws.com/hudson/</url>
+	</ciManagement>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/propn/golf/issues</url>
+	</issueManagement>
+	<scm>
+		<url>https://github.com/propn/golf</url>
+		<connection>scm:git:git://github.com/propn/golf.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:/propn/golf.git</developerConnection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -81,13 +116,93 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
-	<organization>
-		<name>Golf Gourp</name>
-	</organization>
-	<scm>
-		<url>https://github.com/propn/golf.git</url>
-		<developerConnection>propn</developerConnection>
-	</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.1.1</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<generateProjectInfo>true</generateProjectInfo>
+					<reportPlugins>
+						<plugin>
+							<artifactId>maven-project-info-reports-plugin</artifactId>
+							<version>2.6</version>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-jxr-plugin</artifactId>
+							<version>2.3</version>
+							<configuration>
+								<aggregate>true</aggregate>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-report-plugin</artifactId>
+							<version>2.12.4</version>
+						</plugin>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>cobertura-maven-plugin</artifactId>
+							<version>2.5.2</version>
+							<configuration>
+								<instrumentation>
+									<ignores>
+										<ignore>javax.*</ignore>
+									</ignores>
+								</instrumentation>
+							</configuration>
+						</plugin>
+						<plugin>
+							<artifactId>maven-javadoc-plugin</artifactId>
+							<version>2.9</version>
+							<configuration>
+								<charset>${project.build.sourceEncoding}</charset>
+								<excludePackageNames>
+									javax
+								</excludePackageNames>
+							</configuration>
+							<reportSets>
+								<reportSet>
+									<reports>
+										<report>aggregate</report>
+									</reports>
+								</reportSet>
+							</reportSets>
+						</plugin>
+						<plugin>
+							<artifactId>maven-checkstyle-plugin</artifactId>
+							<version>2.9.1</version>
+							<configuration>
+								<excludes>javax/**</excludes>
+							</configuration>
+							<reportSets>
+								<reportSet>
+									<reports>
+										<report>checkstyle-aggregate</report>
+									</reports>
+								</reportSet>
+							</reportSets>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
