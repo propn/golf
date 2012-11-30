@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Thunder.Hsu
  * 
  */
-public class MultParser {
+public class MultiParser {
 
     /** input stream to read parts from */
     private ServletInputStream in;
@@ -41,8 +41,7 @@ public class MultParser {
     /** preferred encoding */
     private String encoding = DEFAULT_ENCODING;
 
-    
-    public MultParser(HttpServletRequest req, String contentType, String boundary, String encoding) throws IOException {
+    public MultiParser(HttpServletRequest req, String contentType, String boundary, String encoding) throws IOException {
         if (encoding != null) {
             setEncoding(encoding);
         }
@@ -85,9 +84,6 @@ public class MultParser {
         if (sbuf.length() == 0) {
             return null; // nothing read, must be at the end of stream
         }
-        // Cut off the trailing \n or \r\n
-        // It should always be \r\n but IE5 sometimes does just \n
-        // Thanks to Luke Blaikie for helping make this work with \n
         int len = sbuf.length();
         if (len >= 2 && sbuf.charAt(len - 2) == '\r') {
             sbuf.setLength(len - 2); // cut \r\n
@@ -97,20 +93,7 @@ public class MultParser {
         return sbuf.toString();
     }
 
-    /**
-     * Read the next part arriving in the stream. Will be either a <code>FilePart</code> or a <code>ParamPart</code>, or
-     * <code>null</code> to indicate there are no more parts to read. The order of arrival corresponds to the order of
-     * the form elements in the submitted form.
-     * 
-     * @return either a <code>FilePart</code>, a <code>ParamPart</code> or <code>null</code> if there are no more parts
-     *         to read.
-     * @exception IOException if an input or output exception has occurred.
-     * 
-     * @see FilePart
-     * @see ParamPart
-     */
     public Part readNextPart() throws IOException {
-        // Make sure the last file was entirely read from the input
         if (lastFilePart != null) {
             lastFilePart.getInputStream().close();
             lastFilePart = null;
@@ -123,18 +106,10 @@ public class MultParser {
         Vector headers = new Vector();
         String line = readLine();
         if (line == null) {
-            // No parts left, we're done
             return null;
         } else if (line.length() == 0) {
-            // IE4 on Mac sends an empty line at the end; treat that as the end.
-            // Thanks to Daniel Lemire and Henri Tourigny for this fix.
             return null;
         }
-
-        // Read the following header lines we hit an empty line
-        // A line starting with whitespace is considered a continuation;
-        // that requires a little special logic. Thanks to Nic Ferrier for
-        // identifying a good fix.
         while (line != null && line.length() > 0) {
             String nextLine = null;
             boolean getNextLine = true;
@@ -146,13 +121,11 @@ public class MultParser {
                     getNextLine = false;
                 }
             }
-            // Add the line to the header list
             headers.addElement(line);
             line = nextLine;
         }
 
-        // If we got a null above, it's the end
-        if (line == null) {
+        if (line == null) {// If we got a null above, it's the end
             return null;
         }
 
@@ -205,11 +178,8 @@ public class MultParser {
     private String[] extractDispositionInfo(String line) throws IOException {
         // Return the line's data as an array: disposition, name, filename
         String[] retval = new String[4];
-        // Convert the line to a lowercase string without the ending \r\n
-        // Keep the original line for error messages and for variable names.
         String origline = line;
         line = origline.toLowerCase();
-
         // Get the content disposition, should be "form-data"
         int start = line.indexOf("content-disposition: ");
         int end = line.indexOf(";");
@@ -226,8 +196,6 @@ public class MultParser {
         end = line.indexOf("\"", start + 7); // skip name=\"
         int startOffset = 6;
         if (start == -1 || end == -1) {
-            // Some browsers like lynx don't surround with ""
-            // Thanks to Deon van der Merwe, dvdm@truteq.co.za, for noticing
             start = line.indexOf("name=", end);
             end = line.indexOf(";", start + 6);
             if (start == -1) {
@@ -239,7 +207,6 @@ public class MultParser {
         }
         String name = origline.substring(start + startOffset, end);
 
-        // Get the filename, if given
         String filename = null;
         String origname = null;
         start = line.indexOf("filename=\"", end + 2); // start after name
@@ -247,15 +214,11 @@ public class MultParser {
         if (start != -1 && end != -1) { // note the !=
             filename = origline.substring(start + 10, end);
             origname = filename;
-            // The filename may contain a full path. Cut to just the filename.
             int slash = Math.max(filename.lastIndexOf('/'), filename.lastIndexOf('\\'));
             if (slash > -1) {
                 filename = filename.substring(slash + 1); // past last slash
             }
         }
-
-        // Return a String array: disposition, name, filename
-        // empty filename denotes no file posted!
         retval[0] = disposition;
         retval[1] = name;
         retval[2] = filename;
@@ -263,19 +226,8 @@ public class MultParser {
         return retval;
     }
 
-    /**
-     * Extracts and returns the content type from a line, or null if the line was empty.
-     * 
-     * @return content type, or null if line was empty.
-     * @exception IOException if the line is malformatted.
-     */
     private static String extractContentType(String line) throws IOException {
-        // Convert the line to a lowercase string
         line = line.toLowerCase();
-        // Get the content type, if any
-        // Note that Opera at least puts extra info after the type, so handle
-        // that. For example: Content-Type: text/plain; name="foo"
-        // Thanks to Leon Poyyayil, leon.poyyayil@trivadis.com, for noticing this.
         int end = line.indexOf(";");
         if (end == -1) {
             end = line.length();

@@ -27,6 +27,7 @@ import com.google.common.io.InputSupplier;
  * 
  */
 public class FileStream extends OutputStream {
+
     private final int fileThreshold;
     private final boolean resetOnFinalize;
     private final InputSupplier<InputStream> supplier;
@@ -51,24 +52,10 @@ public class FileStream extends OutputStream {
         return file;
     }
 
-    /**
-     * Creates a new instance that uses the given file threshold, and does not reset the data when the
-     * {@link InputSupplier} returned by {@link #getSupplier} is finalized.
-     * 
-     * @param fileThreshold the number of bytes before the stream should switch to buffering to a file
-     */
     public FileStream(int fileThreshold) {
         this(fileThreshold, false);
     }
 
-    /**
-     * Creates a new instance that uses the given file threshold, and optionally resets the data when the
-     * {@link InputSupplier} returned by {@link #getSupplier} is finalized.
-     * 
-     * @param fileThreshold the number of bytes before the stream should switch to buffering to a file
-     * @param resetOnFinalize if true, the {@link #reset} method will be called when the {@link InputSupplier} returned
-     *            by {@link #getSupplier} is finalized
-     */
     public FileStream(int fileThreshold, boolean resetOnFinalize) {
         this.fileThreshold = fileThreshold;
         this.resetOnFinalize = resetOnFinalize;
@@ -101,9 +88,6 @@ public class FileStream extends OutputStream {
         }
     }
 
-    /**
-     * Returns a supplier that may be used to retrieve the data buffered by this stream.
-     */
     public InputSupplier<InputStream> getSupplier() {
         return supplier;
     }
@@ -116,12 +100,6 @@ public class FileStream extends OutputStream {
         }
     }
 
-    /**
-     * Calls {@link #close} if not already closed, and then resets this object back to its initial state, for reuse. If
-     * data was buffered to a file, it will be deleted.
-     * 
-     * @throws IOException if an I/O error occurred while deleting the file buffer
-     */
     public synchronized void reset() throws IOException {
         try {
             close();
@@ -169,22 +147,16 @@ public class FileStream extends OutputStream {
         out.flush();
     }
 
-    /**
-     * Checks if writing {@code len} bytes would go over threshold, and switches to file buffering if so.
-     */
     private void update(int len) throws IOException {
         if (file == null && (memory.getCount() + len > fileThreshold)) {
             File temp = File.createTempFile(UUID.randomUUID().toString(), null);
             if (resetOnFinalize) {
-                // Finalizers are not guaranteed to be called on system shutdown;
-                // this is insurance.
                 temp.deleteOnExit();
             }
             FileOutputStream transfer = new FileOutputStream(temp);
             transfer.write(memory.getBuffer(), 0, memory.getCount());
             transfer.flush();
 
-            // We've successfully transferred the data; switch to writing to file
             out = transfer;
             file = temp;
             memory = null;

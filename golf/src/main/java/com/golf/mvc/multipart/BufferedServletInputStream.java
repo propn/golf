@@ -1,34 +1,9 @@
-// Copyright (C) 1999-2001 by Jason Hunter <jhunter_AT_acm_DOT_org>.
-// All rights reserved.  Use of this class is limited.
-// Please see the LICENSE for more information.
- 
 package com.golf.mvc.multipart;
 
 import java.io.IOException;
 
 import javax.servlet.ServletInputStream;
 
-/**
- * A <code>BufferedServletInputStream</code> wraps a 
- * <code>ServletInputStream</code> in order to provide input buffering and to 
- * avoid calling the the <code>readLine</code> method of the wrapped 
- * <code>ServletInputStream</code>.
- * <p>
- * This is necessary because some servlet containers rely on the default 
- * implementation of the <code>readLine</code> method provided by the Servlet 
- * API classes, which is very slow. Tomcat 3.2, Tomcat 3.1, the JSWDK 1.0 web 
- * server and the JSDK2.1 web server are all known to need this class for 
- * performance reasons. 
- * <p>
- * Also, it may be used to work around a bug in the Servlet API 2.0 
- * implementation of <code>readLine</code> which contains a bug that causes
- * <code>ArrayIndexOutOfBoundsExceptions</code> under certain conditions.
- * Apache JServ is known to suffer from this bug.
- * 
- * @author Geoff Soutter
- * @version 1.1, 2001/05/21, removed block of commented out code
- * @version 1.0, 2000/10/27, initial revision
- */
 public class BufferedServletInputStream extends ServletInputStream {
   
   /** input stream we are filtering */
@@ -43,23 +18,16 @@ public class BufferedServletInputStream extends ServletInputStream {
   /** current position in the buffer */
   private int pos;
   
-  /**
-   * Creates a <code>BufferedServletInputStream</code> that wraps the provided 
-   * <code>ServletInputStream</code>.
-   * 
-   * @param in  a servlet input stream.
-   */
   public BufferedServletInputStream(ServletInputStream in) {
     this.in = in;
   }
 
-  /**
-   * Fill up our buffer from the underlying input stream. Users of this
-   * method must ensure that they use all characters in the buffer before
-   * calling this method.
-   * 
-   * @exception  IOException  if an I/O error occurs.
-   */
+    /**
+     * Fill up our buffer from the underlying input stream. Users of this method must ensure that they use all
+     * characters in the buffer before calling this method.
+     * 
+     * @exception IOException if an I/O error occurs.
+     */
   private void fill() throws IOException {
     int i = in.read(buf, 0, buf.length);
     if (i > 0) {

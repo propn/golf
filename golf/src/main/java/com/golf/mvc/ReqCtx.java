@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
 import com.golf.mvc.multipart.FilePart;
-import com.golf.mvc.multipart.MultParser;
+import com.golf.mvc.multipart.MultiParser;
 import com.golf.mvc.multipart.ParamPart;
 import com.golf.mvc.multipart.Part;
 import com.golf.mvc.multipart.UpFile;
@@ -283,7 +283,7 @@ public class ReqCtx {
 
             List<UpFile> fileParts = new ArrayList<UpFile>();
 
-            MultParser mp = new MultParser(request, contentType, boundary, Golf.charsetName);
+            MultiParser mp = new MultiParser(request, contentType, boundary, Golf.charsetName);
             Part part;
             while ((part = mp.readNextPart()) != null) {
                 String name = part.getName();
