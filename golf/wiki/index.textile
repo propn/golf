@@ -4,14 +4,14 @@ h1. Golf
 
 *Golf*是用了几个周末写出来的一个java开发框架,包含MVC,IOC,DAO三个模块.
 命名 *Golf*主要是一直对大众神车 *Golf*情有独钟,对它的短小精干,动力强劲,改造无极限影响深刻.希望这个开发框架能像大众Golf在汽车玩家一样在开发人员中受欢迎!
-更多内容请在 "github":https://github.com/propn/golf 上查看 ,欢迎大家fork&pull
+更多内容请在 "http://propn.com":https://github.com/propn/golf 上查看 ,欢迎大家fork&pull
 更欢迎各位大佬在负责的项目中使用,承诺[*自家出品,改造无极限*]
 
 h1. 更多内容
 
-* "home Page":https://github.com/propn/golf 
-* "issues":https://github.com/propn/golf/issues ,问题提交到这里
-* "source":https://github.com/propn/golf.git ,欢迎大家fork&pull
+* "主页:":http://propn.com/site/
+* "BUG":https://github.com/propn/golf/issues ,问题提交到这里
+* "源码":https://github.com/propn/golf.git ,欢迎大家fork&pull
 
 
 h2. 索引
