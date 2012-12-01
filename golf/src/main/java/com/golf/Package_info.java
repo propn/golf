@@ -1,7 +1,7 @@
 /**
  * 
  */
-package javax;
+package com.golf;
 
 /**
  * @author Thunder.Hsu
