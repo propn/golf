@@ -18,6 +18,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
@@ -153,12 +154,18 @@ public class ResUtils {
         if (method.isAnnotationPresent(POST.class)) {
             httpMethods.append("POST|");
         }
-        if (method.isAnnotationPresent(OPTIONS.class)) {
-            httpMethods.append("OPTIONS|");
-        }
+
         if (method.isAnnotationPresent(DELETE.class)) {
             httpMethods.append("DELETE|");
         }
+
+        if (method.isAnnotationPresent(PUT.class)) {
+            httpMethods.append("PUT|");
+        }
+        if (method.isAnnotationPresent(OPTIONS.class)) {
+            httpMethods.append("OPTIONS|");
+        }
+
         if (method.isAnnotationPresent(HEAD.class)) {
             httpMethods.append("HEAD|");
         }
