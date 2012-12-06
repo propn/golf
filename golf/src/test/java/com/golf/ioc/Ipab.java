@@ -1,6 +1,6 @@
 package com.golf.ioc;
 
-import javax.inject.Named;
+import com.golf.ioc.anno.Named;
 
 @Named(value = "ipab")
 public class Ipab extends Ipa {

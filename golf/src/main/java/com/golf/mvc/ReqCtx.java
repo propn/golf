@@ -19,12 +19,12 @@ import java.util.StringTokenizer;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
+import com.golf.mvc.anno.MediaType;
 import com.golf.mvc.multipart.FilePart;
 import com.golf.mvc.multipart.MultiParser;
 import com.golf.mvc.multipart.ParamPart;

@@ -14,9 +14,9 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
 
 import com.golf.Golf;
+import com.golf.mvc.anno.MediaType;
 
 /**
  * @author Administrator

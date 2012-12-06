@@ -52,17 +52,25 @@ public class ConvertUtils {
     private static Object convert(Class distClass, String obj) throws Exception {
 
         if (distClass.equals(long.class)) {
+            if (null == obj || "".equals(obj)) {
+                return 0;
+            }
             return Long.valueOf(obj).longValue();
         }
 
         if (distClass.equals(int.class)) {
+            if (null == obj || "".equals(obj)) {
+                return 0;
+            }
             return Integer.valueOf(obj).intValue();
         }
 
         if (distClass.equals(double.class)) {
+            if (null == obj || "".equals(obj)) {
+                return 0;
+            }
             return Double.valueOf(obj).doubleValue();
         }
-
         throw new Exception(obj.getClass() + " 转 " + distClass + "未实现!");
     }
 

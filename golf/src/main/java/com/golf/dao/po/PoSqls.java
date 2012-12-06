@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.golf.dao.anno.Column;
+import com.golf.dao.anno.Id;
+import com.golf.dao.anno.Table;
 import com.golf.tools.Cache;
 import com.golf.tools.RefUtils;
 import com.golf.tools.StringUtils;

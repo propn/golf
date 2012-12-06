@@ -1,14 +1,13 @@
 package com.golf.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
+import com.golf.dao.anno.Column;
+import com.golf.dao.anno.Table;
+
 @Table(name = "Student")
 @XmlRootElement(name = "Student")
 @XmlAccessorType(XmlAccessType.FIELD)

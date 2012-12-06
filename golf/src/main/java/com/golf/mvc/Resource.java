@@ -6,8 +6,9 @@ package com.golf.mvc;
 import java.lang.reflect.Method;
 
 /**
- * @author Administrator
  * 
+ * @author Thunder.Hsu
+ * 2012-12-6
  */
 public class Resource {
     private String httpMethod;// PUT, GET, POST , DELETE

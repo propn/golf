@@ -12,13 +12,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
+import com.golf.mvc.anno.MediaType;
+import com.golf.mvc.view.Builder;
 import com.golf.mvc.view.BuilderFactory;
+import com.golf.mvc.view.ErrorViewBuilder;
 import com.golf.tools.StringUtils;
 
 /**
@@ -122,7 +124,14 @@ public class GolfFilter extends Golf implements Filter {
             // FutureTask
             throw new RuntimeException(e);
         }
-        BuilderFactory.getBuilder(mediaType, rst).build(request, response, mediaType, rst);
+        Builder builder = BuilderFactory.getBuilder(mediaType, rst);
+        if (null == builder) {
+            builder = new ErrorViewBuilder();
+            builder.build(request, response, mediaType, new ServletException("系统不支持的视图" + mediaType + " "
+                    + rst.getClass().getName()));
+            return;
+        }
+        builder.build(request, response, mediaType, rst);
     }
 
     private boolean validate(final HttpServletRequest request, HttpServletResponse response, Resource res)
@@ -177,7 +186,7 @@ public class GolfFilter extends Golf implements Filter {
         if (null == produces || produces.length == 0) {
             return MediaType.APPLICATION_JSON;
         }
-        if (accept.contains("*/*")) {
+        if (null == accept || accept.contains("*/*")) {
             return produces[0];
         }
         for (String type : produces) {

@@ -86,7 +86,9 @@ public class SqlMapExe {
                 }
             }
             rs = stmt.executeQuery(sql);
-            rst = rs.getObject(1);
+            if (rs.first()) {
+                rst = rs.getObject(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -108,6 +110,7 @@ public class SqlMapExe {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Map<String, Object> rstMap = null;
+
         try {
             stmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             if (null != params && params.length > 0) {
@@ -116,7 +119,9 @@ public class SqlMapExe {
                 }
             }
             rs = stmt.executeQuery();
-            rstMap = row2Map(rs, getMetaData(rs));
+            if (rs.first()) {
+                rstMap = row2Map(rs, getMetaData(rs));
+            }
         } catch (SQLException e) {
             throw e;
         } finally {

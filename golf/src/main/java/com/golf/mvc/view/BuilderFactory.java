@@ -13,7 +13,8 @@ package com.golf.mvc.view;
 import java.io.File;
 
 import javax.servlet.ServletException;
-import javax.ws.rs.core.MediaType;
+
+import com.golf.mvc.anno.MediaType;
 
 /**
  * @author Thunder.Hsu
@@ -61,6 +62,11 @@ public class BuilderFactory {
         // application/xml
         if (mediaType.equals(MediaType.APPLICATION_XML)) {
             return new XmlViewBuilder();
+        }
+
+        // application/xml
+        if (rst instanceof String) {
+            return new TextViewBuilder();
         }
 
         throw new ServletException("系统不支持视图 [mediaType=" + mediaType + "vkind" + rst.getClass());

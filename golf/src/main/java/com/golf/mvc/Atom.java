@@ -8,17 +8,17 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.golf.dao.trans.Trans;
 import com.golf.ioc.BeanUtils;
+import com.golf.mvc.anno.CookieParam;
+import com.golf.mvc.anno.FormParam;
+import com.golf.mvc.anno.HeaderParam;
+import com.golf.mvc.anno.PathParam;
+import com.golf.mvc.anno.QueryParam;
 import com.golf.mvc.multipart.UpFile;
 import com.golf.tools.ConvertUtils;
 

@@ -3,32 +3,26 @@
  */
 package com.golf.dao;
 
-import javax.inject.Inject;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.golf.dao.anno.Column;
+import com.golf.dao.anno.Id;
+import com.golf.dao.anno.Table;
 import com.golf.dao.po.Po;
 
 /**
  * @author Thunder.Hsu
  * 
  */
-@Entity
 @Table(name = "Person")
 @XmlRootElement(name = "Person")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Person extends Po {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     @NotNull(message = "may not be null")
     private String personId;

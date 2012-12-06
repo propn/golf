@@ -3,9 +3,7 @@
  */
 package com.golf.ioc;
 
-import javax.inject.Inject;
-
-import com.golf.ioc.BeanUtils;
+import com.golf.ioc.anno.Inject;
 
 /**
  * @author Administrator

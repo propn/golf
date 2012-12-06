@@ -2,10 +2,9 @@ package com.golf.dao;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import com.golf.dao.anno.Column;
+import com.golf.dao.anno.Id;
+import com.golf.dao.anno.Table;
 import com.golf.dao.po.Po;
 
 
