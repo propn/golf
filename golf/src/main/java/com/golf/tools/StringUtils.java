@@ -29,12 +29,21 @@ public class StringUtils {
     public static final String charsetName = Golf.charsetName;
     public static final int BUFFER_SIZE = 8192;
 
+    
     public static boolean isBlank(String str) {
         if (null == str || str.isEmpty() || str.trim().isEmpty()) {
             return true;
         } else {
             return false;
         }
+    }
+    public static final String EMPTY_STR = "".intern();
+    public static String trimToNull(String str) {
+        if (str == null) {
+            return null;
+        }
+        str = str.trim();
+        return (str.length() == 0) ? null : str;
     }
 
     public static String array2Strig(String[] array, String split) {
