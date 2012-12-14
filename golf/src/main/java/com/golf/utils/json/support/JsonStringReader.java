@@ -1,7 +1,6 @@
 package com.golf.utils.json.support;
 
 import com.golf.utils.StringUtils;
-import com.golf.utils.io.StringWriter;
 import com.golf.utils.json.exception.JsonException;
 
 public class JsonStringReader {

@@ -2,7 +2,7 @@ package com.golf.utils.json.parser;
 
 import com.golf.utils.json.Parser;
 import com.golf.utils.json.support.JsonStringReader;
-import com.golf.utils.time.SafeSimpleDateFormat;
+import com.golf.utils.json.support.SafeSimpleDateFormat;
 
 public class DateParser implements Parser {
 

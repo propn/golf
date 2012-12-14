@@ -13,8 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * 
- * @author Thunder.Hsu
- * 2012-12-6
+ * @author Thunder.Hsu 2012-12-6
  */
 public class SAXHandler extends DefaultHandler {
     /*
@@ -51,6 +50,7 @@ public class SAXHandler extends DefaultHandler {
         return out;
     }
 
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         InternalElement newElement = new InternalElement();
         newElement.name = localName;
@@ -70,6 +70,7 @@ public class SAXHandler extends DefaultHandler {
         currentElement = newElement;
     }
 
+    @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (currentElement.value == null) {
             currentElement.value = new StringBuffer();
@@ -77,20 +78,24 @@ public class SAXHandler extends DefaultHandler {
         currentElement.value.append(ch, start, length);
     }
 
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (currentElement.parent != null) {
             currentElement = currentElement.parent;
         }
     }
 
+    @Override
     public void warning(SAXParseException e) throws SAXException {
         throw e;
     }
 
+    @Override
     public void error(SAXParseException e) throws SAXException {
         throw e;
     }
 
+    @Override
     public void fatalError(SAXParseException e) throws SAXException {
         throw e;
     }

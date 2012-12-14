@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
-import com.golf.utils.collection.IdentityHashMap;
 import com.golf.utils.json.Parser;
 import com.golf.utils.json.exception.JsonException;
+import com.golf.utils.json.support.IdentityHashMap;
 import com.golf.utils.json.support.JsonStringReader;
 
 public class ParserStateMachine {

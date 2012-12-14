@@ -155,6 +155,7 @@ public abstract class XmlUtils {
     }
 
     private static class ThreadLocalSAXParser extends ThreadLocal {
+        @Override
         protected Object initialValue() {
             try {
                 return getSAXFactory().newSAXParser();
@@ -174,6 +175,7 @@ public abstract class XmlUtils {
     }
 
     private static class ThreadLocalSAXHandler extends ThreadLocal {
+        @Override
         protected Object initialValue() {
             return new SAXHandler();
         }

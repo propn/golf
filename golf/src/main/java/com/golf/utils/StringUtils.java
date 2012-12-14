@@ -509,7 +509,7 @@ public class StringUtils {
         if (match || (preserveAllTokens && lastMatch)) {
             list.add(str.substring(start, i));
         }
-        return (String[]) list.toArray(EMPTY_STRING_ARRAY);
+        return list.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**

@@ -10,9 +10,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.golf.utils.collection.IdentityHashMap;
 import com.golf.utils.json.Serializer;
 import com.golf.utils.json.anno.CircularReferenceCheck;
+import com.golf.utils.json.support.IdentityHashMap;
 import com.golf.utils.json.support.JsonStringWriter;
 
 abstract public class SerialStateMachine {

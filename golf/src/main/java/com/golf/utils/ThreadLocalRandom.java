@@ -44,7 +44,7 @@ import java.util.Random;
  * @author Doug Lea
  */
 public final class ThreadLocalRandom extends Random {
-    
+
     private final static long multiplier = 0x5DEECE66DL;
     private final static long addend = 0xBL;
     private final static long mask = (1L << 48) - 1;

@@ -6,7 +6,7 @@ import java.util.Date;
 
 import com.golf.utils.json.Serializer;
 import com.golf.utils.json.support.JsonStringWriter;
-import com.golf.utils.time.SafeSimpleDateFormat;
+import com.golf.utils.json.support.SafeSimpleDateFormat;
 
 public class DateSerializer implements Serializer {
 

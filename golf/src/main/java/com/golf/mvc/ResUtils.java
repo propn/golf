@@ -123,7 +123,7 @@ public class ResUtils {
         res.setClz(clz);
         res.setMethodName(method.getName());
         res.setMethod(method);
-        String path = ((Path) clz.getAnnotation(Path.class)).value() + method.getAnnotation(Path.class).value();
+        String path = clz.getAnnotation(Path.class).value() + method.getAnnotation(Path.class).value();
         String compiledPath = path.replaceAll(PATH_PARAM_REXP, "/?");
         res.setPath(path);
         res.setCompiledPath(compiledPath);
@@ -133,7 +133,7 @@ public class ResUtils {
             consumes = method.getAnnotation(Consumes.class).value();
         }
         if (null == consumes && clz.isAnnotationPresent(Consumes.class)) {
-            consumes = ((Consumes) clz.getAnnotation(Consumes.class)).value();
+            consumes = clz.getAnnotation(Consumes.class).value();
         }
         res.setConsumes(StringUtils.array2Strig(consumes, '|'));
 
@@ -142,7 +142,7 @@ public class ResUtils {
             produces = method.getAnnotation(Produces.class).value();
         }
         if (null == produces && clz.isAnnotationPresent(Produces.class)) {
-            produces = ((Produces) clz.getAnnotation(Produces.class)).value();
+            produces = clz.getAnnotation(Produces.class).value();
         }
         res.setProduces(produces);
         // httpMethods

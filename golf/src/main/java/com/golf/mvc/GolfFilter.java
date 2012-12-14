@@ -73,8 +73,8 @@ public class GolfFilter extends Golf implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
         try {
-            request = (HttpServletRequest) request;
-            response = (HttpServletResponse) response;
+            request = request;
+            response = response;
         } catch (ClassCastException e) {
             throw new ServletException("non-HTTP request or response");
         }
