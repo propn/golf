@@ -18,7 +18,7 @@ import com.golf.dao.po.Po;
  * @author Thunder.Hsu
  * 
  */
-@Table(name = "Person")
+@Table(schema = "golf", name = "Person")
 @XmlRootElement(name = "Person")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Person extends Po {

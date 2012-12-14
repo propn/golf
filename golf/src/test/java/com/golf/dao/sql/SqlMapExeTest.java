@@ -43,7 +43,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#qryMap(java.sql.Connection, java.lang.String, java.lang.Object[])}.
+     * {@link com.golf.dao.sql.SqlRunner#qryMap(java.sql.Connection, java.lang.String, java.lang.Object[])}.
      */
     @Test
     public void testQryMap() {
@@ -51,14 +51,14 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#qryMapList(java.sql.Connection, java.lang.String, java.lang.Object[])}.
+     * {@link com.golf.dao.sql.SqlRunner#qryMapList(java.sql.Connection, java.lang.String, java.lang.Object[])}.
      */
     @Test
     public void testQryMapList() {
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlMapExe#qryString(java.sql.Connection, java.lang.String)}.
+     * Test method for {@link com.golf.dao.sql.SqlRunner#qryString(java.sql.Connection, java.lang.String)}.
      */
     @Test
     public void testQryString() {
@@ -67,7 +67,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#qryOne(java.sql.Connection, java.lang.String, java.lang.Object[])}.
+     * {@link com.golf.dao.sql.SqlRunner#qryOne(java.sql.Connection, java.lang.String, java.lang.Object[])}.
      */
     @Test
     public void testQryOne() {
@@ -76,7 +76,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#excuteUpdate(java.sql.Connection, java.lang.String, java.lang.Object[])}.
+     * {@link com.golf.dao.sql.SqlRunner#excuteUpdate(java.sql.Connection, java.lang.String, java.lang.Object[])}.
      */
     @Test
     public void testExcuteUpdate() {
@@ -85,7 +85,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#excuteBatchUpdate(java.sql.Connection, java.lang.String, java.util.List)}.
+     * {@link com.golf.dao.sql.SqlRunner#excuteBatchUpdate(java.sql.Connection, java.lang.String, java.util.List)}.
      */
     @Test
     public void testExcuteBatchUpdate() {
@@ -93,7 +93,7 @@ public class SqlMapExeTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlMapExe#getSeqNextVal(java.sql.Connection, java.lang.String)}.
+     * Test method for {@link com.golf.dao.sql.SqlRunner#getSeqNextVal(java.sql.Connection, java.lang.String)}.
      * 
      * @throws Exception
      * @throws SQLException
@@ -106,7 +106,7 @@ public class SqlMapExeTest {
             public Object call() throws Exception {
 //                String sql = "call next value for SEQ_FILE_INFO_FILE_ID";
                 String sql = "SELECT SEQ_FILE_INFO_FILE_ID.nextval FROM dual; ";
-                long a = SqlMapExe.qryLong(ConnUtils.getConn(),sql);
+                long a = SqlRunner.qryLong(ConnUtils.getConn(),sql);
                 System.out.println(a);
                 return null;
             }
@@ -116,7 +116,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#callDbFunc(java.sql.Connection, java.lang.String, java.lang.String[])}.
+     * {@link com.golf.dao.sql.SqlRunner#callDbFunc(java.sql.Connection, java.lang.String, java.lang.String[])}.
      */
     @Test
     public void testCallDbFunc() {
@@ -125,7 +125,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlMapExe#callProc(java.sql.Connection, java.lang.String, java.util.List, int[])}.
+     * {@link com.golf.dao.sql.SqlRunner#callProc(java.sql.Connection, java.lang.String, java.util.List, int[])}.
      */
     @Test
     public void testCallProc() {

@@ -24,10 +24,10 @@ import com.golf.mvc.anno.POST;
 import com.golf.mvc.anno.PUT;
 import com.golf.mvc.anno.Path;
 import com.golf.mvc.anno.Produces;
-import com.golf.tools.Cache;
-import com.golf.tools.ClassUtils;
-import com.golf.tools.RefUtils;
-import com.golf.tools.StringUtils;
+import com.golf.utils.Cache;
+import com.golf.utils.ClassUtils;
+import com.golf.utils.RefUtils;
+import com.golf.utils.StringUtils;
 
 /**
  * @author Thunder.Hsu
@@ -135,7 +135,7 @@ public class ResUtils {
         if (null == consumes && clz.isAnnotationPresent(Consumes.class)) {
             consumes = ((Consumes) clz.getAnnotation(Consumes.class)).value();
         }
-        res.setConsumes(StringUtils.array2Strig(consumes, "|"));
+        res.setConsumes(StringUtils.array2Strig(consumes, '|'));
 
         String[] produces = null;
         if (method.isAnnotationPresent(Produces.class)) {

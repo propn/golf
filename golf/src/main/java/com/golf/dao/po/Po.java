@@ -14,9 +14,9 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import com.golf.tools.JaxbUtils;
-import com.golf.tools.JsonUtils;
-import com.golf.tools.RefUtils;
+import com.golf.utils.JaxbUtils;
+import com.golf.utils.RefUtils;
+import com.golf.utils.json.Json;
 
 /**
  * @author Thunder.Hsu
@@ -67,7 +67,7 @@ public abstract class Po implements Serializable, Cloneable {
 
     // 序列化工具
     public String toJson() {
-        return JsonUtils.toJson(this, this.getClass());
+        return Json.toJson(this);
     }
 
     public String toXml() throws JAXBException, IOException, ClassNotFoundException {
@@ -87,6 +87,8 @@ public abstract class Po implements Serializable, Cloneable {
     /**
      * 模版equel查询
      * 
+     * @param T
+     * 
      * @param <T>
      * 
      * @param <T>
@@ -94,8 +96,8 @@ public abstract class Po implements Serializable, Cloneable {
      * @return
      * @throws Exception
      */
-    public <T> List<T> qryList() throws Exception {
-        return PoUtils.qryPoList(this);
+    public  List qryList() throws Exception {
+        return PoUtils.qryPoList(this.getClass(), this);
     }
 
     /**

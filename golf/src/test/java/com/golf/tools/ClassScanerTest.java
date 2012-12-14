@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.golf.tools.ClassUtils;
+import com.golf.utils.ClassUtils;
 
 public class ClassScanerTest {
 

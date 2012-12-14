@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.golf.ioc.BeanUtils;
 import com.golf.mvc.ResUtils;
-import com.golf.tools.ClassUtils;
-import com.golf.tools.JaxbUtils;
+import com.golf.utils.ClassUtils;
+import com.golf.utils.JaxbUtils;
 
 /**
  * @author Thunder.Hsu
@@ -52,11 +52,9 @@ public abstract class Golf {
     }
 
     public static String[] getPkgs() {
-
         if (null != packages && packages.length != 0) {
             return packages;
         }
-
         String classPath = null;// classPath
         if (null != appPath) {
             classPath = appPath + "WEB-INF\\classes";
@@ -65,7 +63,6 @@ public abstract class Golf {
         }
         File dir = new File(classPath);
         File[] files = dir.listFiles(new FileFilter() {
-            // 自定义文件过滤规则
             @Override
             public boolean accept(File file) {
                 if (file.isDirectory() && !file.getName().equals("javax") && !file.getName().equals("java")) {
@@ -74,7 +71,6 @@ public abstract class Golf {
                 return false;
             }
         });
-
         String[] pkgs = new String[files.length];
         for (int i = 0; i < files.length; i++) {
             pkgs[i] = files[i].getName();

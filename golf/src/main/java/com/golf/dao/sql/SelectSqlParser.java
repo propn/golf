@@ -10,13 +10,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Thunder.xu
+ * SELECT SQL语句解析,动态SQL处理
  * 
+ * @author Thunder.Hsu 2012-12-8
  */
 public class SelectSqlParser extends SqlParser {
 
     @Override
-    public String dealOptParam(String sql, Map param) throws Exception {
+    public String dealOptParam(String sql, Map<String, Object> param) throws Exception {
         String OPTIONAL_REXP = "\\[[#=!<>${}\\w\\s]*]";
         Pattern p = Pattern.compile(OPTIONAL_REXP);
         Matcher m = p.matcher(sql);
@@ -43,11 +44,11 @@ public class SelectSqlParser extends SqlParser {
      */
     public static void main(String[] args) throws Exception {
         String sql = "SELECT PROXYHOSTIP,NAME,PROXYPORT,TYPE FROM SYSNETPROXYCFG [WHERE NAME=${NAME} [AND TYPE=${TYPE}]] ";
-        Filter parser = new SelectSqlParser();
+        Parser parser = new SelectSqlParser();
         Map parms = new HashMap();
         parms.put("NAME", "徐雷");
         // parms.put("TYPE", "IT");
-        Object[] r = parser.doFilter(sql, parms);
+        Object[] r = parser.parse(sql, parms);
 
         System.out.println(r[0]);
         Object[] p = (Object[]) r[1];

@@ -5,8 +5,8 @@ import javax.xml.bind.JAXBException;
 import com.golf.dao.Person;
 import com.golf.dao.Student;
 import com.golf.dao.Teacher;
-import com.golf.tools.JaxbUtils;
-import com.golf.tools.JsonUtils;
+import com.golf.utils.JaxbUtils;
+import com.golf.utils.json.Json;
 
 public class XmlViewTest {
 
@@ -36,7 +36,7 @@ public class XmlViewTest {
 
             System.out.println(JaxbUtils.toXml(t));
 
-            System.out.println(JsonUtils.toJson(st));
+            System.out.println(Json.toJson(t));
         } catch (JAXBException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.golf.dao.Person;
+import com.golf.utils.RefUtils;
 
 /**
  * @author Administrator
@@ -37,7 +38,7 @@ public class RefUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.tools.RefUtils#getFieldValue(java.lang.Object, java.lang.String)}.
+     * Test method for {@link com.golf.utils.RefUtils#getFieldValue(java.lang.Object, java.lang.String)}.
      */
     @Test
     public void testGetFieldValue() {
@@ -60,35 +61,35 @@ public class RefUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.tools.RefUtils#setFieldValue(java.lang.Object, java.lang.String, java.lang.Object)}.
+     * Test method for {@link com.golf.utils.RefUtils#setFieldValue(java.lang.Object, java.lang.String, java.lang.Object)}.
      */
     @Test
     public void testSetFieldValue() {
     }
 
     /**
-     * Test method for {@link com.golf.tools.RefUtils#getFields(java.lang.Class)}.
+     * Test method for {@link com.golf.utils.RefUtils#getFields(java.lang.Class)}.
      */
     @Test
     public void testGetFields() {
     }
 
     /**
-     * Test method for {@link com.golf.tools.RefUtils#getMethods(java.lang.Class)}.
+     * Test method for {@link com.golf.utils.RefUtils#getMethods(java.lang.Class)}.
      */
     @Test
     public void testGetMethods() {
     }
 
     /**
-     * Test method for {@link com.golf.tools.RefUtils#getField(java.lang.Class, java.lang.String)}.
+     * Test method for {@link com.golf.utils.RefUtils#getField(java.lang.Class, java.lang.String)}.
      */
     @Test
     public void testGetField() {
     }
 
     /**
-     * Test method for {@link com.golf.tools.RefUtils#getMethod(java.lang.Class, java.lang.String)}.
+     * Test method for {@link com.golf.utils.RefUtils#getMethod(java.lang.Class, java.lang.String)}.
      */
     @Test
     public void testGetMethod() {

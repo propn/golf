@@ -30,8 +30,8 @@ import com.golf.mvc.multipart.MultiParser;
 import com.golf.mvc.multipart.ParamPart;
 import com.golf.mvc.multipart.Part;
 import com.golf.mvc.multipart.UpFile;
-import com.golf.tools.MultMap;
-import com.golf.tools.StringUtils;
+import com.golf.utils.MultMap;
+import com.golf.utils.StringUtils;
 
 /**
  * @author Thunder.Hsu

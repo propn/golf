@@ -21,7 +21,7 @@ import com.golf.mvc.anno.MediaType;
 import com.golf.mvc.view.Builder;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
-import com.golf.tools.StringUtils;
+import com.golf.utils.StringUtils;
 
 /**
  * 
@@ -55,7 +55,7 @@ public class GolfFilter extends Golf implements Filter {
         String[] pkgs = null;
         if (null == packages) {
             pkgs = getPkgs();
-            log.debug("Packages : [{}]", StringUtils.array2Strig(pkgs, ";"));
+            log.debug("Packages : [{}]", StringUtils.array2Strig(pkgs, ';'));
         } else {
             pkgs = packages.split(";");
             log.debug("Packages : " + packages);

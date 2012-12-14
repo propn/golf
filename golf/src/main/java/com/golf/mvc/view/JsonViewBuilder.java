@@ -18,27 +18,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
-import com.golf.tools.JsonUtils;
+import com.golf.utils.json.Json;
 
 /**
- * @author Administrator
  * 
+ * @author Thunder.Hsu 2012-12-8
  */
 public class JsonViewBuilder implements Builder {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.golf.mvc.view.Builder#build(javax.servlet.http.HttpServletRequest,
-     * javax.servlet.http.HttpServletResponse, java.lang.String, java.lang.Object)
-     */
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {
         response.setCharacterEncoding(Golf.charsetName);
         response.setContentType(MediaType.APPLICATION_JSON);
         PrintWriter out = response.getWriter();
-        out.append(JsonUtils.toJson(rst));
+        out.append(Json.toJson(rst));
         out.flush();
         out.close();
     }

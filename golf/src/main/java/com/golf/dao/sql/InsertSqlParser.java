@@ -9,24 +9,29 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * @author Thunder.xu
+ * @author Thunder.Hsu
  * 
  */
 public class InsertSqlParser extends SqlParser {
 
     @Override
-    public String dealOptParam(String sql, Map param) throws Exception {
+    public String dealOptParam(String sql, Map<String, Object> param) throws Exception {
+        String REXP = "";
         List<String> vars = getVars(sql);
         for (String var : vars) {
             if (!containsKey(var, param)) {
-                String REXP = ",?//s*[$#]{0,1}(\\{" + var + "\\}|" + var + ")//s*,?";
+                // ,${V},|,${V}|#{V}
+//                REXP = ",?//s*[$#]{0,1}(\\{" + var + "\\}|" + var + ")//s*,?";
+                REXP = ",?//s*[$#]{0,1}(\\{" + var + "\\}|" + var + ")//s*,?";
+                System.out.println(REXP);
                 sql = Pattern.compile(REXP).matcher(sql).replaceAll(",");
-                REXP = ",//s*[)]";
-                sql = Pattern.compile(REXP).matcher(sql).replaceAll(")");
-                REXP = "[(]//s*,";
-                sql = Pattern.compile(REXP).matcher(sql).replaceAll("(");
+                System.out.println(sql);
             }
         }
+        REXP = ",//s*[)]";// ,)
+        sql = Pattern.compile(REXP).matcher(sql).replaceAll(")");
+        REXP = "[(]//s*,";// (,
+        sql = Pattern.compile(REXP).matcher(sql).replaceAll("(");
         return sql;
     }
 
@@ -36,61 +41,16 @@ public class InsertSqlParser extends SqlParser {
      */
     public static void main(String[] args) throws Exception {
         String sql = "INSERT INTO SYSNETPROXYCFG (PROXYHOSTIP,NAME,PROXYPORT,TYPE) VALUES (${PROXYHOSTIP},${NAME},${PROXYPORT},${TYPE})";
-        // String REXP="\\$?\\{(\\S*?)\\}";
-        // //
-        // // REXP = ",?[$#]{0,1}(\\{PROXYHOSTIP\\}|PROXYHOSTIP),?";
-        // sql = Pattern.compile(REXP).matcher(sql).replaceAll("?");
-        // System.out.println(sql);
-        //
-        // REXP = ",[)]";
-        // str = Pattern.compile(REXP).matcher(str).replaceAll(")");
-        // System.out.println(str);
-        //
-        // REXP = "[(],";
-        // str = Pattern.compile(REXP).matcher(str).replaceAll("(");
-        // System.out.println(str);
-        // REXP = "[,*],]";
-        // str = Pattern.compile(REXP).matcher(str).replaceAll("(");
-        // System.out.println(str);
 
-        Filter sqlParser = new InsertSqlParser();
-
+        Parser sqlParser = new InsertSqlParser();
         Map parms = new HashMap();
-
         parms.put("PROXYPORT", "127.0.0.1");
-        Object[] r = sqlParser.doFilter(sql, parms);
+        Object[] r = sqlParser.parse(sql, parms);
         System.out.println(r[0]);
         Object[] p = (Object[]) r[1];
         for (int i = 0; i < p.length; i++) {
             System.out.print(p[i] + "    ");
         }
         System.out.println();
-
-        parms.put("PROXYHOSTIP", "127.0.0.1");
-        r = sqlParser.doFilter(sql, parms);
-        System.out.println(r[0]);
-        p = (Object[]) r[1];
-        for (int i = 0; i < p.length; i++) {
-            System.out.print(p[i] + "    ");
-        }
-        System.out.println();
-        //
-        parms.put("NAME", "127.0.0.1");
-        r = sqlParser.doFilter(sql, parms);
-        System.out.println(r[0]);
-        p = (Object[]) r[1];
-        for (int i = 0; i < p.length; i++) {
-            System.out.print(p[i] + "    ");
-        }
-        System.out.println();
-        //
-        parms.put("TYPE", "127.0.0.1");
-        r = sqlParser.doFilter(sql, parms);
-        System.out.println(r[0]);
-        p = (Object[]) r[1];
-        for (int i = 0; i < p.length; i++) {
-            System.out.print(p[i] + "    ");
-        }
-
     }
 }

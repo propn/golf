@@ -19,7 +19,7 @@ import javax.xml.bind.JAXBException;
 
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
-import com.golf.tools.JaxbUtils;
+import com.golf.utils.JaxbUtils;
 
 /**
  * @author Administrator

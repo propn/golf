@@ -5,20 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.golf.Golf;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.tools.Cache;
-import com.golf.tools.RefUtils;
-import com.golf.tools.StringUtils;
+import com.golf.utils.Cache;
+import com.golf.utils.RefUtils;
+import com.golf.utils.StringUtils;
 
 /**
  * 
+ * @author Thunder.Hsu 2012-12-14
  */
 public class PoSqls {
-    private static Cache cache = new Cache();
 
-    public static String getInsertSql(Class clz) throws Exception {
+    private static Cache<String> cache = new Cache<String>();
+
+    public static String getInsertSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
             cache.put(className, "C", generalInsertSql(clz));
@@ -29,7 +32,7 @@ public class PoSqls {
         return cache.get(className, "C").toString();
     }
 
-    public static String getSelectSql(Class clz) throws Exception {
+    public static String getSelectSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
             cache.put(className, "C", generalInsertSql(clz));
@@ -40,7 +43,7 @@ public class PoSqls {
         return cache.get(className, "R").toString();
     }
 
-    public static String getUpdateSql(Class clz) throws Exception {
+    public static String getUpdateSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
             cache.put(className, "C", generalInsertSql(clz));
@@ -51,7 +54,7 @@ public class PoSqls {
         return cache.get(className, "U").toString();
     }
 
-    public static String getDeleteSql(Class clz) throws Exception {
+    public static String getDeleteSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
             cache.put(className, "C", generalInsertSql(clz));
@@ -62,7 +65,7 @@ public class PoSqls {
         return cache.get(className, "D").toString();
     }
 
-    private static String generalInsertSql(Class clz) throws Exception {
+    private static String generalInsertSql(Class<?> clz) throws Exception {
         String tableName = getTableName(clz);
         StringBuffer sqlStr = new StringBuffer("INSERT INTO " + tableName + " (");
         StringBuffer valueStr = new StringBuffer(" VALUES (");
@@ -82,7 +85,7 @@ public class PoSqls {
         return sqlStr.append(valueStr).toString();
     }
 
-    private static String generalDeleteSql(Class clz) throws Exception {
+    private static String generalDeleteSql(Class<?> clz) throws Exception {
         StringBuffer sqlStr = new StringBuffer("DELETE FROM ");
         sqlStr.append(getTableName(clz));
         sqlStr.append(" WHERE ");
@@ -103,7 +106,7 @@ public class PoSqls {
         return sqlStr.toString();
     }
 
-    private static String generalUpdateSql(Class clz) throws Exception {
+    private static String generalUpdateSql(Class<?> clz) throws Exception {
         String tableName = getTableName(clz);
         StringBuffer sqlStr = new StringBuffer("UPDATE " + tableName + " SET ");
 
@@ -135,7 +138,7 @@ public class PoSqls {
         return sqlStr.toString();
     }
 
-    private static String generalSelectSql(Class clz) throws Exception {
+    private static String generalSelectSql(Class<?> clz) throws Exception {
         StringBuffer sqlStr = new StringBuffer("SELECT ");
         List<Field> columnFields = getColumnFields(clz);
         if (columnFields != null && columnFields.size() > 0) {
@@ -165,7 +168,22 @@ public class PoSqls {
         return sqlStr.toString();
     }
 
-    private static String getTableName(Class clz) throws Exception {
+    public static String getTableSchema(Class<?> clz) throws Exception {
+        String className = clz.getName();
+        if (cache.get(className).get("S").isEmpty()) {
+            String schema = null;
+            if (clz.isAnnotationPresent(Table.class)) {
+                schema = ((Table) clz.getAnnotation(Table.class)).schema().toUpperCase();
+            }
+            if (null == schema) {
+                schema = Golf.DEFAULT_DATASOURCE_CODE;
+            }
+            cache.put(className, "S", schema);
+        }
+        return cache.get(className).get("S");
+    }
+
+    private static String getTableName(Class<?> clz) throws Exception {
         String table = null;
         if (clz.isAnnotationPresent(Table.class)) {
             table = ((Table) clz.getAnnotation(Table.class)).name().toUpperCase();
@@ -176,8 +194,8 @@ public class PoSqls {
         return table;
     }
 
-    private static List<Field> getIdFields(Class clz) {
-        Map map = RefUtils.getFields(clz);
+    private static List<Field> getIdFields(Class<?> clz) {
+        Map<String, Field> map = RefUtils.getFields(clz);
         Object[] fields = map.values().toArray();
 
         List<Field> list = new ArrayList<Field>();
@@ -190,9 +208,9 @@ public class PoSqls {
         return list;
     }
 
-    private static List<Field> getColumnFields(Class clz) {
+    private static List<Field> getColumnFields(Class<?> clz) {
         List<Field> list = new ArrayList<Field>();
-        Map map = RefUtils.getFields(clz);
+        Map<String, Field> map = RefUtils.getFields(clz);
         Object[] fields = map.values().toArray();
         for (int i = 0; i < fields.length; i++) {
             Field field = (Field) fields[i];

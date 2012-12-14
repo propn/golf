@@ -13,10 +13,10 @@ import java.util.regex.Pattern;
 import com.golf.dao.po.Po;
 
 /**
- * @author Thunder.xu
+ * @author Thunder.Hsu
  * 
  */
-public abstract class SqlParser implements Filter {
+public abstract class SqlParser implements Parser {
 
     // 查找变量的正则表达式，如${var1}这样的格式
     public static final String VARIABLE_REXP = "\\u0024\\u007B\\S+?}";
@@ -33,13 +33,30 @@ public abstract class SqlParser implements Filter {
     // 使用“@@”括起来的为排序SQL语句，当使用分页统计时，屏蔽此排序语句
     public static final String FIND_SQL_ORDER_BY_REXP = "@[\\S\\s]*?@";
 
+    public static List<SqlParser> getSqlParse(String sql) {
+        List<SqlParser> sqlParsers = new ArrayList<SqlParser>();
+        if (sql.contains("SELECT")) {
+            sqlParsers.add(new SelectSqlParser());
+        }
+
+        if (sql.contains("INSERT")) {
+            sqlParsers.add(new InsertSqlParser());
+        }
+
+        if (sql.contains("UPDATE")) {
+            sqlParsers.add(new UpdateSqlParser());
+        }
+
+        return sqlParsers;
+    }
+
     @Override
-    public Object[] doFilter(String sql, final Object params) throws Exception {
-        Map parm = new HashMap();
+    public Object[] parse(String sql, final Object params) throws Exception {
+        Map<String, Object> parm = new HashMap<String, Object>();
         if (params instanceof Po) {
             parm = ((Po) params).toMap();
         } else if (params instanceof Map) {
-            parm = (Map) params;
+            parm = (Map<String, Object>) params;
         }
         // 处理[]
         sql = dealOptParam(sql, parm);
@@ -49,7 +66,7 @@ public abstract class SqlParser implements Filter {
         return compileSql(sql, parm);
     }
 
-    String dealOptParam(String sql, Map parm) throws Exception {
+    String dealOptParam(String sql, Map<String, Object> parm) throws Exception {
         return null;
     }
 
@@ -60,7 +77,7 @@ public abstract class SqlParser implements Filter {
      * @param params
      * @throws Exception
      */
-    public static String replaceParam(String sql, Map params) throws Exception {
+    public static String replaceParam(String sql, Map<String, Object> params) throws Exception {
         // 用正则解析出变量
         Pattern p = Pattern.compile(REPLACE_REXP);
         Matcher m = p.matcher(sql);
@@ -74,9 +91,9 @@ public abstract class SqlParser implements Filter {
         return sql;
     }
 
-    public static Object[] compileSql(String sql, Map params) throws Exception {
+    public static Object[] compileSql(String sql, Map<?, ?> params) throws Exception {
         List<String> varList = getVars(sql);
-        List param = new ArrayList();
+        List<Object> param = new ArrayList<Object>();
         for (String var : varList) {
             param.add(getParam(var, params));
         }
@@ -85,23 +102,23 @@ public abstract class SqlParser implements Filter {
         return new Object[] { sql, param.toArray() };
     }
 
-    private static Object getParam(String var, Map param) {
+    private static Object getParam(String var, Map<?, ?> param) {
         String[] vars = var.split("//.");
         if (vars.length == 1) {
             return param.get(vars[0]);
         } else if (vars.length > 1 && param.get(vars[0]) instanceof Map) {
-            Map p = (Map) param.get(vars[0]);
+            Map<?, ?> p = (Map<?, ?>) param.get(vars[0]);
             return getParam(var.replaceFirst(vars[0] + ".", ""), p);
         }
         return null;
     }
 
-    public static boolean containsKey(String var, Map param) {
+    public static boolean containsKey(String var, Map<?, ?> param) {
         String[] vars = var.split("\\.");
         if (vars.length == 1) {
             return param.containsKey(var);
         } else if (vars.length > 1 && param.get(vars[0]) instanceof Map) {
-            Map p = (Map) param.get(vars[0]);
+            Map<?, ?> p = (Map<?, ?>) param.get(vars[0]);
             return containsKey(var.replaceFirst(vars[0] + ".", ""), p);
         }
         return false;

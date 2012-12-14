@@ -76,8 +76,8 @@ public class ConnUtils {
      */
     public static Connection getConn(String dsCode) throws Exception {
 
-        if (null == getTransStatus()) {
-            throw new Exception("当前操作不在数据库事务中,请使用Service.call进行数据库操作！");
+        if (null == getTransStatus() || "".equals(getTransStatus())) {
+            throw new Exception("当前操作不在数据库事务中,请使用Trans.transNew进行数据库操作！");
         }
         int currentPropagation = getCurrentPropagation();
         String currentTransId = getCurrentTransId();

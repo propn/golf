@@ -10,7 +10,7 @@
  */
 package com.golf.dao;
 
-import com.golf.dao.sql.SqlMapExe;
+import com.golf.dao.sql.SqlRunner;
 import com.golf.dao.trans.ConnUtils;
 import com.golf.dao.trans.Trans;
 
@@ -34,7 +34,7 @@ public class SqlUtils {
         Object rst = Trans.transNew(new Trans() {
             @Override
             public Object call() throws Exception {
-                return SqlMapExe.excuteUpdate(ConnUtils.getConn(dsCode), sql, params);
+                return SqlRunner.excuteUpdate(ConnUtils.getConn(dsCode), sql, params);
             }
         });
         return rst;
@@ -54,7 +54,7 @@ public class SqlUtils {
         Object rst = Trans.transNest(new Trans() {
             @Override
             public Object call() throws Exception {
-                return SqlMapExe.excuteUpdate(ConnUtils.getConn(dsCode), sql, params);
+                return SqlRunner.excuteUpdate(ConnUtils.getConn(dsCode), sql, params);
             }
         });
         return rst;
@@ -73,7 +73,7 @@ public class SqlUtils {
         Object rst = Trans.transNew(new Trans() {
             @Override
             public Object call() throws Exception {
-                return SqlMapExe.qryLong(ConnUtils.getConn(dsCode), "select " + seqName + ".nextval from dual");
+                return SqlRunner.qryLong(ConnUtils.getConn(dsCode), "select " + seqName + ".nextval from dual");
             }
         });
         return (Long) rst;
