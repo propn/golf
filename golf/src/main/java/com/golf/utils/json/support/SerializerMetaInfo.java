@@ -9,29 +9,28 @@ import com.golf.utils.json.Serializer;
 
 public class SerializerMetaInfo extends MetaInfo {
 
-	private Serializer serializer;
+    private Serializer serializer;
 
-	public void setPropertyName(String propertyName, boolean first) {
-		propertyNameString = propertyName;
-		this.propertyName = ((first ? "" : ",") + QUOTE + propertyName + QUOTE + OBJ_SEPARATOR).toCharArray();
-	}
+    public void setPropertyName(String propertyName, boolean first) {
+        propertyNameString = propertyName;
+        this.propertyName = ((first ? "" : ",") + QUOTE + propertyName + QUOTE + OBJ_SEPARATOR).toCharArray();
+    }
 
-	public void setSerializer(Serializer serializer) {
-		this.serializer = serializer;
-	}
+    public void setSerializer(Serializer serializer) {
+        this.serializer = serializer;
+    }
 
-	public Serializer getSerializer() {
-		return serializer;
-	}
+    public Serializer getSerializer() {
+        return serializer;
+    }
 
-	public void toJson(Object obj, JsonStringWriter writer)
-			throws IOException {
-		Object ret = propertyInvoke.get(obj);
-		if(ret == null) {
-			writer.writeNull();
-			return;
-		}
-		serializer.convertTo(writer, ret);
-	}
+    public void toJson(Object obj, JsonStringWriter writer) throws IOException {
+        Object ret = propertyInvoke.get(obj);
+        if (ret == null) {
+            writer.writeNull();
+            return;
+        }
+        serializer.convertTo(writer, ret);
+    }
 
 }

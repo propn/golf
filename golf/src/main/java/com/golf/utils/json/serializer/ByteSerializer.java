@@ -5,9 +5,9 @@ import com.golf.utils.json.support.JsonStringWriter;
 
 public class ByteSerializer implements Serializer {
 
-	@Override
-	public void convertTo(JsonStringWriter writer, Object obj) {
-		writer.writeByte((Byte)obj);
-	}
+    @Override
+    public void convertTo(JsonStringWriter writer, Object obj) {
+        writer.writeByte((Byte) obj);
+    }
 
 }

@@ -5,9 +5,9 @@ import com.golf.utils.json.support.JsonStringReader;
 
 public class StringParser implements Parser {
 
-	@Override
-	public Object convertTo(JsonStringReader reader, Class<?> clazz) {
-		return reader.readString();
-	}
+    @Override
+    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+        return reader.readString();
+    }
 
 }

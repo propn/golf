@@ -6,9 +6,9 @@ import com.golf.utils.time.SafeSimpleDateFormat;
 
 public class DateParser implements Parser {
 
-	@Override
-	public Object convertTo(JsonStringReader reader, Class<?> clazz) {
-		return SafeSimpleDateFormat.defaultDateFormat.parse(reader.readString());
-	}
+    @Override
+    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+        return SafeSimpleDateFormat.defaultDateFormat.parse(reader.readString());
+    }
 
 }

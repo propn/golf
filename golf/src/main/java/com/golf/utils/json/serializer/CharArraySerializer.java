@@ -7,10 +7,9 @@ import com.golf.utils.json.support.JsonStringWriter;
 
 public class CharArraySerializer implements Serializer {
 
-	@Override
-	public void convertTo(JsonStringWriter writer, Object obj)
-			throws IOException {
-		writer.writeStringWithQuote(new String((char[])obj));
-	}
+    @Override
+    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+        writer.writeStringWithQuote(new String((char[]) obj));
+    }
 
 }

@@ -5,9 +5,9 @@ import com.golf.utils.json.support.JsonStringWriter;
 
 public class IntSerializer implements Serializer {
 
-	@Override
-	public void convertTo(JsonStringWriter writer, Object obj) {
-		writer.writeInt((Integer)obj);
-	}
+    @Override
+    public void convertTo(JsonStringWriter writer, Object obj) {
+        writer.writeInt((Integer) obj);
+    }
 
 }

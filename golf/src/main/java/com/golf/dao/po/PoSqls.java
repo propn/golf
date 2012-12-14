@@ -170,7 +170,7 @@ public class PoSqls {
 
     public static String getTableSchema(Class<?> clz) throws Exception {
         String className = clz.getName();
-        if (cache.get(className).get("S").isEmpty()) {
+        if (null == cache.get(className).get("S")) {
             String schema = null;
             if (clz.isAnnotationPresent(Table.class)) {
                 schema = ((Table) clz.getAnnotation(Table.class)).schema().toUpperCase();

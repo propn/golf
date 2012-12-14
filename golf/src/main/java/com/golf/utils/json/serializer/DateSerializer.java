@@ -10,9 +10,9 @@ import com.golf.utils.time.SafeSimpleDateFormat;
 
 public class DateSerializer implements Serializer {
 
-	@Override
-	public void convertTo(JsonStringWriter writer, Object obj) {
-		writer.write(QUOTE + SafeSimpleDateFormat.defaultDateFormat.format((Date) obj) + QUOTE);
-	}
+    @Override
+    public void convertTo(JsonStringWriter writer, Object obj) {
+        writer.write(QUOTE + SafeSimpleDateFormat.defaultDateFormat.format((Date) obj) + QUOTE);
+    }
 
 }

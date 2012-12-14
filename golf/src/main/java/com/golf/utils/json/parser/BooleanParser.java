@@ -5,9 +5,9 @@ import com.golf.utils.json.support.JsonStringReader;
 
 public class BooleanParser implements Parser {
 
-	@Override
-	public Object convertTo(JsonStringReader reader, Class<?> clazz) {
-		return reader.readBoolean();
-	}
+    @Override
+    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+        return reader.readBoolean();
+    }
 
 }
