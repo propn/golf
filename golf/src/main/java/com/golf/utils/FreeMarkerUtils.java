@@ -9,7 +9,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.golf.Golf;
-import com.golf.mvc.GolfFilter;
 
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
@@ -40,7 +39,7 @@ public class FreeMarkerUtils {
         cfg.setLocale(Locale.CHINA);
     }
 
-    public static String build(String tpl, Map model) throws TemplateException, IOException {
+    public static String build(String tpl, Map<String, Object> model) throws TemplateException, IOException {
         Template requestTemplate = cfg.getTemplate(tpl);
         StringWriter out = new StringWriter();
         requestTemplate.process(model, out);

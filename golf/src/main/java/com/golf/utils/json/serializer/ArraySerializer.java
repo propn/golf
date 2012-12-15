@@ -13,7 +13,7 @@ import com.golf.utils.json.support.JsonStringWriter;
 public class ArraySerializer implements Serializer {
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
         Object[] objArray = (Object[]) obj;
         int iMax = objArray.length - 1;
         if (iMax == -1) {
@@ -23,7 +23,7 @@ public class ArraySerializer implements Serializer {
 
         writer.append(ARRAY_PRE);
         for (int i = 0;; i++) {
-            SerialStateMachine.toJson(objArray[i], writer);
+            SerialStateMachine.toJson(objArray[i], writer, datePattern);
             if (i == iMax) {
                 writer.append(ARRAY_SUF);
                 return;

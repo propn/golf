@@ -10,6 +10,10 @@
  */
 package com.golf.utils.json;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.golf.dao.Person;
@@ -21,18 +25,33 @@ public class JsonTest {
 
     @Test
     public void testToJson() {
-        Person p = new Person();
-        p.setAge(10);
-        p.setPersonId("11");
-        p.setPersonName("徐雷");
-        String a = Json.toJson(p);
+        List<Person> ps = new ArrayList<Person>();
+        Person p1 = new Person();
+        p1.setAge(10);
+        p1.setPersonId("11");
+        p1.setPersonName("徐雷");
+        p1.setBirthDay(new Date());
+        ps.add(p1);
+
+        Person p2 = new Person();
+        p2.setAge(10);
+        p2.setPersonId("11");
+        p2.setPersonName("东升");
+        p2.setBirthDay(new Date());
+        ps.add(p2);
+        String a = Json.toJson(ps);
+        String b = Json.toJson(ps, "yyyy-MM-dd");
         System.out.println(a);
+        System.out.println(b);
     }
 
     @Test
     public void testToObject() {
-        String str = "{\"age\":10,\"personId\":\"11\",\"personName\":\"徐雷\"}";
-        Person p = Json.toObject(str, Person.class);
-        System.out.println(p.getPersonName());
+        String str = "[{\"age\":10,\"birthDay\":\"2012-12-15\",\"personId\":\"11\",\"personName\":\"徐雷\"},{\"age\":10,\"birthDay\":\"2012-12-15\",\"personId\":\"11\",\"personName\":\"东升\"}]";
+        Person[] ps = Json.toObject(str, Person[].class,"yyyy-MM-dd");
+        for (Person person : ps) {
+            System.out.println(person.getPersonName());
+            System.out.println(person.getBirthDay());
+        }
     }
 }

@@ -3,6 +3,8 @@
  */
 package com.golf.dao;
 
+import java.util.Date;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,6 +35,16 @@ public class Person extends Po {
     @Column
     @Min(value = 18, message = "You have to be 18 to drive a car")
     private int age;
+
+    Date birthDay;
+
+    public Date getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
 
     public String getPersonId() {
         return personId;

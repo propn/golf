@@ -14,16 +14,16 @@ public class ObjectNoCheckSerializer implements Serializer {
 
     private SerializerMetaInfo[] serializerMetaInfos;
 
-    public ObjectNoCheckSerializer(Class<?> clazz) {
-        serializerMetaInfos = EncodeCompiler.compile(clazz);
+    public ObjectNoCheckSerializer(Class<?> clazz, String datePattern) {
+        serializerMetaInfos = EncodeCompiler.compile(clazz, datePattern);
     }
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
         writer.append(OBJ_PRE);
         for (SerializerMetaInfo metaInfo : serializerMetaInfos) {
             writer.write(metaInfo.getPropertyName());
-            metaInfo.toJson(obj, writer);
+            metaInfo.toJson(obj, writer, datePattern);
         }
         writer.append(OBJ_SUF);
     }

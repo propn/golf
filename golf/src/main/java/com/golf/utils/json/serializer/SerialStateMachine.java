@@ -69,26 +69,31 @@ abstract public class SerialStateMachine {
         SERIAL_MAP.put(AtomicBoolean.class, SERIAL_MAP.get(double.class));
     }
 
-    public static Serializer getSerializer(Class<?> clazz) {
+    public static Serializer getSerializer(Class<?> clazz, String datePattern) {
         Serializer ret = SERIAL_MAP.get(clazz);
         if (ret == null) {
-            if (clazz.isEnum())
+            if (clazz.isEnum()) {
                 ret = new EnumSerializer(clazz);
-            else if (Map.class.isAssignableFrom(clazz))
+                SERIAL_MAP.put(clazz, ret);
+            } else if (Map.class.isAssignableFrom(clazz)) {
                 ret = MAP;
-            else if (Collection.class.isAssignableFrom(clazz))
+                SERIAL_MAP.put(clazz, ret);
+            } else if (Collection.class.isAssignableFrom(clazz)) {
                 ret = COLLECTION;
-            else if (clazz.isArray())
+                SERIAL_MAP.put(clazz, ret);
+            } else if (clazz.isArray()) {
                 ret = ARRAY;
-            else
-                ret = clazz.isAnnotationPresent(CircularReferenceCheck.class) ? new ObjectSerializer(clazz)
-                        : new ObjectNoCheckSerializer(clazz);
-            SERIAL_MAP.put(clazz, ret);
+                SERIAL_MAP.put(clazz, ret);
+            } else {
+                ret = clazz.isAnnotationPresent(CircularReferenceCheck.class) ? new ObjectSerializer(clazz, datePattern)
+                        : new ObjectNoCheckSerializer(clazz, datePattern);
+                SERIAL_MAP.put(clazz, ret);
+            }
         }
         return ret;
     }
 
-    public static Serializer getSerializerInCompiling(Class<?> clazz) {
+    public static Serializer getSerializerInCompiling(Class<?> clazz, String datePattern) {
         Serializer ret = SERIAL_MAP.get(clazz);
         if (ret == null || ret instanceof ObjectSerializer || ret instanceof ObjectNoCheckSerializer) {
             if (clazz.isEnum()) {
@@ -109,14 +114,20 @@ abstract public class SerialStateMachine {
         return ret;
     }
 
-    public static void toJson(Object obj, JsonStringWriter writer) throws IOException {
+    /**
+     * 
+     * @param obj
+     * @param writer
+     * @param datePattern
+     * @throws IOException
+     */
+    public static void toJson(Object obj, JsonStringWriter writer, String datePattern) throws IOException {
         if (obj == null) {
             writer.writeNull();
             return;
         }
-
         Class<?> clazz = obj.getClass();
-        Serializer serializer = getSerializer(clazz);
-        serializer.convertTo(writer, obj);
+        Serializer serializer = getSerializer(clazz, datePattern);
+        serializer.convertTo(writer, obj, datePattern);
     }
 }

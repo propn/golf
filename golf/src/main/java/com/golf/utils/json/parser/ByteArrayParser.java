@@ -7,7 +7,7 @@ import com.golf.utils.json.support.JsonStringReader;
 public class ByteArrayParser implements Parser {
 
     @Override
-    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+    public Object convertTo(JsonStringReader reader, Class<?> clazz,String datePattern) {
         return Base64.decodeFast(reader.readChars());
     }
 

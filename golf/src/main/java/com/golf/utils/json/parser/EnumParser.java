@@ -25,7 +25,7 @@ public class EnumParser implements Parser {
     }
 
     @Override
-    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+    public Object convertTo(JsonStringReader reader, Class<?> clazz,String datePattern) {
         return find(reader.readChars());
     }
 

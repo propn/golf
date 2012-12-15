@@ -27,7 +27,7 @@ public class EnumSerializer implements Serializer {
     }
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
         writer.write(find(obj).value);
     }
 

@@ -1,5 +1,11 @@
 package com.golf.utils.json.support;
 
+/**
+ * java中key值可以重复的map：IdentityHashMap 在IdentityHashMap中，判断两个键值k1和 k2相等的条件是 k1 == k2
+ * @author Thunder.Hsu 2012-12-15
+ * @param <K>
+ * @param <V>
+ */
 @SuppressWarnings("unchecked")
 public class IdentityHashMap<K, V> {
 

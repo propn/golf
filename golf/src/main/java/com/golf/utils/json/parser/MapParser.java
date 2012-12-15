@@ -14,7 +14,7 @@ public class MapParser extends ComplexTypeParser {
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+    public Object convertTo(JsonStringReader reader, Class<?> clazz,String datePattern) {
         reader.mark();
         if (reader.isNull())
             return null;
@@ -44,7 +44,7 @@ public class MapParser extends ComplexTypeParser {
             if (!reader.isColon())
                 throw new JsonException("missing ':'");
 
-            obj.put(key, elementMetaInfo.getValue(reader));
+            obj.put(key, elementMetaInfo.getValue(reader, datePattern));
 
             char ch = reader.readAndSkipBlank();
             if (ch == '}')

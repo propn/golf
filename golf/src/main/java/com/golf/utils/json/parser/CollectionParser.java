@@ -14,7 +14,7 @@ public class CollectionParser extends ComplexTypeParser {
 
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+    public Object convertTo(JsonStringReader reader, Class<?> clazz, String datePattern) {
         reader.mark();
         if (reader.isNull())
             return null;
@@ -40,7 +40,7 @@ public class CollectionParser extends ComplexTypeParser {
             reader.reset();
 
         for (;;) {
-            obj.add(elementMetaInfo.getValue(reader));
+            obj.add(elementMetaInfo.getValue(reader, datePattern));
 
             char ch = reader.readAndSkipBlank();
             if (ch == ']')

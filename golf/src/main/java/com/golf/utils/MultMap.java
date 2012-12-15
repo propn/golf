@@ -4,22 +4,17 @@
 package com.golf.utils;
 
 /**
- * @author Administrator
- *
+ * 
  */
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-public class MultMap<T, V> extends HashMap<T, List<V>> {
+public class MultMap<K, V> extends HashMap<K, List<V>> {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4680505289430989101L;
 
-    public List<V> put(T key, V value) {
+    public List<V> put(K key, V value) {
         /* 判断该建是否已经存在吗,如果不存在 则放入一个新的Vector对象 */
         if (!super.containsKey(key)) {
             super.put(key, new Vector<V>());

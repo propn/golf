@@ -8,8 +8,8 @@ import com.golf.utils.json.support.JsonStringWriter;
 public class DynamicObjectSerializer implements Serializer {
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
-        SerialStateMachine.toJson(obj, writer);
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
+        SerialStateMachine.toJson(obj, writer, datePattern);
     }
 
 }

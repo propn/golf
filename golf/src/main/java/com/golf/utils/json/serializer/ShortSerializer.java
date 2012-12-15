@@ -6,7 +6,7 @@ import com.golf.utils.json.support.JsonStringWriter;
 public class ShortSerializer implements Serializer {
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) {
         writer.writeShort((Short) obj);
     }
 

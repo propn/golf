@@ -8,7 +8,7 @@ import com.golf.utils.json.support.JsonStringWriter;
 public class CharacterSerializer implements Serializer {
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) {
         writer.append(QUOTE).append((Character) obj).append(QUOTE);
     }
 

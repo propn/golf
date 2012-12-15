@@ -29,7 +29,7 @@ public class ObjectParser implements Parser {
     }
 
     @Override
-    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+    public Object convertTo(JsonStringReader reader, Class<?> clazz, String datePattern) {
         reader.mark();
         if (reader.isNull())
             return null;
@@ -61,11 +61,11 @@ public class ObjectParser implements Parser {
                 throw new JsonException("missing ':'");
 
             if (field == null) { // 顺序相同，快速跳过
-                parser.invoke(obj, reader);
+                parser.invoke(obj, reader,datePattern);
             } else {
                 ParserMetaInfo np = find(field);
                 if (np != null)
-                    np.invoke(obj, reader);
+                    np.invoke(obj, reader,datePattern);
                 else
                     reader.skipValue();
             }
@@ -95,7 +95,7 @@ public class ObjectParser implements Parser {
 
             ParserMetaInfo np = find(field);
             if (np != null)
-                np.invoke(obj, reader);
+                np.invoke(obj, reader,datePattern);
             else
                 reader.skipValue();
 

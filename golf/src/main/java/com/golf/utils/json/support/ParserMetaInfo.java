@@ -9,9 +9,9 @@ public class ParserMetaInfo extends MetaInfo {
     private Class<?> type;
     private Parser parser;
 
-    public void invoke(Object obj, JsonStringReader reader) {
+    public void invoke(Object obj, JsonStringReader reader, String datePattern) {
         try {
-            propertyInvoke.set(obj, getValue(reader));
+            propertyInvoke.set(obj, getValue(reader, datePattern));
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -22,8 +22,8 @@ public class ParserMetaInfo extends MetaInfo {
         propertyName = propertyNameString.toCharArray();
     }
 
-    public Object getValue(JsonStringReader reader) {
-        return parser.convertTo(reader, type);
+    public Object getValue(JsonStringReader reader, String datePattern) {
+        return parser.convertTo(reader, type, datePattern);
     }
 
     public boolean equals(char[] field) {

@@ -6,7 +6,7 @@ import com.golf.utils.json.support.JsonStringWriter;
 public class StringSerializer implements Serializer {
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) {
         writer.writeStringWithQuote(obj.toString());
     }
 

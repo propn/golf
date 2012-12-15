@@ -24,13 +24,13 @@ public class SerializerMetaInfo extends MetaInfo {
         return serializer;
     }
 
-    public void toJson(Object obj, JsonStringWriter writer) throws IOException {
+    public void toJson(Object obj, JsonStringWriter writer, String datePattern) throws IOException {
         Object ret = propertyInvoke.get(obj);
         if (ret == null) {
             writer.writeNull();
             return;
         }
-        serializer.convertTo(writer, ret);
+        serializer.convertTo(writer, ret, datePattern);
     }
 
 }

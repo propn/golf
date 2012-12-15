@@ -63,7 +63,7 @@ public class ParserStateMachine {
                         ret = new EnumParser(clazz);
                         PARSER_MAP.put(clazz, ret);
                     } else if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
-                        throw new JsonException("not support type " + clazz);
+                        throw new JsonException("not support type " + clazz + ". use Array instend,as String[]");
                     } else if (clazz.isArray()) {
                         Class<?> elementClass = clazz.getComponentType();
                         ret = new ArrayParser(elementClass);
@@ -80,8 +80,8 @@ public class ParserStateMachine {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T toObject(JsonStringReader reader, Class<?> clazz) {
+    public static <T> T toObject(JsonStringReader reader, Class<?> clazz,String datePattern) {
         Parser parser = getParser(clazz);
-        return (T) parser.convertTo(reader, clazz);
+        return (T) parser.convertTo(reader, clazz,datePattern);
     }
 }

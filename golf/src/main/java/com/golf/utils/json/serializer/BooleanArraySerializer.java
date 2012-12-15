@@ -11,7 +11,7 @@ public class BooleanArraySerializer extends SimpleArraySerializer {
     }
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
         if (primitive) {
             writer.writeBooleanArray((boolean[]) obj);
         } else {

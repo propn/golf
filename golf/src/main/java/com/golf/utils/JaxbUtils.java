@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 import com.golf.Golf;
 
 /**
- * @author Thunder.Hsu
  * 
+ * @author Thunder.Hsu 2012-12-15
  */
 public class JaxbUtils {
     private static final Logger log = LoggerFactory.getLogger(JaxbUtils.class);
@@ -44,13 +44,13 @@ public class JaxbUtils {
     public static void regist(Set<Class<?>> clzs) throws JAXBException, IOException, ClassNotFoundException {
         long start = System.currentTimeMillis();
         List<Class<?>> rst = new ArrayList<Class<?>>();
-        for (Class clz : clzs) {
+        for (Class<?> clz : clzs) {
             if (clz.isAnnotationPresent(XmlRootElement.class)) {
                 rst.add(clz);
                 log.debug("register jaxb class " + clz.getName());
             }
         }
-        Class[] clz = new Class[rst.size()];
+        Class<?>[] clz = new Class[rst.size()];
         int i = 0;
         for (Class<?> c : rst) {
             clz[i] = c;
@@ -85,6 +85,7 @@ public class JaxbUtils {
         return sw.toString();
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T fromXml(Class<?> stream, String xml) throws JAXBException, IOException, ClassNotFoundException {
         if (null == context) {
             registJaxb();
@@ -93,7 +94,7 @@ public class JaxbUtils {
         return element.getValue();
     }
 
-    private static Class[] loadJaxbClass(String[] packages) throws IOException, ClassNotFoundException {
+    private static Class<?>[] loadJaxbClass(String[] packages) throws IOException, ClassNotFoundException {
         long start = System.currentTimeMillis();
         Set<Class<?>> calssList = new LinkedHashSet<Class<?>>();
         List<String> classFilters = new ArrayList<String>();
@@ -102,13 +103,13 @@ public class JaxbUtils {
             calssList.addAll(handler.getPackageAllClasses(pkg, true));
         }
         List<Class<?>> rst = new ArrayList<Class<?>>();
-        for (Class clz : calssList) {
+        for (Class<?> clz : calssList) {
             if (clz.isAnnotationPresent(XmlRootElement.class)) {
                 rst.add(clz);
                 log.debug("register jaxb class " + clz.getName());
             }
         }
-        Class[] clz = new Class[rst.size()];
+        Class<?>[] clz = new Class[rst.size()];
         int i = 0;
         for (Class<?> c : rst) {
             clz[i] = c;

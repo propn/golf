@@ -15,7 +15,7 @@ import com.golf.utils.json.support.JsonStringWriter;
 public class CollectionSerializer implements Serializer {
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
         Collection<?> collection = (Collection<?>) obj;
         if (collection.size() == 0) {
             writer.write(EMPTY_ARRAY);
@@ -24,7 +24,7 @@ public class CollectionSerializer implements Serializer {
 
         writer.append(ARRAY_PRE);
         for (Iterator<?> it = collection.iterator();;) {
-            SerialStateMachine.toJson(it.next(), writer);
+            SerialStateMachine.toJson(it.next(), writer, datePattern);
             if (!it.hasNext()) {
                 writer.append(ARRAY_SUF);
                 return;

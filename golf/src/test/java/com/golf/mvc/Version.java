@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.golf.dao.Person;
 import com.golf.dao.Student;
+import com.golf.dao.po.Po;
 import com.golf.mvc.anno.Consumes;
 import com.golf.mvc.anno.CookieParam;
 import com.golf.mvc.anno.FormParam;
@@ -58,7 +59,7 @@ public class Version {
         // System.out.println(person.toJson());
         Person p = new Person();
         p.setPersonId("1");
-        List<Person> ps = p.qryList();
+        List<Person> ps = (List<Person>) p.qryList();
         return ps;
     }
 

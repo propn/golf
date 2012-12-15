@@ -14,12 +14,12 @@ public class ObjectSerializer implements Serializer {
 
     private SerializerMetaInfo[] serializerMetaInfos;
 
-    public ObjectSerializer(Class<?> clazz) {
-        serializerMetaInfos = EncodeCompiler.compile(clazz);
+    public ObjectSerializer(Class<?> clazz, String datePattern) {
+        serializerMetaInfos = EncodeCompiler.compile(clazz, datePattern);
     }
 
     @Override
-    public void convertTo(JsonStringWriter writer, Object obj) throws IOException {
+    public void convertTo(JsonStringWriter writer, Object obj, String datePattern) throws IOException {
         if (writer.existRef(obj)) { // 防止循环引用，此处会影响一些性能
             writer.writeNull();
             return;
@@ -29,7 +29,7 @@ public class ObjectSerializer implements Serializer {
         writer.append(OBJ_PRE);
         for (SerializerMetaInfo metaInfo : serializerMetaInfos) {
             writer.write(metaInfo.getPropertyName());
-            metaInfo.toJson(obj, writer);
+            metaInfo.toJson(obj, writer, datePattern);
         }
         writer.append(OBJ_SUF);
         writer.popRef();

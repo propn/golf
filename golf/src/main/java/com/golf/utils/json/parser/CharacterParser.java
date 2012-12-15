@@ -6,7 +6,7 @@ import com.golf.utils.json.support.JsonStringReader;
 public class CharacterParser implements Parser {
 
     @Override
-    public Object convertTo(JsonStringReader reader, Class<?> clazz) {
+    public Object convertTo(JsonStringReader reader, Class<?> clazz,String datePattern) {
         char ret = 0;
         String s = reader.readString();
 

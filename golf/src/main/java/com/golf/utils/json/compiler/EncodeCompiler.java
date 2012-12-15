@@ -16,7 +16,7 @@ public class EncodeCompiler {
 
     private static final SerializerMetaInfo[] EMPTY_ARRAY = new SerializerMetaInfo[0];
 
-    public static SerializerMetaInfo[] compile(Class<?> clazz) {
+    public static SerializerMetaInfo[] compile(Class<?> clazz, String datePattern) {
         SerializerMetaInfo[] serializerMetaInfos = null;
         Set<SerializerMetaInfo> fieldSet = new TreeSet<SerializerMetaInfo>();
         Set<Entry<String, Field>> fields = RefUtils.getFields(clazz).entrySet();
@@ -29,7 +29,7 @@ public class EncodeCompiler {
             SerializerMetaInfo fieldMetaInfo = new SerializerMetaInfo();
             fieldMetaInfo.setPropertyName(fieldName, false);
             fieldMetaInfo.setPropertyInvoke(new FieldInvoke(field));
-            fieldMetaInfo.setSerializer(SerialStateMachine.getSerializerInCompiling(field.getType()));
+            fieldMetaInfo.setSerializer(SerialStateMachine.getSerializerInCompiling(field.getType(), datePattern));
             fieldSet.add(fieldMetaInfo);
         }
         serializerMetaInfos = fieldSet.toArray(EMPTY_ARRAY);

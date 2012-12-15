@@ -5,7 +5,7 @@
 	<artifactId>golf</artifactId>
 	<version>0.a.6</version>
 	<packaging>jar</packaging>
-	<description>*Golf*是一个java开发框架,包含MVC,IOC,DAO三个模块.命名 *Golf*主要是一直对大众神车 *Golf*情有独钟,对它的短小精干,动力强劲,改造无极限影响深刻.希望这个开发框架能像大众Golf在汽车玩家一样在开发人员中受欢迎! </description>
+	<description>*Golf*是一个java开发框架,包含MVC,IOC,DAO三个模块.命名 *Golf*主要是一直对大众神车 *Golf*情有独钟,对它的灵巧精干,动力强劲,改造无极限影响深刻.希望这个开发框架能像大众Golf在汽车玩家一样在开发人员中受欢迎! </description>
 	<name>Golf</name>
 	<url>https://github.com/propn/golf</url>
 	<inceptionYear>2012-</inceptionYear>
@@ -68,7 +68,6 @@
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<version>0.7.1.RELEASE</version>
-			<scope>provided</scope>
 		</dependency>
 
 
@@ -76,14 +75,12 @@
 			<groupId>freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.9</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>13.0.1</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -96,6 +93,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.3.168</version>
+			<scope>runtime</scope>
 		</dependency>
 
 
@@ -235,4 +233,5 @@
 			<url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
 </project>

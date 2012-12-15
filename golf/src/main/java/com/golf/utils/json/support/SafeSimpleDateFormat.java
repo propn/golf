@@ -10,11 +10,12 @@ import com.golf.utils.VerifyUtils;
 
 public class SafeSimpleDateFormat {
 
+    public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final SafeSimpleDateFormat defaultDateFormat = new SafeSimpleDateFormat();
     private ThreadLocal<SimpleDateFormat> threadLocal;
 
     public SafeSimpleDateFormat() {
-        this("");
+        this(DEFAULT_DATE_PATTERN);
     }
 
     public SafeSimpleDateFormat(final SimpleDateFormat sdf) {
@@ -29,7 +30,7 @@ public class SafeSimpleDateFormat {
     }
 
     public SafeSimpleDateFormat(String datePattern) {
-        final String p = VerifyUtils.isEmpty(datePattern) ? "yyyy-MM-dd HH:mm:ss" : datePattern;
+        final String p = VerifyUtils.isEmpty(datePattern) ? DEFAULT_DATE_PATTERN : datePattern;
         this.threadLocal = new ThreadLocal<SimpleDateFormat>() {
             protected SimpleDateFormat initialValue() {
                 return new SimpleDateFormat(p);

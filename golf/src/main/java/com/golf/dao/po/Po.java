@@ -24,6 +24,11 @@ import com.golf.utils.json.Json;
  */
 public abstract class Po implements Serializable, Cloneable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     // 属性
     public Object get(String fieldName) throws Exception {
         Object value = RefUtils.getFieldValue(this, fieldName);
@@ -79,13 +84,15 @@ public abstract class Po implements Serializable, Cloneable {
         PoUtils.intsert(this);
     }
 
-    public <T> T getOne() throws Exception {
-        List<T> pos = qryList();
+    public <T> Po getOne() throws Exception {
+        List<? extends Po> pos = qryList();
         return null != pos && pos.size() > 0 ? pos.get(0) : null;
     }
 
     /**
      * 模版equel查询
+     * 
+     * @param <T>
      * 
      * @param T
      * 
@@ -96,7 +103,7 @@ public abstract class Po implements Serializable, Cloneable {
      * @return
      * @throws Exception
      */
-    public  List qryList() throws Exception {
+    public <T> List<? extends Po> qryList() throws Exception {
         return PoUtils.qryPoList(this.getClass(), this);
     }
 
