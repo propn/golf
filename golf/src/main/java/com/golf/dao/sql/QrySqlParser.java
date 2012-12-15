@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * 
  * @author Thunder.Hsu 2012-12-8
  */
-public class SelectSqlParser extends SqlParser {
+public class QrySqlParser extends SqlParser {
 
     @Override
     public String dealOptParam(String sql, Map<String, Object> param) throws Exception {
@@ -44,7 +44,7 @@ public class SelectSqlParser extends SqlParser {
      */
     public static void main(String[] args) throws Exception {
         String sql = "SELECT PROXYHOSTIP,NAME,PROXYPORT,TYPE FROM SYSNETPROXYCFG [WHERE NAME=${NAME} [AND TYPE=${TYPE}]] ";
-        Parser parser = new SelectSqlParser();
+        Parser parser = new QrySqlParser();
         Map parms = new HashMap();
         parms.put("NAME", "徐雷");
         // parms.put("TYPE", "IT");

@@ -59,7 +59,7 @@ public class Version {
         // System.out.println(person.toJson());
         Person p = new Person();
         p.setPersonId("1");
-        List<Person> ps = (List<Person>) p.qryList();
+        List<Person> ps = p.qryList();
         return ps;
     }
 

@@ -84,8 +84,8 @@ public abstract class Po implements Serializable, Cloneable {
         PoUtils.intsert(this);
     }
 
-    public <T> Po getOne() throws Exception {
-        List<? extends Po> pos = qryList();
+    public <T extends Po> T getOne() throws Exception {
+        List<T> pos = qryList();
         return null != pos && pos.size() > 0 ? pos.get(0) : null;
     }
 
@@ -103,8 +103,9 @@ public abstract class Po implements Serializable, Cloneable {
      * @return
      * @throws Exception
      */
-    public <T> List<? extends Po> qryList() throws Exception {
-        return PoUtils.qryPoList(this.getClass(), this);
+    @SuppressWarnings("unchecked")
+    public <T extends Po> List<T> qryList() throws Exception {
+        return (List<T>) PoUtils.qryAll(this);
     }
 
     /**

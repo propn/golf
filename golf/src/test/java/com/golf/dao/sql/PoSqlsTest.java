@@ -55,7 +55,7 @@ public class PoSqlsTest {
     public void testGetSelectSql() throws Exception {
         String a = PoSqls.getSelectSql(FileInfo.class);
         System.out.println(a);
-        SqlParser sp = new SelectSqlParser();
+        SqlParser sp = new QrySqlParser();
         FileInfo f = new FileInfo();
         Map m = f.toMap();
         a = sp.dealOptParam(a, m);

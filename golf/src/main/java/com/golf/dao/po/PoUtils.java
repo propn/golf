@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.golf.dao.sql.InsertSqlParser;
-import com.golf.dao.sql.SelectSqlParser;
+import com.golf.dao.sql.QrySqlParser;
 import com.golf.dao.sql.SqlParser;
 import com.golf.dao.sql.SqlRunner;
 import com.golf.dao.sql.UpdateSqlParser;
@@ -24,43 +24,52 @@ public class PoUtils {
 
     /**
      * 
+     * @param <T>
      * @param po
      * @throws Exception
      */
-    public static void intsert(Po po) throws Exception {
+    public static <T extends Po> void intsert(T po) throws Exception {
         Class<? extends Po> clz = po.getClass();
         String sql = PoSqls.getInsertSql(clz);
         SqlParser filter = new InsertSqlParser();
-        Object[] param = filter.parse(sql, po);
+        Object[] param = filter.parse(sql, po.toMap());
         String schema = PoSqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
         SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static int delete(Po po) throws Exception {
+    public static <T extends Po> int delete(T po) throws Exception {
         Class<? extends Po> clz = po.getClass();
         String sql = PoSqls.getDeleteSql(clz);
         SqlParser filter = new UpdateSqlParser();
-        Object[] param = filter.parse(sql, po);
+        Object[] param = filter.parse(sql, po.toMap());
         String schema = PoSqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static int update(Po po) throws Exception {
+    public static <T extends Po> int update(T po) throws Exception {
         Class<? extends Po> clz = po.getClass();
         String sql = PoSqls.getUpdateSql(clz);
         SqlParser filter = new UpdateSqlParser();
-        Object[] param = filter.parse(sql, po);
+        Object[] param = filter.parse(sql, po.toMap());
         String schema = PoSqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
+    /**
+     * Map入参查询
+     * 
+     * @param clz
+     * @param param
+     * @return
+     * @throws Exception
+     */
     public static <T extends Po> List<T> qryList(Class<T> clz, Map<String, Object> param) throws Exception {
         String sql = PoSqls.getSelectSql(clz);
-        SqlParser filter = new SelectSqlParser();
-        Object[] stmt = filter.parse(sql, param);
+        SqlParser parser = new QrySqlParser();
+        Object[] stmt = parser.parse(sql, param);
         String schema = PoSqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) stmt[0], (Object[]) stmt[1]);
@@ -74,17 +83,24 @@ public class PoUtils {
         return rst;
     }
 
-    public static <T extends Po> List<T> qryPoList(Class<T> clz, Po obj) throws Exception {
+    /**
+     * @param <T>
+     * @param po
+     * @return
+     * @throws Exception
+     */
+    public static <T extends Po> List<T> qryAll(T obj) throws Exception {
+        Class<?> clz = obj.getClass();
         String sql = PoSqls.getSelectSql(clz);
-        SqlParser filter = new SelectSqlParser();
-        Object[] param = filter.parse(sql, obj);
+        SqlParser filter = new QrySqlParser();
+        Object[] param = filter.parse(sql, obj.toMap());
         String schema = PoSqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) param[0], (Object[]) param[1]);
         // 转换结果
         List<T> rst = new ArrayList<T>();
         for (Map<String, Object> map : maps) {
-            T po = clz.newInstance();
+            T po = (T) clz.newInstance();
             po.set(map);
             rst.add(po);
         }

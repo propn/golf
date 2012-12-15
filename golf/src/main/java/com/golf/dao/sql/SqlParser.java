@@ -4,13 +4,10 @@
 package com.golf.dao.sql;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.golf.dao.po.Po;
 
 /**
  * @author Thunder.Hsu
@@ -36,7 +33,7 @@ public abstract class SqlParser implements Parser {
     public static List<SqlParser> getSqlParse(String sql) {
         List<SqlParser> sqlParsers = new ArrayList<SqlParser>();
         if (sql.contains("SELECT")) {
-            sqlParsers.add(new SelectSqlParser());
+            sqlParsers.add(new QrySqlParser());
         }
 
         if (sql.contains("INSERT")) {
@@ -51,13 +48,7 @@ public abstract class SqlParser implements Parser {
     }
 
     @Override
-    public Object[] parse(String sql, final Object params) throws Exception {
-        Map<String, Object> parm = new HashMap<String, Object>();
-        if (params instanceof Po) {
-            parm = ((Po) params).toMap();
-        } else if (params instanceof Map) {
-            parm = (Map<String, Object>) params;
-        }
+    public Object[] parse(String sql, final Map<String, Object> parm) throws Exception {
         // 处理[]
         sql = dealOptParam(sql, parm);
         // 处理 #{}
@@ -74,10 +65,10 @@ public abstract class SqlParser implements Parser {
      * 将SQL语句中#{var1}替换成对应变量，直接替换，不使用？预编译字符
      * 
      * @param sql
-     * @param params
+     * @param parm
      * @throws Exception
      */
-    public static String replaceParam(String sql, Map<String, Object> params) throws Exception {
+    public static String replaceParam(String sql, Map<String, Object> parm) throws Exception {
         // 用正则解析出变量
         Pattern p = Pattern.compile(REPLACE_REXP);
         Matcher m = p.matcher(sql);
@@ -85,7 +76,7 @@ public abstract class SqlParser implements Parser {
             String var = m.group();
             // 去掉首尾的多余字符串
             var = var.substring(2, var.length() - 1);
-            String v = String.valueOf(getParam(var, params));
+            String v = String.valueOf(getParam(var, parm));
             sql = sql.replaceAll(m.group(), v);
         }
         return sql;
