@@ -65,6 +65,56 @@ public class PoSqls {
         return cache.get(className, "D").toString();
     }
 
+    public static String getDDL(Class<?> clz) throws Exception {
+        return generalDDL(clz);
+    }
+
+    /**
+     * 构造建表语句
+     * 
+     * @param clz
+     * @return
+     * @throws Exception
+     */
+    private static String generalDDL(Class<?> clz) throws Exception {
+        String tableName = getTableName(clz);
+        StringBuffer sqlStr = new StringBuffer("CREATE TABLE " + tableName + " (");
+        List<Field> columnFields = getColumnFields(clz);
+        if (columnFields != null && columnFields.size() > 0) {
+            for (Field field : columnFields) {
+                Column column = field.getAnnotation(Column.class);
+                // 列名
+                String columnName = column.name().toUpperCase();
+                if (StringUtils.isBlank(columnName)) {
+                    columnName = StringUtils.camel4underline(field.getName());
+                }
+                sqlStr.append(columnName);
+                // 类型
+                String columnType = column.columnDefinition().toUpperCase();
+                if (StringUtils.isBlank(columnName)) {
+                    throw new Exception("属性" + columnName + " @Column未设置columnDefinition属性");
+                }
+                sqlStr.append(" ");
+                sqlStr.append(columnType);
+                // 长度
+                int length = column.length();
+                if (length != 255) {
+                    sqlStr.append("(").append(length).append(")");
+                } else if (columnType.contains("CHAR")) {
+                    sqlStr.append("(").append(length).append(")");
+                }
+                // nullable
+                boolean nullable = column.nullable();
+                if (!nullable) {
+                    sqlStr.append(" NOT NULL");
+                }
+                sqlStr.append(",");
+            }
+        }
+        sqlStr = sqlStr.replace(sqlStr.lastIndexOf(","), sqlStr.length(), ")");
+        return sqlStr.toString();
+    }
+
     private static String generalInsertSql(Class<?> clz) throws Exception {
         String tableName = getTableName(clz);
         StringBuffer sqlStr = new StringBuffer("INSERT INTO " + tableName + " (");
@@ -147,7 +197,7 @@ public class PoSqls {
                 if (StringUtils.isBlank(column)) {
                     column = StringUtils.camel4underline(field.getName());
                 }
-                sqlStr.append(column).append(",");
+                sqlStr.append(column).append(" ").append(field.getName()).append(",");
             }
         }
         sqlStr.replace(sqlStr.length() - 1, sqlStr.length(), " FROM ");

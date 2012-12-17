@@ -25,17 +25,18 @@ import com.golf.dao.po.Po;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Person extends Po {
     @Id
-    @Column
+    @Column(columnDefinition = "Long", nullable = false)
     @NotNull(message = "may not be null")
     private String personId;
 
-    @Column
+    @Column(columnDefinition = "VARCHAR", length = 255, nullable = false)
     private String personName;
 
-    @Column
+    @Column(columnDefinition = "TINYINT")
     @Min(value = 18, message = "You have to be 18 to drive a car")
     private int age;
 
+    @Column(columnDefinition = "DATE")
     Date birthDay;
 
     public Date getBirthDay() {

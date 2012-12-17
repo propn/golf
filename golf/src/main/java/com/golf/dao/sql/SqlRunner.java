@@ -1,6 +1,9 @@
 package com.golf.dao.sql;
 
+import java.io.Reader;
+import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -18,8 +21,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import com.golf.utils.StringUtils;
 
 /**
  * <pre>
@@ -246,11 +247,11 @@ public class SqlRunner {
      * @return
      * @throws Exception
      */
-    public static List callProc(Connection conn, String procName, List inParams, int[] outParamTypes)
+    public static List<Object> callProc(Connection conn, String procName, List<?> inParams, int[] outParamTypes)
             throws SQLException {
         CallableStatement cstmt = null;
         int outParamIndex = (inParams == null ? 0 : inParams.size());
-        List result = (outParamTypes == null || outParamTypes.length == 0) ? null : new ArrayList();
+        List<Object> result = (outParamTypes == null || outParamTypes.length == 0) ? null : new ArrayList<Object>();
         String callSQL = "";
         try {
             StringBuffer paramStr = new StringBuffer();
@@ -331,7 +332,7 @@ public class SqlRunner {
         return s.getString(i);
     }
 
-    private static void wrapProcParam(StringBuffer sb, List params) {
+    private static void wrapProcParam(StringBuffer sb, List<?> params) {
         if (params == null || params.isEmpty())
             return;
         wrapProcParam(sb, params.size());
@@ -392,7 +393,8 @@ public class SqlRunner {
         for (String columnName : metaData.keySet()) {
             int columnType = metaData.get(columnName);
             Object object = rs.getObject(columnName);
-            map.put(StringUtils.underline4camel(columnName), convert(object, columnType));
+            // map.put(StringUtils.underline4camel(columnName), convert(object, columnType));
+            map.put(columnName, convert(object, columnType));
         }
         return map;
     }
@@ -407,26 +409,45 @@ public class SqlRunner {
             rst = String.valueOf(object);
             break;
         case java.sql.Types.DATE:
-            rst = String.valueOf(object);
+            Date date = (java.sql.Date) object;
+            rst = new java.util.Date(date.getTime());
             break;
         case java.sql.Types.TIMESTAMP:
-            rst = String.valueOf(object);
+            Timestamp timestamp = (java.sql.Timestamp) object;
+            rst = new java.util.Date(timestamp.getTime());
             break;
         case java.sql.Types.TIME:
-            rst = String.valueOf(object);
+            Time time = (java.sql.Time) object;
+            rst = new java.util.Date(time.getTime());
             break;
         case java.sql.Types.CLOB:
             try {
                 if (object != null) {
                     Clob clob = (Clob) object;
-                    long length = clob.length();
-                    rst = clob.getSubString(1L, (int) length);
+                    Reader reader = clob.getCharacterStream();
+                    StringWriter writer = new StringWriter();
+                    char[] buff = new char[1024];
+                    for (int i = 0; (i = reader.read(buff)) > 0;) {
+                        writer.write(buff, 0, i);
+                    }
+                    writer.flush();
+                    writer.close();
+                    reader.close();
+                    rst = writer.toString();
                 }
             } catch (Exception e) {
             }
             break;
         case java.sql.Types.BLOB:
-            rst = null;
+            if (object != null) {
+                try {
+                    Blob rstObj = (Blob) object;
+                    byte[] bytes = rstObj.getBytes(0, (int) rstObj.length());
+                    rst = new String(bytes, "UTF-8");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             break;
         default:
             rst = object;

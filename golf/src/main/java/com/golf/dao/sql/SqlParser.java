@@ -17,33 +17,26 @@ public abstract class SqlParser implements Parser {
 
     // 查找变量的正则表达式，如${var1}这样的格式
     public static final String VARIABLE_REXP = "\\u0024\\u007B\\S+?}";
-
     // 查找SQL中需要直接替换的地方，如#{var1}，与${var1}的区别为，${var1}替换成问号，#{var1}直接替换成具体的字符
     public static final String REPLACE_REXP = "#\\u007B\\S+?}";
-
     // 使用中括号“[]”括起来的为可选SQL语句，当可选语句里面的#{var1}或者${var1}为空时，则认为是不需要此查询条件，直接去掉
     public static final String OPTIONAL_REXP = "\\[[\\S\\s]*?\\]";
-
     // 找出所有变量，包括#{var1}、${var1}
     public static final String FIND_ALL_QUERY_VARIABLE_REXP = "\\u007B\\S+?}";
-
-    // 使用“@@”括起来的为排序SQL语句，当使用分页统计时，屏蔽此排序语句
-    public static final String FIND_SQL_ORDER_BY_REXP = "@[\\S\\s]*?@";
+    // 找出没有入参的WHERE条件[ WHERE ]
+    public static final String WHERE_REXP = "\\[[\\S\\s]WHERE[\\S\\s]\\]";
 
     public static List<SqlParser> getSqlParse(String sql) {
         List<SqlParser> sqlParsers = new ArrayList<SqlParser>();
         if (sql.contains("SELECT")) {
             sqlParsers.add(new QrySqlParser());
         }
-
         if (sql.contains("INSERT")) {
             sqlParsers.add(new InsertSqlParser());
         }
-
         if (sql.contains("UPDATE")) {
             sqlParsers.add(new UpdateSqlParser());
         }
-
         return sqlParsers;
     }
 
@@ -53,12 +46,18 @@ public abstract class SqlParser implements Parser {
         sql = dealOptParam(sql, parm);
         // 处理 #{}
         sql = replaceParam(sql, parm);
+        // 处理[ WHERE ]
+        sql = checkWhereCondition(sql);
         // 处理 ${}
         return compileSql(sql, parm);
     }
 
     String dealOptParam(String sql, Map<String, Object> parm) throws Exception {
         return null;
+    }
+
+    public static String checkWhereCondition(String sql) {
+        return sql.replaceAll(WHERE_REXP, sql);
     }
 
     /**
