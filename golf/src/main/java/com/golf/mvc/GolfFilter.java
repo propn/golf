@@ -32,9 +32,9 @@ import com.golf.utils.StringUtils;
 public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
-    private static final String IGNORE = "^(.+[.])(jsp|png|gif|jpg|ttf|woff|eot|svg|js|css|jspx|jpeg|swf|html)$";
-
-    private static Pattern ignorePattern;
+    private static final String IGNORE_FILE = "^(.+[.])(jsp|png|gif|jpg|ttf|woff|eot|svg|js|css|jspx|jpeg|swf|html)$";
+    private static Pattern ignoreFilePattern;
+    private static Pattern ignorePathPattern;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -43,14 +43,18 @@ public class GolfFilter extends Golf implements Filter {
         log.info("golf begin start.");
         appPath = filterConfig.getServletContext().getRealPath("/");
         log.info("Path [{}] ", appPath);
-
-        String regex = filterConfig.getInitParameter("ignore");
+        //
+        String regex = filterConfig.getInitParameter("ignore_file");
         if (null == regex) {
-            ignorePattern = Pattern.compile(IGNORE, Pattern.CASE_INSENSITIVE);
-            log.debug("ignorePattern : " + IGNORE);
+            ignoreFilePattern = Pattern.compile(IGNORE_FILE, Pattern.CASE_INSENSITIVE);
+            log.debug("ignorePattern : " + IGNORE_FILE);
         } else {
-            ignorePattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            ignoreFilePattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         }
+        //
+        String ignore_path = filterConfig.getInitParameter("ignore_path");
+        ignorePathPattern = Pattern.compile(ignore_path, Pattern.CASE_INSENSITIVE);
+
         String packages = filterConfig.getInitParameter("packages");
         String[] pkgs = null;
         if (null == packages) {
@@ -73,19 +77,25 @@ public class GolfFilter extends Golf implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
             ServletException {
         try {
-            request = request;
-            response = response;
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse rsp = (HttpServletResponse) response;
+            doFilter(req, rsp, chain);
         } catch (ClassCastException e) {
             throw new ServletException("non-HTTP request or response");
         }
-        doFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
     }
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String servletPath = request.getServletPath();
 
-        if (ignorePattern.matcher(servletPath).matches()) {
+        String requestURI = request.getRequestURI();
+        if (ignorePathPattern.matcher(requestURI).find()) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String servletPath = request.getServletPath();
+        if (ignoreFilePattern.matcher(servletPath).matches()) {
             chain.doFilter(request, response);
             return;
         }
