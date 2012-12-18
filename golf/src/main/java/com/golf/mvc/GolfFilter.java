@@ -111,13 +111,15 @@ public class GolfFilter extends Golf implements Filter {
         // CharacterEncodingFilter
         request.setCharacterEncoding(Golf.charsetName);
         response.setCharacterEncoding(Golf.charsetName);
-        //
+
         String servletPath = request.getServletPath();
+        //
         if (null != ignorePathPattern) {
-            if (!servletPath.endsWith("/")) {
-                servletPath = servletPath + "/";
+            String path = servletPath;
+            if (!path.endsWith("/")) {
+                path = servletPath + "/";
             }
-            if (ignorePathPattern.matcher(servletPath).find()) {
+            if (ignorePathPattern.matcher(path).find()) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -130,6 +132,7 @@ public class GolfFilter extends Golf implements Filter {
             chain.doFilter(request, response);
             return;
         }
+
         // 禁止客户端缓存
         response.setDateHeader("Expires", -10);
         response.setHeader("Cache-Control", "no-store,no-cache,must-revalidate");
