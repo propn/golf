@@ -33,8 +33,8 @@ public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
     private static final String IGNORE_FILE = "^(.+[.])(jsp|png|gif|jpg|ttf|woff|eot|svg|js|css|jspx|jpeg|swf|html)$";
-    private static Pattern ignoreFilePattern;
-    private static Pattern ignorePathPattern;
+    private static Pattern ignoreFilePattern = null;
+    private static Pattern ignorePathPattern = null;// console.\\S{0,}
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -51,10 +51,31 @@ public class GolfFilter extends Golf implements Filter {
         } else {
             ignoreFilePattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         }
-        //
+        // ignore_path
         String ignore_path = filterConfig.getInitParameter("ignore_path");
-        ignorePathPattern = Pattern.compile(ignore_path, Pattern.CASE_INSENSITIVE);
-
+        if (null != ignore_path) {
+            String paths[] = ignore_path.split(";");
+            StringBuffer pattern = new StringBuffer();
+            for (String path : paths) {
+                if (StringUtils.isBlank(path)) {
+                    continue;
+                }
+                pattern.append("^");
+                if (!path.startsWith("/")) {
+                    pattern.append("/");
+                }
+                pattern.append(path);
+                if (!path.endsWith("/")) {
+                    pattern.append("/");
+                }
+                pattern.append(".*|");
+            }
+            if (pattern.length() > 0) {
+                ignorePathPattern = Pattern.compile(pattern.subSequence(0, pattern.length() - 1).toString(),
+                        Pattern.CASE_INSENSITIVE);
+            }
+        }
+        //
         String packages = filterConfig.getInitParameter("packages");
         String[] pkgs = null;
         if (null == packages) {
@@ -88,13 +109,11 @@ public class GolfFilter extends Golf implements Filter {
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        String requestURI = request.getRequestURI();
-        if (ignorePathPattern.matcher(requestURI).find()) {
+        String servletPath = request.getServletPath();
+        if (null != ignorePathPattern && ignorePathPattern.matcher(servletPath).find()) {
             chain.doFilter(request, response);
             return;
         }
-
-        String servletPath = request.getServletPath();
         if (ignoreFilePattern.matcher(servletPath).matches()) {
             chain.doFilter(request, response);
             return;
