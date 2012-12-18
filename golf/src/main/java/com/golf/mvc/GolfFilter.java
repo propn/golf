@@ -32,7 +32,7 @@ import com.golf.utils.StringUtils;
 public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
-    private static final String IGNORE_FILE = "^(.+[.])(jsp|png|gif|jpg|ttf|woff|eot|svg|js|css|jspx|jpeg|swf|html)$";
+    private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|swf|html|jsp|jspx)$";
     private static Pattern ignoreFilePattern = null;
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
 
@@ -108,6 +108,9 @@ public class GolfFilter extends Golf implements Filter {
 
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        // CharacterEncodingFilter
+        request.setCharacterEncoding(Golf.charsetName);
+        response.setCharacterEncoding(Golf.charsetName);
 
         String servletPath = request.getServletPath();
         if (null != ignorePathPattern && ignorePathPattern.matcher(servletPath + "/").find()) {
@@ -115,16 +118,15 @@ public class GolfFilter extends Golf implements Filter {
             return;
         }
         if (ignoreFilePattern.matcher(servletPath).matches()) {
-            response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24
+            if (servletPath.endsWith(".jsp") || servletPath.endsWith(".jspx")) {
+                response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24
+            }
             chain.doFilter(request, response);
             return;
         }
-        // CharacterEncodingFilter
-        request.setCharacterEncoding(Golf.charsetName);
-        response.setCharacterEncoding(Golf.charsetName);
         // 禁止客户端缓存
-        response.setDateHeader("Expires", 0);
-        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", -10);
+        response.setHeader("Cache-Control", "no-store,no-cache,must-revalidate");
         response.setHeader("Pragma", "no-cache");
         //
         Resource res = ResUtils.getMatchedRes(servletPath);
