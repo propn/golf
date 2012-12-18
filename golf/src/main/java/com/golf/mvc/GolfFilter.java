@@ -115,10 +115,18 @@ public class GolfFilter extends Golf implements Filter {
             return;
         }
         if (ignoreFilePattern.matcher(servletPath).matches()) {
+            response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24
             chain.doFilter(request, response);
             return;
         }
-
+        // CharacterEncodingFilter
+        request.setCharacterEncoding(Golf.charsetName);
+        response.setCharacterEncoding(Golf.charsetName);
+        // 禁止客户端缓存
+        response.setDateHeader("Expires", 0);
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        //
         Resource res = ResUtils.getMatchedRes(servletPath);
         if (!validate(request, response, res)) {
             // HTTP 404 Not Found
@@ -127,7 +135,7 @@ public class GolfFilter extends Golf implements Filter {
             // 415 Unsupported Media Type
             return;
         }
-
+        //
         String accept = request.getHeader("Accept");
         String[] produces = res.getProduces();
         String mediaType = getOptimalType(accept, produces);
