@@ -111,12 +111,18 @@ public class GolfFilter extends Golf implements Filter {
         // CharacterEncodingFilter
         request.setCharacterEncoding(Golf.charsetName);
         response.setCharacterEncoding(Golf.charsetName);
-
+        //
         String servletPath = request.getServletPath();
-        if (null != ignorePathPattern && ignorePathPattern.matcher(servletPath + "/").find()) {
-            chain.doFilter(request, response);
-            return;
+        if (null != ignorePathPattern) {
+            if (!servletPath.endsWith("/")) {
+                servletPath = servletPath + "/";
+            }
+            if (ignorePathPattern.matcher(servletPath).find()) {
+                chain.doFilter(request, response);
+                return;
+            }
         }
+        //
         if (ignoreFilePattern.matcher(servletPath).matches()) {
             if (servletPath.endsWith(".jsp") || servletPath.endsWith(".jspx")) {
                 response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24

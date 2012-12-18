@@ -225,7 +225,7 @@ public class PoSqls {
             if (clz.isAnnotationPresent(Table.class)) {
                 schema = ((Table) clz.getAnnotation(Table.class)).schema().toUpperCase();
             }
-            if (null == schema) {
+            if ("".equals(schema)) {
                 schema = Golf.DEFAULT_DATASOURCE_CODE;
             }
             cache.put(className, "S", schema);
