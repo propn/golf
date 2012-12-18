@@ -110,7 +110,7 @@ public class GolfFilter extends Golf implements Filter {
             throws IOException, ServletException {
 
         String servletPath = request.getServletPath();
-        if (null != ignorePathPattern && ignorePathPattern.matcher(servletPath).find()) {
+        if (null != ignorePathPattern && ignorePathPattern.matcher(servletPath + "/").find()) {
             chain.doFilter(request, response);
             return;
         }
