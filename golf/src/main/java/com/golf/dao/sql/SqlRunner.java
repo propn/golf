@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class SqlRunner {
 
-    public static long qryLong(Connection conn, String sql) throws SQLException {
+    public static long qrySingleLong(Connection conn, String sql) throws SQLException {
         long rst = 0;
         Statement stmt = null;
         ResultSet rs = null;
@@ -55,7 +55,7 @@ public class SqlRunner {
         return rst;
     }
 
-    public static String qryString(Connection conn, String sql) throws SQLException {
+    public static String qrySingleString(Connection conn, String sql) throws SQLException {
         String rst = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -75,7 +75,7 @@ public class SqlRunner {
         return rst;
     }
 
-    public static Object qryOne(Connection conn, String sql, Object[] params) throws SQLException {
+    public static Object qrySingleObject(Connection conn, String sql, Object[] params) throws SQLException {
         Object rst = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -89,6 +89,30 @@ public class SqlRunner {
             rs = stmt.executeQuery(sql);
             if (rs.first()) {
                 rst = rs.getObject(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeRst(rs);
+            closeStmt(stmt);
+        }
+        return rst;
+    }
+
+    public static List<Object> qrySingleObjectList(Connection conn, String sql, Object[] params) throws SQLException {
+        List<Object> rst = new ArrayList<Object>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            if (null != params && params.length > 0) {
+                for (int i = 0; i < params.length; i++) {
+                    setParam(stmt, i + 1, params[i]);
+                }
+            }
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                rst.add(rs.getObject(1));
             }
         } catch (SQLException e) {
             e.printStackTrace();

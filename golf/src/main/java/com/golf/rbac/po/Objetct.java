@@ -28,18 +28,18 @@ public class Objetct extends Po {
     private static final long serialVersionUID = -6661042781607359127L;
 
     @Id
-    @Column(columnDefinition = "BIGINT")
-    private Long objetctId;
+    @Column(columnDefinition = "VARCHAR", length = 32)
+    private String objetctCode;
 
     @Column(columnDefinition = "VARCHAR", length = 128)
     private String objetctName;
 
-    public Long getObjetctId() {
-        return objetctId;
+    public String getObjetctCode() {
+        return objetctCode;
     }
 
-    public void setObjetctId(Long objetctId) {
-        this.objetctId = objetctId;
+    public void setObjetctCode(String objetctCode) {
+        this.objetctCode = objetctCode;
     }
 
     public String getObjetctName() {

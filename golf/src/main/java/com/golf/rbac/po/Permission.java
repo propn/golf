@@ -10,10 +10,18 @@
  */
 package com.golf.rbac.po;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
 import com.golf.dao.po.Po;
+import com.golf.dao.po.PoSqls;
+import com.golf.dao.po.PoUtils;
+import com.golf.utils.json.anno.Transient;
 
 /**
  * 许可表（PERMISSIONS）包括许可标识、许可名称、受控对象、操作标识。许可表给出了受控对象与操作算子的对应关系。
@@ -23,24 +31,63 @@ import com.golf.dao.po.Po;
 @Table(schema = "golf", name = "PERMISSIONS")
 public class Permission extends Po {
 
-    /**
-     * 
-     */
+    @Transient
     private static final long serialVersionUID = -8409027515314245278L;
 
-    @Id
-    @Column(columnDefinition = "BIGINT")
+    @Column(columnDefinition = "BIGINT", nullable = false)
     private Long permissionId;
 
-    @Column(columnDefinition = "varchar", length = 255)
-    private String permissionName;
-
     @Id
-    @Column(columnDefinition = "BIGINT")
-    private Long objetctId;
+    @Column(columnDefinition = "VARCHAR", length = 255, nullable = false)
+    private String permissionName;
+    @Id
+    @Column(columnDefinition = "VARCHAR", length = 32, nullable = false)
+    private String objetctCode;
 
-    @Column(columnDefinition = "BIGINT")
-    private Long operationId;
+    @Column(columnDefinition = "VARCHAR", length = 32, nullable = false)
+    private String operationCode;
+
+    //
+    @Transient
+    private static Map<String, Long> permissionCache;
+
+    public static Long getPermissionIdFromCache(String objetctCode, String operationCode) throws Exception {
+        if (null != permissionCache) {
+            return permissionCache.get(objetctCode + ":" + operationCode);
+        }
+        //
+        List<Permission> permissions = PoUtils.qryList(Permission.class, null);
+        permissionCache = new HashMap<String, Long>();
+        for (Permission permission : permissions) {
+            permissionCache.put(permission.getObjetctCode() + ":" + permission.getOperationCode(),
+                    permission.getPermissionId());
+        }
+        return permissionCache.get(objetctCode + ":" + operationCode);
+    }
+
+    //
+    public static void addPermission(Permission permission, Objetct obj, Operation oper) throws Exception {
+        permission.setObjetctCode(obj.getObjetctCode());
+        permission.setOperationCode(oper.getOperationCode());
+        permission.save();
+        if (null != permissionCache) {
+            permissionCache.put(permission.getObjetctCode() + ":" + permission.getOperationCode(),
+                    permission.getPermissionId());
+        }
+    }
+
+    //
+    public static void deletePermission(Permission permission) throws Exception {
+        String sql = "DELETE FROM ROLE_PERMISSION_REL WHERE PERMISSION_ID=${permissionId}";
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("permissionId", permission.getPermissionId());
+        SqlUtils.excuteUpdate(sql, PoSqls.getTableSchema(RolePermissionRel.class), param);
+        //
+        permission.delete();
+        if (null != permissionCache) {
+            permissionCache.remove(permission.getObjetctCode() + ":" + permission.getOperationCode());
+        }
+    }
 
     public Long getPermissionId() {
         return permissionId;
@@ -58,20 +105,20 @@ public class Permission extends Po {
         this.permissionName = permissionName;
     }
 
-    public Long getObjetctId() {
-        return objetctId;
+    public String getObjetctCode() {
+        return objetctCode;
     }
 
-    public void setObjetctId(Long objetctId) {
-        this.objetctId = objetctId;
+    public void setObjetctCode(String objetctCode) {
+        this.objetctCode = objetctCode;
     }
 
-    public Long getOperationId() {
-        return operationId;
+    public String getOperationCode() {
+        return operationCode;
     }
 
-    public void setOperationId(Long operationId) {
-        this.operationId = operationId;
+    public void setOperationCode(String operationCode) {
+        this.operationCode = operationCode;
     }
 
 }

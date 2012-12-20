@@ -10,10 +10,17 @@
  */
 package com.golf.rbac.po;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
 import com.golf.dao.po.Po;
+import com.golf.dao.po.PoSqls;
+import com.golf.utils.json.anno.Transient;
 
 /**
  * 用户表（USERS）包括用户标识、用户姓名、用户登录密码。用户表是系统中的个体用户集，随用户的添加与删除动态变化。
@@ -51,6 +58,77 @@ public class User extends Po {
     // AES加密
     @Column(columnDefinition = "varchar", length = 64)
     private String password;
+
+    @Transient
+    private List<Role> roles;
+    @Transient
+    private List<Long> permissionIds;
+
+    /**
+     * 
+     * @param userCode
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    public static User login(String userCode, String password) throws Exception {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("userCode", userCode);
+        param.put("password", password);
+        param.put("status", 0);
+        //
+        List<User> users = SqlUtils.queryList(User.class, PoSqls.getSelectSql(User.class),
+                PoSqls.getTableSchema(User.class), param);
+        if (users.isEmpty()) {
+            return null;
+        } else {
+            return users.get(0);
+        }
+    }
+
+    public boolean hasPermission(String objetctCode, String operationCode) throws Exception {
+        long permissionId = Permission.getPermissionIdFromCache(objetctCode, operationCode);
+        if (null != permissionIds) {
+            return permissionIds.contains(permissionId);
+        }
+        //
+        String sql = "SELECT PERMISSION_ID FROM ROLE_PERMISSION_REL WHERE ROLE_ID IN ("
+                + "SELECT ROLE_ID FROM USER_ROLE_REL WHERE USER_ID=${userId})";
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("userId", this.userId);
+        permissionIds = SqlUtils.querySingleObjectList(Long.class, sql, PoSqls.getTableSchema(Role.class), param);
+        return permissionIds.contains(permissionId);
+    }
+
+    // ------
+    public List<Role> getRoles() throws Exception {
+        if (null != roles) {
+            return roles;
+        }
+        //
+        String sql = "SELECT STATUS status,ROLE_NAME roleName,ROLE_ID roleId FROM ROLES WHERE ROLE_ID IN ("
+                + "SELECT ROLE_ID FROM USER_ROLE_REL WHERE USER_ID=${userId})";
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("userId", this.userId);
+        roles = SqlUtils.queryList(Role.class, sql, PoSqls.getTableSchema(Role.class), param);
+        return roles;
+    }
+
+    //
+    public void addRole(Role role) throws Exception {
+        UserRoleRel urr = new UserRoleRel();
+        urr.setUserId(userId);
+        urr.setRoleId(role.getRoleId());
+        urr.save();
+    }
+
+    //
+    public void deleteRole(Role role) throws Exception {
+        UserRoleRel urr = new UserRoleRel();
+        urr.setUserId(userId);
+        urr.setRoleId(role.getRoleId());
+        urr.delete();
+    }
 
     public Long getUserId() {
         return userId;

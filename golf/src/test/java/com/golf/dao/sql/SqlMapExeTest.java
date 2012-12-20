@@ -58,7 +58,7 @@ public class SqlMapExeTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.sql.SqlRunner#qryString(java.sql.Connection, java.lang.String)}.
+     * Test method for {@link com.golf.dao.sql.SqlRunner#qrySingleString(java.sql.Connection, java.lang.String)}.
      */
     @Test
     public void testQryString() {
@@ -67,7 +67,7 @@ public class SqlMapExeTest {
 
     /**
      * Test method for
-     * {@link com.golf.dao.sql.SqlRunner#qryOne(java.sql.Connection, java.lang.String, java.lang.Object[])}.
+     * {@link com.golf.dao.sql.SqlRunner#qrySingleObject(java.sql.Connection, java.lang.String, java.lang.Object[])}.
      */
     @Test
     public void testQryOne() {
@@ -106,7 +106,7 @@ public class SqlMapExeTest {
             public Object call() throws Exception {
 //                String sql = "call next value for SEQ_FILE_INFO_FILE_ID";
                 String sql = "SELECT SEQ_FILE_INFO_FILE_ID.nextval FROM dual; ";
-                long a = SqlRunner.qryLong(ConnUtils.getConn(),sql);
+                long a = SqlRunner.qrySingleLong(ConnUtils.getConn(),sql);
                 System.out.println(a);
                 return null;
             }

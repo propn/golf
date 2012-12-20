@@ -21,25 +21,24 @@ public class ConvertUtils {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
 
-    public static Object convert(Object obj, Class<?> dist) throws Exception {
+    public static <T> T convert(Object obj, Class<T> clz) throws Exception {
         if (null == obj) {
-            return getDefaultValue(dist);
+            return getDefaultValue(clz);
         }
-        if (obj.getClass().equals(dist)) {
-            return obj;
+        if (obj.getClass().equals(clz)) {
+            return (T) obj;
         }
-        if (dist.getClass().equals(String.class)) {
-            return String.valueOf(obj);
+        if (clz.getClass().equals(String.class)) {
+            return (T) String.valueOf(obj);
         }
-        log.debug("Convert Object Type: [" + obj.getClass().getName() + "] TO [" + dist.getName() + "]");
-        return convert(obj, obj.getClass(), dist);
+        log.debug("Convert Object Type: [" + obj.getClass().getName() + "] TO [" + clz.getName() + "]");
+        return (T) convert(obj, obj.getClass(), clz);
     }
 
-    private static Object getDefaultValue(Class<?> dist) {
-        if (Number.class.isAssignableFrom(dist)) {
-            return 0;
-        } else if (dist.equals(Boolean.class)) {
-            return false;
+    private static <T> T getDefaultValue(Class<T> clz) throws InstantiationException, IllegalAccessException {
+        if (Number.class.isAssignableFrom(clz) || clz.equals(Boolean.class)) {
+            T obj = clz.newInstance();
+            return obj;
         } else {
             return null;
         }

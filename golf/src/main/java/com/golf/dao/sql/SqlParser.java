@@ -41,18 +41,18 @@ public abstract class SqlParser implements Parser {
     }
 
     @Override
-    public Object[] parse(String sql, final Map<String, Object> parm) throws Exception {
+    public Object[] parse(String sql, final Map<String, Object> param) throws Exception {
         // 处理[]
-        sql = dealOptParam(sql, parm);
+        sql = dealOptParam(sql, param);
         // 处理 #{}
-        sql = replaceParam(sql, parm);
+        sql = replaceParam(sql, param);
         // 处理[ WHERE ]
         sql = checkWhereCondition(sql);
         // 处理 ${}
-        return compileSql(sql, parm);
+        return compileSql(sql, param);
     }
 
-    String dealOptParam(String sql, Map<String, Object> parm) throws Exception {
+    String dealOptParam(String sql, Map<String, Object> param) throws Exception {
         return null;
     }
 
@@ -64,10 +64,10 @@ public abstract class SqlParser implements Parser {
      * 将SQL语句中#{var1}替换成对应变量，直接替换，不使用？预编译字符
      * 
      * @param sql
-     * @param parm
+     * @param param
      * @throws Exception
      */
-    public static String replaceParam(String sql, Map<String, Object> parm) throws Exception {
+    public static String replaceParam(String sql, Map<String, Object> param) throws Exception {
         // 用正则解析出变量
         Pattern p = Pattern.compile(REPLACE_REXP);
         Matcher m = p.matcher(sql);
@@ -75,7 +75,7 @@ public abstract class SqlParser implements Parser {
             String var = m.group();
             // 去掉首尾的多余字符串
             var = var.substring(2, var.length() - 1);
-            String v = String.valueOf(getParam(var, parm));
+            String v = String.valueOf(getParam(var, param));
             sql = sql.replaceAll(m.group(), v);
         }
         return sql;

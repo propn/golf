@@ -29,18 +29,18 @@ public class Operation extends Po {
     private static final long serialVersionUID = -1293185392542237638L;
 
     @Id
-    @Column(columnDefinition = "BIGINT")
-    private Long operationId;
+    @Column(columnDefinition = "VARCHAR", length = 32)
+    private String operationCode;
 
     @Column(columnDefinition = "VARCHAR", length = 128)
     private String operationName;
 
-    public Long getOperationId() {
-        return operationId;
+    public String getOperationCode() {
+        return operationCode;
     }
 
-    public void setOperationId(Long operationId) {
-        this.operationId = operationId;
+    public void setOperationCode(String operationCode) {
+        this.operationCode = operationCode;
     }
 
     public String getOperationName() {

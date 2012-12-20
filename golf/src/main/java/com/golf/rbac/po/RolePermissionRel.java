@@ -22,7 +22,7 @@ import com.golf.dao.po.Po;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "ROLE_PERMISSION_REL")
-public class RolePermissionRel extends Po{
+public class RolePermissionRel extends Po {
     /**
      * 
      */

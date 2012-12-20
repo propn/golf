@@ -226,17 +226,29 @@ public class PoSqls {
         sqlStr.replace(sqlStr.length() - 1, sqlStr.length(), " FROM ");
         sqlStr.append(getTableName(clz));
         // WHERE
-        List<Field> ids = getIdFields(clz);
-        if (!ids.isEmpty()) {
+        // List<Field> ids = getIdFields(clz); 所有字段
+        if (!columnFields.isEmpty()) {
             sqlStr.append(" [ WHERE ");
-            for (Field field : ids) {
+            for (int i = 0; i < columnFields.size(); i++) {
+                Field field = columnFields.get(i);
                 String column = field.getAnnotation(Column.class).name().toUpperCase();
                 if (StringUtils.isBlank(column)) {
                     column = StringUtils.camel4underline(field.getName());
                 }
-                sqlStr.append(column).append("=${").append(field.getName()).append("}").append(" AND ");
+                sqlStr.append("[");
+                if (i > 0) {
+                    sqlStr.append("AND ");
+                }
+                sqlStr.append(column).append("=${").append(field.getName()).append("}").append("]");
             }
-            sqlStr.replace(sqlStr.length() - 4, sqlStr.length(), "]");
+            // for (Field field : columnFields) {
+            // String column = field.getAnnotation(Column.class).name().toUpperCase();
+            // if (StringUtils.isBlank(column)) {
+            // column = StringUtils.camel4underline(field.getName());
+            // }
+            // sqlStr.append(column).append("=${").append(field.getName()).append("}").append(" AND ");
+            // }
+            sqlStr.append("]");
         }
         return sqlStr.toString();
     }

@@ -31,20 +31,19 @@ public class PoTest {
 
     @Test
     public void test() throws Exception {
-        String groupSql = PoSqls.getDDL(Group.class);
+        String groupSql = PoSqls.getDeleteSql(RolePermissionRel.class);
         System.out.println(groupSql);
         Trans.transNest(new Trans() {
             @Override
             public Object call() throws Exception {
-                PoUtils.buildSchema(Group.class, true);
-                PoUtils.buildSchema(Objetct.class, true);
-                PoUtils.buildSchema(Operation.class, true);
-                PoUtils.buildSchema(Permission.class, true);
-                PoUtils.buildSchema(Role.class, true);
-                PoUtils.buildSchema(RolePermissionRel.class, true);
-                PoUtils.buildSchema(RolePermissionRel.class, true);
-                PoUtils.buildSchema(User.class, true);
-                PoUtils.buildSchema(UserRoleRel.class, true);
+//                PoUtils.buildSchema(Group.class, true);
+//                PoUtils.buildSchema(Objetct.class, true);
+//                PoUtils.buildSchema(Operation.class, true);
+//                PoUtils.buildSchema(Permission.class, true);
+//                PoUtils.buildSchema(Role.class, true);
+//                PoUtils.buildSchema(RolePermissionRel.class, true);
+//                PoUtils.buildSchema(User.class, true);
+//                PoUtils.buildSchema(UserRoleRel.class, true);
                 return null;
             }
 

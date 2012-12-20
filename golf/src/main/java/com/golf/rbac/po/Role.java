@@ -10,10 +10,17 @@
  */
 package com.golf.rbac.po;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
 import com.golf.dao.po.Po;
+import com.golf.dao.po.PoSqls;
+import com.golf.utils.json.anno.Transient;
 
 /**
  * Role：角色，一定数量的权限的集合。权限分配的单位与载体,目的是隔离User与Privilege的逻辑关系.<br>
@@ -38,6 +45,41 @@ public class Role extends Po {
 
     @Column(columnDefinition = "TINYINT")
     private Byte status;
+
+    //
+    @Transient
+    private List<Permission> permissions;
+
+    public List<Permission> getPermission() throws Exception {
+        if (null != permissions) {
+            return permissions;
+        }
+        String sql = "SELECT PERMISSION_NAME permissionName,OBJETCT_CODE objetctCode,PERMISSION_ID permissionId,OPERATION_CODE operationCode FROM PERMISSIONS WHERE PERMISSION_ID IN(SELECT PERMISSION_ID permissionId,ROLE_ID roleId FROM ROLE_PERMISSION_REL WHERE ROLE_ID=${roleId})";
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("roleId", this.roleId);
+        permissions = SqlUtils.queryList(Permission.class, sql, PoSqls.getTableSchema(Permission.class), param);
+        return permissions;
+    }
+
+    public void addPermission(Permission permission) throws Exception {
+        RolePermissionRel rpr = new RolePermissionRel();
+        rpr.setRoleId(roleId);
+        rpr.setPermissionId(permission.getPermissionId());
+        rpr.save();
+        if (null != permissions) {
+            permissions.add(permission);
+        }
+    }
+
+    public void deletePermission(Permission permission) throws Exception {
+        RolePermissionRel rpr = new RolePermissionRel();
+        rpr.setRoleId(roleId);
+        rpr.setPermissionId(permission.getPermissionId());
+        rpr.delete();
+        if (null != permissions) {
+            getPermission();
+        }
+    }
 
     public Long getRoleId() {
         return roleId;
