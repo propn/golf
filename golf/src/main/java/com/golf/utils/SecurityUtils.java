@@ -61,7 +61,6 @@ public class SecurityUtils {
                 oos.close();
             }
         }
-
         return secretKey;
     }
 

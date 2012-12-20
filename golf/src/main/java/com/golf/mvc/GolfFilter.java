@@ -126,9 +126,9 @@ public class GolfFilter extends Golf implements Filter {
         }
         //
         if (ignoreFilePattern.matcher(servletPath).matches()) {
-            if (servletPath.endsWith(".jsp") || servletPath.endsWith(".jspx")) {
-                response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24
-            }
+            // if (servletPath.endsWith(".jsp") || servletPath.endsWith(".jspx")) {
+            response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24
+            // }
             chain.doFilter(request, response);
             return;
         }

@@ -34,7 +34,7 @@ public class H2Func {
      */
     public static void main(String[] args) throws Exception {
         String sql = "CREATE ALIAS TO_DATE FOR \"com.golf.e.h2.H2Func.to_date\"";
-        SqlUtils.execSqlInNewTrans(sql, null, Golf.DEFAULT_DATASOURCE_CODE);
+        SqlUtils.excuteInNewTrans(sql, Golf.DEFAULT_DATASOURCE_CODE);
     }
 
 }

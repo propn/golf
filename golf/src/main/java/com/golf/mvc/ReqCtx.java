@@ -82,6 +82,10 @@ public class ReqCtx {
         return getContext().get(obj);
     }
 
+    public static String getRequestedSessionId() {
+        return (String) getContext().get("sessionId");
+    }
+
     // @PathParam
     private static MultMap<String, Object> getPathParam() {
         MultMap<String, Object> pathParam = paramCtx.get().get("PathParam");
@@ -157,6 +161,9 @@ public class ReqCtx {
         context.put("HttpServletRequest", request);
         context.put("HttpServletResponse", response);
         context.put("Cookie[]", request.getCookies());
+        context.put("Session", request.getSession());
+        String sessionId = request.getRequestedSessionId();
+        context.put("sessionId", sessionId);
 
         String contentType = getContentType(request);
         if (null == contentType) {

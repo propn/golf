@@ -28,6 +28,24 @@ public class PoUtils {
      * @param po
      * @throws Exception
      */
+    public static <T extends Po> void buildSchema(Class<T> clz, boolean dropTable) throws Exception {
+        String table = PoSqls.getTableName(clz);
+        String schema = PoSqls.getTableSchema(clz);
+        Connection conn = ConnUtils.getConn(schema);
+        if (dropTable) {
+            String dSql = "DROP TABLE IF EXISTS " + table;
+            SqlRunner.excuteUpdate(conn, dSql, null);
+        }
+        String cSql = PoSqls.getDDL(clz);
+        SqlRunner.excuteUpdate(conn, cSql, null);
+    }
+
+    /**
+     * 
+     * @param <T>
+     * @param po
+     * @throws Exception
+     */
     public static <T extends Po> void intsert(T po) throws Exception {
         Class<? extends Po> clz = po.getClass();
         String sql = PoSqls.getInsertSql(clz);

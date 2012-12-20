@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DataSources>
 	<DataSource>
-		<code>default</code>
+		<schema>GOLF</schema>
 		<jndi/>
 		<driverClass>org.h2.Driver</driverClass>
 		<jdbcUrl>jdbc:h2:E:/java/golf/workspace/demo/db/golf;LOCK_MODE=3;MVCC=TRUE</jdbcUrl>
@@ -13,7 +13,7 @@
 		<maxConnectionsPerPartition>5</maxConnectionsPerPartition>
 	</DataSource>
 	<DataSource>
-		<code>default</code>
+		<schema>DEFAULT</schema>
 		<jndi/>
 		<driverClass>org.h2.Driver</driverClass>
 		<jdbcUrl>jdbc:h2:E:\java\golf\workspace\golf\db\default;LOCK_MODE=3;MVCC=TRUE</jdbcUrl>

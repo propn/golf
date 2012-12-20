@@ -29,7 +29,26 @@ public class SqlUtils {
      * @return
      * @throws Exception
      */
-    public static Object execSqlInNewTrans(final String sql, final String[] params, final String dsCode)
+    public static Object excuteInNewTrans(final String sql, final String dsCode) throws Exception {
+        Object rst = Trans.transNew(new Trans() {
+            @Override
+            public Object call() throws Exception {
+                return SqlRunner.excute(ConnUtils.getConn(dsCode), sql);
+            }
+        });
+        return rst;
+    }
+
+    /**
+     * 使用新事务执行Sql
+     * 
+     * @param sql Sql语句
+     * @param params Sql参数
+     * @param dsCode 数据源编码
+     * @return
+     * @throws Exception
+     */
+    public static Object excuteUpdateInNewTrans(final String sql, final String[] params, final String dsCode)
             throws Exception {
         Object rst = Trans.transNew(new Trans() {
             @Override
@@ -49,7 +68,26 @@ public class SqlUtils {
      * @return
      * @throws Exception
      */
-    public static Object execSqlInNestTrans(final String sql, final String[] params, final String dsCode)
+    public static Object excuteInNestTrans(final String sql, final String dsCode) throws Exception {
+        Object rst = Trans.transNest(new Trans() {
+            @Override
+            public Object call() throws Exception {
+                return SqlRunner.excute(ConnUtils.getConn(dsCode), sql);
+            }
+        });
+        return rst;
+    }
+
+    /**
+     * 使用嵌入事务执行Sql
+     * 
+     * @param sql Sql语句
+     * @param params Sql参数
+     * @param dsCode 数据源编码
+     * @return
+     * @throws Exception
+     */
+    public static Object excuteUpdateInNestTrans(final String sql, final String[] params, final String dsCode)
             throws Exception {
         Object rst = Trans.transNest(new Trans() {
             @Override

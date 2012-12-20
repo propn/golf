@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.golf.Golf;
 
 /**
+ * Database Connection Tools
  * 
  * @author Thunder.Hsu
  * 
@@ -24,9 +25,9 @@ public class ConnUtils {
 
     /* 当前线程事务状态,transId序列 */
     private static final ThreadLocal<String> transStatus = new ThreadLocal<String>();
-    /* {CurrentTransId,{dsCode,Connection}} */
+    /* {CurrentTransId,{schema,Connection}} */
     private static final ThreadLocal<Map<String, Map<String, Connection>>> connCtx = new ThreadLocal<Map<String, Map<String, Connection>>>();
-    /* {transStatus,{dsCode,SavePoint}} */
+    /* {transStatus,{schema,SavePoint}} */
     private static final ThreadLocal<Map<String, Map<String, Savepoint>>> savePointCtx = new ThreadLocal<Map<String, Map<String, Savepoint>>>();
 
     static String getTransStatus() {
@@ -70,11 +71,11 @@ public class ConnUtils {
 
     /**
      * 
-     * @param dsCode
+     * @param schema
      * @return
      * @throws Exception
      */
-    public static Connection getConn(String dsCode) throws Exception {
+    public static Connection getConn(String schema) throws Exception {
 
         if (null == getTransStatus() || "".equals(getTransStatus())) {
             throw new Exception("当前操作不在数据库事务中,请使用Trans.transNew进行数据库操作！");
@@ -84,12 +85,12 @@ public class ConnUtils {
         log.debug("get Conn in trans[{}] propagation[{}] transId[{}] ", transStatus.get(), currentPropagation,
                 currentTransId);
 
-        if (null == dsCode) {
-            dsCode = Golf.DEFAULT_DATASOURCE_CODE;
+        if (null == schema) {
+            schema = Golf.DEFAULT_DATASOURCE_CODE;
         }
 
         Connection conn = null;
-        Map<String, Map<String, Connection>> connCache = connCtx.get();// {currenttransId,{dsCode,Connection}}
+        Map<String, Map<String, Connection>> connCache = connCtx.get();// {currenttransId,{schema,Connection}}
         if (null == connCache)// 事务Cache
         {
             log.debug("init trans[{}] connCache.", getTransStatus());
@@ -100,11 +101,11 @@ public class ConnUtils {
             Map<String, Connection> connMap = Collections.synchronizedMap(new HashMap<String, Connection>());
             connCache.put(currentTransId, connMap);
 
-            log.debug("init dsCode[{}] Conn ", dsCode);
-            conn = DsUtils.getDataSource(dsCode).getConnection();
+            log.debug("init schema[{}] Conn ", schema);
+            conn = DsUtils.getDataSource(schema).getConnection();
             conn.setAutoCommit(false);
             conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            connMap.put(dsCode, conn);
+            connMap.put(schema, conn);
         } else {
             Map<String, Connection> connMap = connCache.get(currentTransId);
             if (null == connMap) {
@@ -112,34 +113,34 @@ public class ConnUtils {
                 connMap = Collections.synchronizedMap(new HashMap<String, Connection>());
                 connCache.put(currentTransId, connMap);
 
-                log.debug("init dsCode[{}] Conn", dsCode);
-                conn = DsUtils.getDataSource(dsCode).getConnection();
+                log.debug("init schema[{}] Conn", schema);
+                conn = DsUtils.getDataSource(schema).getConnection();
                 conn.setAutoCommit(false);
                 conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-                connMap.put(dsCode, conn);
+                connMap.put(schema, conn);
             } else {
-                conn = connMap.get(dsCode);
+                conn = connMap.get(schema);
                 if (null == conn) {
-                    log.debug("init dsCode[{}] conn ", dsCode);
-                    conn = DsUtils.getDataSource(dsCode).getConnection();
+                    log.debug("init schema[{}] conn ", schema);
+                    conn = DsUtils.getDataSource(schema).getConnection();
                     conn.setAutoCommit(false);
                     conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-                    connMap.put(dsCode, conn);
+                    connMap.put(schema, conn);
                 }
             }
         }
-        log.debug("getConn dscode[{}] ", dsCode);
+        log.debug("getConn schema[{}] ", schema);
         // 嵌套事务
         if (Trans.NEST == getCurrentPropagation()) {
-            Map<String, Map<String, Savepoint>> savePointCache = savePointCtx.get();// {currenttransId,{dsCode,savePoint}}
+            Map<String, Map<String, Savepoint>> savePointCache = savePointCtx.get();// {currenttransId,{schema,savePoint}}
             if (null == savePointCache) {
                 savePointCache = Collections.synchronizedMap(new HashMap<String, Map<String, Savepoint>>());
-                /* {dsCode,SavePoint} */
+                /* {schema,SavePoint} */
                 Map<String, Savepoint> savepoints = Collections.synchronizedMap(new HashMap<String, Savepoint>());
                 /* 为上下文中所有Connection创建SavePoint */
                 Map<String, Connection> connMap = connCache.get(currentTransId);
-                Set<String> dsCodes = connMap.keySet();
-                for (String ds : dsCodes) {
+                Set<String> schemas = connMap.keySet();
+                for (String ds : schemas) {
                     Connection c = connMap.get(ds);
                     savepoints.put(ds, c.setSavepoint());
                 }
@@ -151,13 +152,13 @@ public class ConnUtils {
                     savepoints = Collections.synchronizedMap(new HashMap<String, Savepoint>());
                     savePointCache.put(getTransStatus(), savepoints);
                     Map<String, Connection> connMap = connCache.get(currentTransId);
-                    Connection c = connMap.get(dsCode);
-                    savepoints.put(dsCode, c.setSavepoint());
+                    Connection c = connMap.get(schema);
+                    savepoints.put(schema, c.setSavepoint());
                 } else {
-                    Savepoint p = savepoints.get(dsCode);
+                    Savepoint p = savepoints.get(schema);
                     if (null == p) {
                         p = conn.setSavepoint();
-                        savepoints.put(dsCode, p);
+                        savepoints.put(schema, p);
                     }
                 }
             }
@@ -241,26 +242,26 @@ public class ConnUtils {
                     Map<String, Connection> connMap = connCtx.get().get(currentTransId);
                     for (Map.Entry<String, Connection> entry : connMap.entrySet()) {
                         Connection conn = entry.getValue();
-                        String dsCode = entry.getKey();
-                        Savepoint savepoint = savepointMap.get(dsCode);
+                        String schema = entry.getKey();
+                        Savepoint savepoint = savepointMap.get(schema);
                         if (null == savepoint) {
                             try {// 保存点建立之后创建的数据库连接
                                 conn.rollback();
                             } catch (SQLException e) {
-                                log.debug("事务回滚失败：dsCode[{}] ", dsCode, e);
+                                log.debug("事务回滚失败：schema[{}] ", schema, e);
                             } finally {
                                 try {
                                     conn.close();
-                                    connMap.remove(dsCode);
+                                    connMap.remove(schema);
                                 } catch (SQLException e) {
-                                    log.debug("数据库连接关闭失败：dsCode[{}] ", dsCode, e);
+                                    log.debug("数据库连接关闭失败：schema[{}] ", schema, e);
                                 }
                             }
                         } else {
                             try {
                                 conn.rollback(savepoint);
                             } catch (SQLException e) {
-                                log.debug("事务回滚失败：dsCode[{}] ", dsCode, e);
+                                log.debug("事务回滚失败：schema[{}] ", schema, e);
                             }
                         }
                     }

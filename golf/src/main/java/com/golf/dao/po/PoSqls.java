@@ -81,6 +81,7 @@ public class PoSqls {
         StringBuffer sqlStr = new StringBuffer("CREATE TABLE " + tableName + " (");
         List<Field> columnFields = getColumnFields(clz);
         if (columnFields != null && columnFields.size() > 0) {
+            String primarykey = null;// 主键
             for (Field field : columnFields) {
                 Column column = field.getAnnotation(Column.class);
                 // 列名
@@ -103,15 +104,37 @@ public class PoSqls {
                 } else if (columnType.contains("CHAR")) {
                     sqlStr.append("(").append(length).append(")");
                 }
-                // nullable
+                // NULL
                 boolean nullable = column.nullable();
                 if (!nullable) {
                     sqlStr.append(" NOT NULL");
+                } else {
+                    Id id = field.getAnnotation(Id.class);
+                    if (null != id) {
+                        sqlStr.append(" NOT NULL");
+                    }
                 }
                 sqlStr.append(",");
             }
         }
-        sqlStr = sqlStr.replace(sqlStr.lastIndexOf(","), sqlStr.length(), ")");
+        // PRIMARY KEY
+        List<Field> idFields = getIdFields(clz);
+        if (!idFields.isEmpty()) {
+            sqlStr.append("PRIMARY KEY (");
+            for (Field field : idFields) {
+                Column column = field.getAnnotation(Column.class);
+                // 列名
+                String columnName = column.name().toUpperCase();
+                if (StringUtils.isBlank(columnName)) {
+                    columnName = StringUtils.camel4underline(field.getName());
+                }
+                sqlStr.append(columnName);
+                sqlStr.append(",");
+            }
+            sqlStr = sqlStr.replace(sqlStr.lastIndexOf(","), sqlStr.length(), "))");
+        } else {
+            sqlStr = sqlStr.replace(sqlStr.lastIndexOf(","), sqlStr.length(), ")");
+        }
         return sqlStr.toString();
     }
 
@@ -139,7 +162,7 @@ public class PoSqls {
         StringBuffer sqlStr = new StringBuffer("DELETE FROM ");
         sqlStr.append(getTableName(clz));
         sqlStr.append(" WHERE ");
-        // Where
+        // WHERE
         List<Field> ids = getIdFields(clz);
         if (!ids.isEmpty()) {
             for (Field field : ids) {
@@ -202,7 +225,7 @@ public class PoSqls {
         }
         sqlStr.replace(sqlStr.length() - 1, sqlStr.length(), " FROM ");
         sqlStr.append(getTableName(clz));
-        // Where
+        // WHERE
         List<Field> ids = getIdFields(clz);
         if (!ids.isEmpty()) {
             sqlStr.append(" [ WHERE ");
@@ -233,7 +256,7 @@ public class PoSqls {
         return cache.get(className).get("S");
     }
 
-    private static String getTableName(Class<?> clz) throws Exception {
+    public static String getTableName(Class<?> clz) throws Exception {
         String table = null;
         if (clz.isAnnotationPresent(Table.class)) {
             table = ((Table) clz.getAnnotation(Table.class)).name().toUpperCase();

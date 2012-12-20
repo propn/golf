@@ -36,9 +36,9 @@ public class DsUtils {
             for (Map<String, String> ds : dss) {
                 String jndi = ds.get("jndi");
                 if (null == jndi || jndi.isEmpty()) {
-                    cache.put(ds.get("code"), initDs(ds));
+                    cache.put(ds.get("schema"), initDs(ds));
                 } else {
-                    cache.put(ds.get("code"), (DataSource) ic.lookup(jndi));
+                    cache.put(ds.get("schema"), (DataSource) ic.lookup(jndi));
                 }
             }
         } catch (Exception e) {
@@ -64,11 +64,11 @@ public class DsUtils {
             Map<String, String> map = new HashMap<String, String>();
             dss.add(map);
             Element ds = (Element) nl.item(i);
-            String code = getNodeValue(ds, "code");
-            if (null == code) {
-                throw new Exception("数据源配置文件DataSource.xml格式错误!code节点不能为空!");
+            String schema = getNodeValue(ds, "schema");
+            if (null == schema) {
+                throw new Exception("数据源配置文件DataSource.xml格式错误!schema节点不能为空!");
             }
-            map.put("code", code);
+            map.put("schema", schema);
 
             String jndi = getNodeValue(ds, "jndi");
             if (null != jndi) {

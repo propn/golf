@@ -35,6 +35,7 @@ public class ErrorViewBuilder implements Builder {
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException {
+        // response.sendError(500, msg);
         response.setCharacterEncoding(Golf.charsetName);
         response.setContentType(MediaType.TEXT_PLAIN);
         Throwable e = (Throwable) rst;

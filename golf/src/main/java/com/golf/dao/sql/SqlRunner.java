@@ -162,6 +162,19 @@ public class SqlRunner {
         return rstList;
     }
 
+    public static boolean excute(Connection conn, String sql) throws SQLException {
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            return stmt.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            closeStmt(stmt);
+        }
+    }
+
     public static int excuteUpdate(Connection conn, String sql, Object[] params) throws SQLException {
         PreparedStatement stmt = null;
         try {
