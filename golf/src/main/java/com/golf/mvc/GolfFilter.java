@@ -21,6 +21,7 @@ import com.golf.mvc.anno.MediaType;
 import com.golf.mvc.view.Builder;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
+import com.golf.rbac.SecurityMgr;
 import com.golf.utils.StringUtils;
 
 /**
@@ -111,9 +112,11 @@ public class GolfFilter extends Golf implements Filter {
         // CharacterEncodingFilter
         request.setCharacterEncoding(Golf.charsetName);
         response.setCharacterEncoding(Golf.charsetName);
-
-        String servletPath = request.getServletPath();
+        // 更新用户最后访问时间
+        String sessionId = request.getSession().getId();
+        SecurityMgr.get(sessionId);
         //
+        String servletPath = request.getServletPath();
         if (null != ignorePathPattern) {
             String path = servletPath;
             if (!path.endsWith("/")) {
@@ -126,13 +129,11 @@ public class GolfFilter extends Golf implements Filter {
         }
         //
         if (ignoreFilePattern.matcher(servletPath).matches()) {
-            // if (servletPath.endsWith(".jsp") || servletPath.endsWith(".jspx")) {
-            response.setDateHeader("Expires", System.currentTimeMillis() + 1440000);// 1000*60*24
-            // }
+            // 静态文件设置缓存
+            response.setDateHeader("Expires", System.currentTimeMillis() + 86400000);// 1000*60*60*24 一天
             chain.doFilter(request, response);
             return;
         }
-
         // 禁止客户端缓存
         response.setDateHeader("Expires", -10);
         response.setHeader("Cache-Control", "no-store,no-cache,must-revalidate");
@@ -146,7 +147,7 @@ public class GolfFilter extends Golf implements Filter {
             // 415 Unsupported Media Type
             return;
         }
-        //
+        
         String accept = request.getHeader("Accept");
         String[] produces = res.getProduces();
         String mediaType = getOptimalType(accept, produces);

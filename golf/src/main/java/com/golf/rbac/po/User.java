@@ -26,6 +26,7 @@ import com.golf.mvc.anno.GET;
 import com.golf.mvc.anno.POST;
 import com.golf.mvc.anno.Path;
 import com.golf.rbac.SecurityMgr;
+import com.golf.utils.SecurityUtils;
 import com.golf.utils.json.anno.Transient;
 
 /**
@@ -63,11 +64,13 @@ public class User extends Po {
     private String userCode;
 
     // AES加密
-    @Column(columnDefinition = "varchar", length = 64)
+    @Column(columnDefinition = "varchar", length = 32)
+    @Transient
     private String password;
 
     @Transient
     private List<Role> roles;
+
     @Transient
     private List<Long> permissionIds;
 
@@ -86,7 +89,7 @@ public class User extends Po {
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("userCode", userCode);
-        param.put("password", password);
+        param.put("password", new String(SecurityUtils.encrypt(password.getBytes())));
         param.put("status", 0);
         //
         User user = null;

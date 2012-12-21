@@ -11,7 +11,12 @@
 package com.golf.utils;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.junit.Test;
 
@@ -33,10 +38,17 @@ public class SecurityUtilsTest {
 
     /**
      * Test method for {@link com.golf.utils.SecurityUtils#encrypt(byte[], java.lang.String)}.
+     * @throws ClassNotFoundException 
+     * @throws IOException 
+     * @throws BadPaddingException 
+     * @throws IllegalBlockSizeException 
+     * @throws NoSuchPaddingException 
+     * @throws NoSuchAlgorithmException 
+     * @throws InvalidKeyException 
      */
     @Test
-    public void testEncryptByteArrayString() {
-        // fail("Not yet implemented");
+    public void testEncryptByteArrayString() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, IOException, ClassNotFoundException {
+        System.out.println(SecurityUtils.encrypt("asdfasfdsa".getBytes())); 
     }
 
     /**
@@ -49,10 +61,24 @@ public class SecurityUtilsTest {
 
     /**
      * Test method for {@link com.golf.utils.SecurityUtils#decrypt(byte[], java.lang.String)}.
+     * @throws ClassNotFoundException 
+     * @throws IOException 
+     * @throws BadPaddingException 
+     * @throws IllegalBlockSizeException 
+     * @throws NoSuchPaddingException 
+     * @throws NoSuchAlgorithmException 
+     * @throws InvalidKeyException 
      */
     @Test
-    public void testDecryptByteArrayString() {
-        // fail("Not yet implemented");
+    public void testDecryptByteArrayString() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, IOException, ClassNotFoundException {
+       
+        byte[] a = SecurityUtils.encrypt("1234567890abcde".getBytes()); 
+        System.out.println(a.length);
+        System.out.println(new String(a));
+        byte[] b = SecurityUtils.decrypt(a);
+        System.out.println(new String(b));
+
+        
     }
 
     /**

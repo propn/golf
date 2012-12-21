@@ -98,7 +98,6 @@ public class SecurityUtils {
         }
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
         return cipher.doFinal(data);
     }
 

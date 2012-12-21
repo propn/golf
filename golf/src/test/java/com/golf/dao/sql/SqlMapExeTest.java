@@ -101,16 +101,16 @@ public class SqlMapExeTest {
     @Test
     public void testGetSeqNextVal() throws SQLException, Exception {
 
-        Trans.transNest(new Trans() {
-            @Override
-            public Object call() throws Exception {
-//                String sql = "call next value for SEQ_FILE_INFO_FILE_ID";
-                String sql = "SELECT SEQ_FILE_INFO_FILE_ID.nextval FROM dual; ";
-                long a = SqlRunner.qrySingleLong(ConnUtils.getConn(),sql);
-                System.out.println(a);
-                return null;
-            }
-        });
+//        Trans.transNest(new Trans() {
+//            @Override
+//            public Object call() throws Exception {
+////                String sql = "call next value for SEQ_FILE_INFO_FILE_ID";
+//                String sql = "SELECT SEQ_FILE_INFO_FILE_ID.nextval FROM dual; ";
+//                long a = SqlRunner.qrySingleLong(ConnUtils.getConn(),sql);
+//                System.out.println(a);
+//                return null;
+//            }
+//        });
 
     }
 
