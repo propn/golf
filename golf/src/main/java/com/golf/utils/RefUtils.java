@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import com.golf.utils.cache.PartitionCache;
+
 /**
  * 反射工具类
  * 
@@ -11,8 +13,8 @@ import java.util.Map;
  * 
  */
 public class RefUtils {
-    private static Cache<Field> fieldsCache = new Cache<Field>();;
-    private static Cache<Method> methodsCache = new Cache<Method>();;
+    private static PartitionCache<Field> fieldsCache = new PartitionCache<Field>();;
+    private static PartitionCache<Method> methodsCache = new PartitionCache<Method>();;
 
     private RefUtils() {
     }

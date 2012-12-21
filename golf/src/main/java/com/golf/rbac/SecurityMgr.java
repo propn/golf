@@ -10,17 +10,33 @@
  */
 package com.golf.rbac;
 
+import com.golf.rbac.po.User;
+import com.golf.utils.cache.ExpiringCache;
+
 /**
  * @author Thunder.Hsu 2012-12-18
  */
-public interface SecurityMgr<T> {
+public abstract class SecurityMgr {
 
-    SecurityMgr<T> getSessionMgr();
+    private static final int expirationInterval = 60;// 60s
+    private static final int timeToLive = 1800;// 30ms
+    private static final ExpiringCache<String, User> cache = new ExpiringCache<String, User>();
 
-    void put(String sessionId, T obj);
+    static {
+        cache.setExpirationInterval(expirationInterval);
+        cache.setTimeToLive(timeToLive);
+    }
 
-    void remove(String sessionId);
+    public static void put(String sessionId, User user) {
+        cache.put(sessionId, user);
+    }
 
-    T get(String sessionId);
+    public static void remove(String sessionId) {
+        cache.remove(sessionId);
+    }
+
+    public static User get(String sessionId) {
+        return cache.get(sessionId);
+    }
 
 }

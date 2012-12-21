@@ -1,11 +1,11 @@
-package com.golf.utils;
+package com.golf.utils.cache;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class Cache<T> {
+public class PartitionCache<T> {
 
     // <组件类名或标识, <数据名, 数据值>>
     private ConcurrentMap<String, ConcurrentMap<String, T>> cache = new ConcurrentHashMap<String, ConcurrentMap<String, T>>();

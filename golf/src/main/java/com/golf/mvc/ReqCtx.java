@@ -30,6 +30,8 @@ import com.golf.mvc.multipart.MultiParser;
 import com.golf.mvc.multipart.ParamPart;
 import com.golf.mvc.multipart.Part;
 import com.golf.mvc.multipart.UpFile;
+import com.golf.rbac.SecurityMgr;
+import com.golf.rbac.po.User;
 import com.golf.utils.MultMap;
 import com.golf.utils.StringUtils;
 
@@ -82,8 +84,16 @@ public class ReqCtx {
         return getContext().get(obj);
     }
 
-    public static String getRequestedSessionId() {
-        return (String) getContext().get("sessionId");
+    public static User getCurrentUser() {
+        Object obj = getContext("User");
+        if (null == obj) {
+            return null;
+        }
+        return (User) obj;
+    }
+
+    public static String getSessionId() {
+        return (String) getContext("sessionId");
     }
 
     // @PathParam
@@ -161,10 +171,11 @@ public class ReqCtx {
         context.put("HttpServletRequest", request);
         context.put("HttpServletResponse", response);
         context.put("Cookie[]", request.getCookies());
-        context.put("Session", request.getSession());
-        String sessionId = request.getRequestedSessionId();
-        context.put("sessionId", sessionId);
-
+        //
+        String sessionId = request.getSession().getId();
+        context.put("User", SecurityMgr.get(sessionId));
+        context.put("sessionId", SecurityMgr.get(sessionId));
+        //
         String contentType = getContentType(request);
         if (null == contentType) {
             return;
@@ -176,7 +187,6 @@ public class ReqCtx {
             ByteArrayInputStream bin = StringUtils.servletInputStream2ByteArrayInputStream(request.getInputStream());
             context.put("InputStream", bin);
         }
-
     }
 
     private static void initPathParam(String servletPath, String path) throws UnsupportedEncodingException {

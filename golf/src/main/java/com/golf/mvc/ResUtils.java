@@ -24,10 +24,10 @@ import com.golf.mvc.anno.POST;
 import com.golf.mvc.anno.PUT;
 import com.golf.mvc.anno.Path;
 import com.golf.mvc.anno.Produces;
-import com.golf.utils.Cache;
 import com.golf.utils.ClassUtils;
 import com.golf.utils.RefUtils;
 import com.golf.utils.StringUtils;
+import com.golf.utils.cache.PartitionCache;
 
 /**
  * @author Thunder.Hsu
@@ -36,7 +36,7 @@ import com.golf.utils.StringUtils;
 public class ResUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ResUtils.class);
-    private static Cache<Resource> resCache = new Cache<Resource>();
+    private static PartitionCache<Resource> resCache = new PartitionCache<Resource>();
     private static final String PATH_PARAM_REXP = "/?\\{(\\S*?)\\}";// 匹配 /{a}
 
     public static void init(String... pkgs) throws Exception {

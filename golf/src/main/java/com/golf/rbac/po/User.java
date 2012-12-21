@@ -20,6 +20,12 @@ import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
 import com.golf.dao.po.Po;
 import com.golf.dao.po.PoSqls;
+import com.golf.mvc.ReqCtx;
+import com.golf.mvc.anno.FormParam;
+import com.golf.mvc.anno.GET;
+import com.golf.mvc.anno.POST;
+import com.golf.mvc.anno.Path;
+import com.golf.rbac.SecurityMgr;
 import com.golf.utils.json.anno.Transient;
 
 /**
@@ -28,6 +34,7 @@ import com.golf.utils.json.anno.Transient;
  * @author Thunder.Hsu 2012-12-18
  */
 @Table(schema = "golf", name = "USERS")
+@Path("/user")
 public class User extends Po {
 
     /**
@@ -71,19 +78,36 @@ public class User extends Po {
      * @return
      * @throws Exception
      */
-    public static User login(String userCode, String password) throws Exception {
+    @Path("/login")
+    @POST
+    public User login(@FormParam(value = "userCode")
+    String userCode, @FormParam(value = "password")
+    String password) throws Exception {
+
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("userCode", userCode);
         param.put("password", password);
         param.put("status", 0);
         //
+        User user = null;
         List<User> users = SqlUtils.queryList(User.class, PoSqls.getSelectSql(User.class),
                 PoSqls.getTableSchema(User.class), param);
         if (users.isEmpty()) {
-            return null;
+            user = null;
         } else {
-            return users.get(0);
+            user = users.get(0);
+            String sessionId = ReqCtx.getSessionId();
+            SecurityMgr.put(sessionId, user);
         }
+        return user;
+    }
+
+    @Path("/logout")
+    @GET
+    @POST
+    public void logout() throws Exception {
+        String sessionId = ReqCtx.getSessionId();
+        SecurityMgr.remove(sessionId);
     }
 
     public boolean hasPermission(String objetctCode, String operationCode) throws Exception {

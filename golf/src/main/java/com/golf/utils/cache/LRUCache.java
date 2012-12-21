@@ -1,4 +1,4 @@
-package com.golf.utils;
+package com.golf.utils.cache;
 
 import java.util.LinkedHashMap;
 import java.util.concurrent.locks.Lock;

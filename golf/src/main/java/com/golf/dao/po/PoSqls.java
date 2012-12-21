@@ -9,9 +9,9 @@ import com.golf.Golf;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.utils.Cache;
 import com.golf.utils.RefUtils;
 import com.golf.utils.StringUtils;
+import com.golf.utils.cache.PartitionCache;
 
 /**
  * 
@@ -19,7 +19,7 @@ import com.golf.utils.StringUtils;
  */
 public class PoSqls {
 
-    private static Cache<String> cache = new Cache<String>();
+    private static PartitionCache<String> cache = new PartitionCache<String>();
 
     public static String getInsertSql(Class<?> clz) throws Exception {
         String className = clz.getName();
