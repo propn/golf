@@ -33,7 +33,7 @@ import com.golf.utils.StringUtils;
 public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
-    private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|swf|html|jsp|jspx)$";
+    private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|html|jsp|jspx)$";
     private static Pattern ignoreFilePattern = null;
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
 

@@ -2,7 +2,7 @@ package com.golf.utils.task.cron;
 
 public class Waiter implements Runnable {
 
-    protected CronManager mgr;
+    protected CronUtils mgr;
     protected Thread thread;
     private long sleepUntil = -1;
     private boolean shutdown = false;
@@ -13,7 +13,7 @@ public class Waiter implements Runnable {
      * @param isDaemon true if the waiter thread should run as a daemon.
      * @param threadName the name of the waiter thread
      */
-    public Waiter(CronManager mgr, boolean isDaemon, String waiterName) {
+    public Waiter(CronUtils mgr, boolean isDaemon, String waiterName) {
         this.mgr = mgr;
         // start the thread
         thread = new Thread(this, waiterName);

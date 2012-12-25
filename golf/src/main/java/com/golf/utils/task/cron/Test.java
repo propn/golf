@@ -34,7 +34,7 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        CronManager mgr = new CronManager();
+        CronUtils mgr = new CronUtils();
 
         long current = System.currentTimeMillis();
         System.out.println("Current date is " + new Date(current));

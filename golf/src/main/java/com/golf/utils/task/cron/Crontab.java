@@ -11,6 +11,7 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    // 定时任务表达式
     private int[] minutes = { -1 };
     private static int minMinute = 0;
     private static int maxMinute = 59;
@@ -32,43 +33,41 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
     // no support for a list of years -- must be * or specified
     private int year = -1;
 
-    //
+    // 定时任务基本信息
     private String name;
     // used to generate names if they are null
     private static int UNIQUE = 0;
-    // default: false
-    private boolean ringInNewThread = false;
+    // default: true
+    private boolean ringInNewThread = true;
 
     private boolean isRelative;
     public boolean isRepeating;
     public long alarmTime;
     private long lastUpdateTime;
 
-    private transient CronTask listener;
+    private transient CronTask task;
 
     /**
      * Creates a new AlarmEntry. Fixed date format: this alarm will happen once, at the timestamp given.
      * 
      * @param date the alarm date to be added.
-     * @param listener the alarm listener.
+     * @param task the alarm listener.
      * @exception Exception if the alarm date is in the past (or less than 1 second away from the current date).
      */
     public Crontab(String _name, Date _date, CronTask _listener) throws Exception {
-
         setName(_name);
-        listener = _listener;
+        this.task = _listener;
         Calendar alarm = Calendar.getInstance();
         alarm.setTime(_date);
-        minutes = new int[] { alarm.get(Calendar.MINUTE) };
-        hours = new int[] { alarm.get(Calendar.HOUR_OF_DAY) };
-        daysOfMonth = new int[] { alarm.get(Calendar.DAY_OF_MONTH) };
-        months = new int[] { alarm.get(Calendar.MONTH) };
-        year = alarm.get(Calendar.YEAR);
-
-        isRepeating = false;
-        isRelative = false;
-        alarmTime = _date.getTime();
-        checkAlarmTime();
+        this.minutes = new int[] { alarm.get(Calendar.MINUTE) };
+        this.hours = new int[] { alarm.get(Calendar.HOUR_OF_DAY) };
+        this.daysOfMonth = new int[] { alarm.get(Calendar.DAY_OF_MONTH) };
+        this.months = new int[] { alarm.get(Calendar.MONTH) };
+        this.year = alarm.get(Calendar.YEAR);
+        this.isRepeating = false;
+        this.isRelative = false;
+        this.alarmTime = _date.getTime();
+        checkPeriod();
     }
 
     /**
@@ -78,7 +77,7 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      * @param _name keeps the alarm unique from other alarms with the same schedule, and used for debugging.
      * @param delayMinutes the alarm delay in minutes (relative to now).
      * @param isRepetitive <code>true</code> if the alarm must be reactivated, <code>false</code> otherwise.
-     * @param listener the alarm listener.
+     * @param task the alarm listener.
      * @exception Exception if the alarm date is in the past (or less than 1 second closed to the current date).
      */
     public Crontab(String _name, int _delayMinutes, boolean _isRepeating, CronTask _listener) throws Exception {
@@ -89,7 +88,7 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
 
         setName(_name);
         minutes = new int[] { _delayMinutes };
-        listener = _listener;
+        task = _listener;
         isRepeating = _isRepeating;
 
         isRelative = true;
@@ -120,7 +119,7 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      *            <code>java.util.Calendar</code> constants can be used.
      * @param year year of the alarm. When this field is not set (i.e. -1) the alarm is repetitive (i.e. it is
      *            rescheduled when reached).
-     * @param listener the alarm listener.
+     * @param task the alarm listener.
      * @return the AlarmEntry.
      * @exception Exception if the alarm date is in the past (or less than 1 second away from the current date).
      */
@@ -154,7 +153,7 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      *            constants can be used.
      * @param year year of the alarm. When this field is not set (i.e. -1) the alarm is repetitive (i.e. it is
      *            rescheduled when reached).
-     * @param listener the alarm listener.
+     * @param task the alarm listener.
      * @return the AlarmEntry.
      * @exception Exception if the alarm date is in the past (or less than 1 second away from the current date).
      */
@@ -168,12 +167,12 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
         months = _months;
         daysOfWeek = _daysOfWeek;
         year = _year;
-        listener = _listener;
+        task = _listener;
         isRepeating = (_year == -1);
         isRelative = false;
 
         updateAlarmTime();
-        checkAlarmTime();
+        checkPeriod();
     }
 
     /**
@@ -182,13 +181,13 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      * @param _name
      */
     private void setName(String _name) {
-        name = _name;
-        if (name == null)
-            name = "alarm" + (UNIQUE++);
+        this.name = _name;
+        if (this.name == null)
+            this.name = "alarm" + (UNIQUE++);
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -197,11 +196,11 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      * listener to this alarm in a new Thread, so other alarms won't be delayed.
      */
     public void setRingInNewThead() {
-        ringInNewThread = true;
+        this.ringInNewThread = true;
     }
 
     public boolean isRingInNewThread() {
-        return ringInNewThread;
+        return this.ringInNewThread;
     }
 
     /**
@@ -209,18 +208,15 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      * 
      * @exception Exception if the alarm date is in the past (or less than 1 second in the future).
      */
-    void checkAlarmTime() throws Exception {
-        long delay = alarmTime - System.currentTimeMillis();
-        if (delay <= 1000) {
+    void checkPeriod() throws Exception {
+        long delay = this.alarmTime - System.currentTimeMillis();
+        if (delay <= 1000) {// 最小间隔时间是1分钟
             throw new Exception();
         }
     }
 
-    /**
-     * Notifies the listener.
-     */
     public void run() {
-        listener.run(this);
+        task.run(this);
     }
 
     /**
@@ -228,16 +224,13 @@ public class Crontab implements Comparable<Object>, java.io.Serializable {
      */
     public void updateAlarmTime() {
         Calendar now = Calendar.getInstance();
-
         if (isRelative) {
             // relative only uses minutes field, with only a single value (NOT -1)
             alarmTime = now.getTime().getTime() + (minutes[0] * 60000);
             return;
         }
-
         Calendar alarm = (Calendar) now.clone();
         alarm.set(Calendar.SECOND, 0);
-
         //
         // the updates work in a cascade -- if next minute value is in the
         // following hour, hour is incremented. If next valid hour value is

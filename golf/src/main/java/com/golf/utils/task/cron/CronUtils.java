@@ -7,18 +7,19 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class CronManager {
+public class CronUtils {
 
     private Waiter waiter;
     private SortedSet /* of AlarmEntry */<Crontab> queue;
 
     /**
-     * Creates a new AlarmManager. The waiter thread will be started only when the first alarm listener will be added.
+     * Creates a new AlarmManager. 
+     * The waiter thread will be started only when the first alarm listener will be added.
      * 
      * @param isDaemon true if the waiter thread should run as a daemon.
      * @param threadName the name of the waiter thread
      */
-    public CronManager(boolean isDaemon, String threadName) {
+    public CronUtils(boolean isDaemon, String threadName) {
         queue = new TreeSet<Crontab>();
         waiter = new Waiter(this, isDaemon, threadName);
     }
@@ -27,7 +28,7 @@ public class CronManager {
      * Creates a new AlarmManager. The waiter thread will be started only when the first alarm listener will be added.
      * The waiter thread will <i>not</i> run as a daemon.
      */
-    public CronManager() {
+    public CronUtils() {
         this(false, "AlarmManager");
     }
 
@@ -115,7 +116,7 @@ public class CronManager {
      * @param entry the AlarmEntry.
      * @exception Exception if the alarm date is in the past (or less than one second away from the current date).
      */
-    public synchronized void add(Crontab _entry) throws Exception {
+    private synchronized void add(Crontab _entry) throws Exception {
         queue.add(_entry);
         if (queue.first().equals(_entry)) {
             waiter.update(_entry.alarmTime);
@@ -167,8 +168,8 @@ public class CronManager {
      * @param Crontab
      * @return boolean whether AlarmEntry is contained within the manager
      */
-    public synchronized boolean contains(Crontab _alarmEntry) {
-        return queue.contains(_alarmEntry);
+    public synchronized boolean contains(Crontab entry) {
+        return queue.contains(entry);
     }
 
     /**
@@ -198,11 +199,10 @@ public class CronManager {
         // Removes this alarm and notifies the listener
         Crontab entry = queue.first();
         queue.remove(entry);
-
         // NOTE: if the entry is still running when its next alarm time comes up,
         // that execution of the entry will be skipped.
         if (entry.isRingInNewThread()) {
-            new Thread(new RunnableTasker(entry)).start();
+            new Thread(new Runner(entry)).start();
         } else {
             // ring in same thread, sequentially.. can delay other alarms
             try {
@@ -211,7 +211,6 @@ public class CronManager {
                 e.printStackTrace();
             }
         }
-
         // Reactivates the alarm if it is repetitive
         if (entry.isRepeating) {
             entry.updateAlarmTime();
@@ -235,8 +234,9 @@ public class CronManager {
      */
     @Override
     public void finalize() {
-        if (waiter != null)
+        if (waiter != null) {
             waiter.stop();
+        }
     }
 
     /**
@@ -244,10 +244,10 @@ public class CronManager {
      * 
      * @see com.golf.utils.task.cron.Crontab#setRingInNewThread()
      */
-    private class RunnableTasker implements Runnable {
+    private class Runner implements Runnable {
         Crontab entry = null;
 
-        RunnableTasker(Crontab _entry) {
+        Runner(Crontab _entry) {
             entry = _entry;
         }
 
