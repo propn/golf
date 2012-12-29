@@ -19,8 +19,8 @@ import com.golf.mvc.anno.Path;
 import com.golf.rbac.SecurityMgr;
 import com.golf.rbac.po.User;
 
-@Path("/RandomCode")
-public class RandomCode {
+@Path("/captcha")
+public class Captcha {
 
     @Path("/")
     @GET
