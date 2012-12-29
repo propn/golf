@@ -33,7 +33,9 @@ import com.golf.utils.StringUtils;
 public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
+    private static final String CACHE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf)$";
     private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|html|jsp|jspx)$";
+    private static Pattern cachePattern = null;// console.\\S{0,}
     private static Pattern ignoreFilePattern = null;
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
 
@@ -44,15 +46,23 @@ public class GolfFilter extends Golf implements Filter {
         log.info("golf begin start.");
         appPath = filterConfig.getServletContext().getRealPath("/");
         log.info("Path [{}] ", appPath);
-        //
-        String regex = filterConfig.getInitParameter("ignore_file");
-        if (null == regex) {
+        // 浏览器缓存
+        String cacheFile = filterConfig.getInitParameter("cache_file");
+        if (null == cacheFile) {
+            cachePattern = Pattern.compile(CACHE_FILE, Pattern.CASE_INSENSITIVE);
+            log.debug("cachePattern : " + CACHE_FILE);
+        } else {
+            cachePattern = Pattern.compile(cacheFile, Pattern.CASE_INSENSITIVE);
+        }
+        // 忽略文件
+        String regexFile = filterConfig.getInitParameter("ignore_file");
+        if (null == regexFile) {
             ignoreFilePattern = Pattern.compile(IGNORE_FILE, Pattern.CASE_INSENSITIVE);
             log.debug("ignorePattern : " + IGNORE_FILE);
         } else {
-            ignoreFilePattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+            ignoreFilePattern = Pattern.compile(regexFile, Pattern.CASE_INSENSITIVE);
         }
-        // ignore_path
+        // 忽略路径
         String ignore_path = filterConfig.getInitParameter("ignore_path");
         if (null != ignore_path) {
             String paths[] = ignore_path.split(";");
@@ -76,7 +86,7 @@ public class GolfFilter extends Golf implements Filter {
                         Pattern.CASE_INSENSITIVE);
             }
         }
-        //
+        // 系统资源
         String packages = filterConfig.getInitParameter("packages");
         String[] pkgs = null;
         if (null == packages) {
@@ -115,8 +125,18 @@ public class GolfFilter extends Golf implements Filter {
         // 更新用户最后访问时间
         String sessionId = request.getSession().getId();
         SecurityMgr.get(sessionId);
-        //
         String servletPath = request.getServletPath();
+        // 静态文件设置缓存
+        if (cachePattern.matcher(servletPath).matches()) {
+            response.setDateHeader("Expires", System.currentTimeMillis() + 259200000);// 1000*60*60*24*3 一天
+        }
+        // 忽略文件
+        if (ignoreFilePattern.matcher(servletPath).matches()) {
+            response.setDateHeader("Expires", System.currentTimeMillis() + 259200000);// 1000*60*60*24*3 一天
+            chain.doFilter(request, response);
+            return;
+        }
+        // 忽略路径
         if (null != ignorePathPattern) {
             String path = servletPath;
             if (!path.endsWith("/")) {
@@ -126,13 +146,6 @@ public class GolfFilter extends Golf implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
-        }
-        //
-        if (ignoreFilePattern.matcher(servletPath).matches()) {
-            // 静态文件设置缓存
-            response.setDateHeader("Expires", System.currentTimeMillis() + 86400000);// 1000*60*60*24 一天
-            chain.doFilter(request, response);
-            return;
         }
         // 禁止客户端缓存
         response.setDateHeader("Expires", -10);
@@ -147,7 +160,6 @@ public class GolfFilter extends Golf implements Filter {
             // 415 Unsupported Media Type
             return;
         }
-        
         String accept = request.getHeader("Accept");
         String[] produces = res.getProduces();
         String mediaType = getOptimalType(accept, produces);
