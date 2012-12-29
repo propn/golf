@@ -173,8 +173,13 @@ public class ReqCtx {
         context.put("Cookie[]", request.getCookies());
         //
         String sessionId = request.getSession().getId();
-        context.put("User", SecurityMgr.get(sessionId));
-        context.put("sessionId", SecurityMgr.get(sessionId));
+        User user = SecurityMgr.get(sessionId);
+        if (null == user) {
+            user = new User();
+            SecurityMgr.put(sessionId, user);
+        }
+        context.put("User", user);
+        context.put("sessionId", sessionId);
         //
         String contentType = getContentType(request);
         if (null == contentType) {

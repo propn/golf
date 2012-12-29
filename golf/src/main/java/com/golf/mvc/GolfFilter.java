@@ -128,11 +128,15 @@ public class GolfFilter extends Golf implements Filter {
         String servletPath = request.getServletPath();
         // 静态文件设置缓存
         if (cachePattern.matcher(servletPath).matches()) {
-            response.setDateHeader("Expires", System.currentTimeMillis() + 259200000);// 1000*60*60*24*3 一天
+            response.setDateHeader("Expires", System.currentTimeMillis() + 259200000);// 1000*60*60*24*3 三天
+        } else {
+            // 取消客户端缓存
+            response.setDateHeader("Expires", -10);
+            response.setHeader("Cache-Control", "no-store,no-cache,must-revalidate");
+            response.setHeader("Pragma", "no-cache");
         }
         // 忽略文件
         if (ignoreFilePattern.matcher(servletPath).matches()) {
-            response.setDateHeader("Expires", System.currentTimeMillis() + 259200000);// 1000*60*60*24*3 一天
             chain.doFilter(request, response);
             return;
         }
@@ -147,10 +151,6 @@ public class GolfFilter extends Golf implements Filter {
                 return;
             }
         }
-        // 禁止客户端缓存
-        response.setDateHeader("Expires", -10);
-        response.setHeader("Cache-Control", "no-store,no-cache,must-revalidate");
-        response.setHeader("Pragma", "no-cache");
         //
         Resource res = ResUtils.getMatchedRes(servletPath);
         if (!validate(request, response, res)) {

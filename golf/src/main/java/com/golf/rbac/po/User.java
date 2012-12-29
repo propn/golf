@@ -74,6 +74,25 @@ public class User extends Po {
     @Transient
     private List<Long> permissionIds;
 
+    @Transient
+    private Map<String, Object> ctx = new HashMap<String, Object>();// 保存Session信息
+
+    public void putVar(String key, Object value) {
+        ctx.put(key, value);
+    }
+
+    public Object getVar(String key) {
+        return ctx.get(key);
+    }
+
+    public void removeVar(String key) {
+        ctx.remove(key);
+    }
+
+    public void clearVars() {
+        ctx.clear();
+    }
+
     /**
      * 
      * @param userCode

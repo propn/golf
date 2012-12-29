@@ -31,6 +31,10 @@ public class BuilderFactory {
      */
     public static Builder getBuilder(String mediaType, Object rst) throws ServletException {
 
+        if (null == rst) {
+            return new EmptyViewBuilder();
+        }
+
         if (rst instanceof View) {
             View v = (View) rst;
             Vkind vkind = v.getKind();
