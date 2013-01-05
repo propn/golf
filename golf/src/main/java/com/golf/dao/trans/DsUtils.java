@@ -53,9 +53,9 @@ public class DsUtils {
         DocumentBuilder docbuilder = dbf.newDocumentBuilder();// 创建解析者
 
         // 初始化数据源
-        InputStream is = ClassLoader.getSystemResourceAsStream(Golf.DATASOURCE_FILE_NAME);
+        InputStream is = ClassLoader.getSystemResourceAsStream(Golf.DATASOURCE_CONFIG_FILE);
         if (null == is) {
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Golf.DATASOURCE_FILE_NAME);
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Golf.DATASOURCE_CONFIG_FILE);
         }
         Document doc = docbuilder.parse(is);
         NodeList nl = doc.getElementsByTagName("DataSource");

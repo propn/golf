@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<router>
+	<default>GOLF</default>
+	<table table="CUST" schema="CRMDB">
+	</table>
+	<table table="ACCOUNT" schema="CRMDB" exp="ACCOUNT_ID|%/10">
+		<schema val="1,2,3" schema="CRM1" />
+		<schema val="4,5" schema="CRM2" />
+	</table>
+</router>

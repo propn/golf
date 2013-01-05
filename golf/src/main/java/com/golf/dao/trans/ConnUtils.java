@@ -86,7 +86,7 @@ public class ConnUtils {
                 currentTransId);
 
         if (null == schema) {
-            schema = Golf.DEFAULT_DATASOURCE_CODE;
+            schema = Golf.DEFAULT_SCHEMA;
         }
 
         Connection conn = null;

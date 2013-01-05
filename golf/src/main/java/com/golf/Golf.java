@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import com.golf.ioc.BeanUtils;
 import com.golf.mvc.ResUtils;
 import com.golf.utils.ClassUtils;
+import com.golf.utils.ConfigUtils;
 import com.golf.utils.JaxbUtils;
+import com.golf.utils.StringUtils;
 
 /**
  * @author Thunder.Hsu
@@ -21,10 +23,11 @@ import com.golf.utils.JaxbUtils;
  */
 public abstract class Golf {
     public static final String charsetName = "UTF-8";
-    public static final String CONFIG_FILE_NAME = "golf";/* 数据库配置文件 */
-    public static final String DATASOURCE_FILE_NAME = "dataSource.xml";/* 数据库配置文件 */
-    public static final String DEFAULT_DATASOURCE_CODE = "default";/* 默认数据源 */
-    public static final String MAX_UPLOAD_SIZE = "maxUploadSize";/* 默认数据源 */
+    public static final String CONFIG_FILE_NAME = "golf";/* 配置文件 */
+    public static final String DATASOURCE_CONFIG_FILE = "dataSource.xml";/* 数据库配置文件 */
+    public static final String DATABASE_ROUTER_FILE = "dbRouter.xml";/* 数据源路由配置文件 */
+    public static final String DEFAULT_SCHEMA = "default";/* 默认数据源 */
+    public static final String RUNTIME = "runtime";// 运行环境/调试环境
 
     private static final Logger log = LoggerFactory.getLogger(Golf.class);
 
@@ -33,6 +36,14 @@ public abstract class Golf {
 
     public static String getAppPath() {
         return appPath;
+    }
+
+    public static String getProperty(String key, String def) {
+        String v = ConfigUtils.get(key);
+        if (StringUtils.isBlank(v)) {
+            v = def;
+        }
+        return v;
     }
 
     public static void init(String... pkgs) throws Exception {

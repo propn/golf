@@ -14,6 +14,7 @@ import com.golf.dao.sql.SqlParser;
 import com.golf.dao.sql.SqlRunner;
 import com.golf.dao.sql.UpdateSqlParser;
 import com.golf.dao.trans.ConnUtils;
+import com.golf.dao.trans.DbRouter;
 
 /**
  * JPA工具类
@@ -43,35 +44,38 @@ public class PoUtils {
     /**
      * 
      * @param <T>
-     * @param po
+     * @param obj
      * @throws Exception
      */
-    public static <T extends Po> void intsert(T po) throws Exception {
-        Class<? extends Po> clz = po.getClass();
+    public static <T extends Po> void intsert(T obj) throws Exception {
+        Class<? extends Po> clz = obj.getClass();
         String sql = PoSqls.getInsertSql(clz);
         SqlParser filter = new InsertSqlParser();
-        Object[] param = filter.parse(sql, po.toMap());
-        String schema = PoSqls.getTableSchema(clz);
+        Object[] param = filter.parse(sql, obj.toMap());
+//        String schema = PoSqls.getTableSchema(clz);
+        String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static <T extends Po> int delete(T po) throws Exception {
-        Class<? extends Po> clz = po.getClass();
+    public static <T extends Po> int delete(T obj) throws Exception {
+        Class<? extends Po> clz = obj.getClass();
         String sql = PoSqls.getDeleteSql(clz);
         SqlParser filter = new UpdateSqlParser();
-        Object[] param = filter.parse(sql, po.toMap());
-        String schema = PoSqls.getTableSchema(clz);
+        Object[] param = filter.parse(sql, obj.toMap());
+//        String schema = PoSqls.getTableSchema(clz);
+        String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static <T extends Po> int update(T po) throws Exception {
-        Class<? extends Po> clz = po.getClass();
+    public static <T extends Po> int update(T obj) throws Exception {
+        Class<? extends Po> clz = obj.getClass();
         String sql = PoSqls.getUpdateSql(clz);
         SqlParser filter = new UpdateSqlParser();
-        Object[] param = filter.parse(sql, po.toMap());
-        String schema = PoSqls.getTableSchema(clz);
+        Object[] param = filter.parse(sql, obj.toMap());
+//        String schema = PoSqls.getTableSchema(clz);
+        String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
@@ -88,7 +92,8 @@ public class PoUtils {
         String sql = PoSqls.getSelectSql(clz);
         SqlParser parser = new QrySqlParser();
         Object[] stmt = parser.parse(sql, param);
-        String schema = PoSqls.getTableSchema(clz);
+//        String schema = PoSqls.getTableSchema(clz);
+        String schema = DbRouter.getSchema(clz, param);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) stmt[0], (Object[]) stmt[1]);
         // 转换结果
@@ -112,7 +117,8 @@ public class PoUtils {
         String sql = PoSqls.getSelectSql(clz);
         SqlParser filter = new QrySqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
-        String schema = PoSqls.getTableSchema(clz);
+//        String schema = PoSqls.getTableSchema(clz);
+        String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) param[0], (Object[]) param[1]);
         // 转换结果

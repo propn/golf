@@ -38,6 +38,8 @@ public class GolfFilter extends Golf implements Filter {
     private static Pattern cachePattern = null;// console.\\S{0,}
     private static Pattern ignoreFilePattern = null;
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
+    // 开发调试环境
+    private static boolean debug = "debug".equals(Golf.getProperty(Golf.RUNTIME, "debug")) ? true : false;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -127,7 +129,7 @@ public class GolfFilter extends Golf implements Filter {
         SecurityMgr.get(sessionId);
         String servletPath = request.getServletPath();
         // 静态文件设置缓存
-        if (cachePattern.matcher(servletPath).matches()) {
+        if (cachePattern.matcher(servletPath).matches() && !debug) {
             response.setDateHeader("Expires", System.currentTimeMillis() + 259200000);// 1000*60*60*24*3 三天
         } else {
             // 取消客户端缓存
