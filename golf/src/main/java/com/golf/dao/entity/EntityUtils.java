@@ -52,7 +52,7 @@ public class EntityUtils {
         String sql = EntitySqls.getInsertSql(clz);
         SqlParser filter = new InsertSqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
-//        String schema = PoSqls.getTableSchema(clz);
+        // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
@@ -63,7 +63,7 @@ public class EntityUtils {
         String sql = EntitySqls.getDeleteSql(clz);
         SqlParser filter = new UpdateSqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
-//        String schema = PoSqls.getTableSchema(clz);
+        // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
@@ -74,7 +74,7 @@ public class EntityUtils {
         String sql = EntitySqls.getUpdateSql(clz);
         SqlParser filter = new UpdateSqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
-//        String schema = PoSqls.getTableSchema(clz);
+        // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
@@ -92,7 +92,7 @@ public class EntityUtils {
         String sql = EntitySqls.getSelectSql(clz);
         SqlParser parser = new QrySqlParser();
         Object[] stmt = parser.parse(sql, param);
-//        String schema = PoSqls.getTableSchema(clz);
+        // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(clz, param);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) stmt[0], (Object[]) stmt[1]);
@@ -107,23 +107,23 @@ public class EntityUtils {
     }
 
     /**
-     * @param <T>
-     * @param po
+     * 
+     * @param obj
      * @return
      * @throws Exception
      */
     public static <T extends Entity> List<T> qryAll(T obj) throws Exception {
-        Class<?> clz = obj.getClass();
+        Class<? extends Entity> clz = obj.getClass();
         String sql = EntitySqls.getSelectSql(clz);
         SqlParser filter = new QrySqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
-//        String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) param[0], (Object[]) param[1]);
         // 转换结果
         List<T> rst = new ArrayList<T>();
         for (Map<String, Object> map : maps) {
+            @SuppressWarnings("unchecked")
             T po = (T) clz.newInstance();
             po.set(map);
             rst.add(po);

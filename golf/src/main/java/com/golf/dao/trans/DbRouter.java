@@ -48,7 +48,7 @@ public class DbRouter {
     }
 
     public static <T extends Entity> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
-        String table = EntitySqls.getTableName(param.getClass());
+        String table = EntitySqls.getTableName(clz);
         Map<String, String> map = routerInfo.get(table);
         if (null != map) {
             // 单库
@@ -68,7 +68,7 @@ public class DbRouter {
                 return map.get("schema");
             }
         }
-        String schema = EntitySqls.getTableSchema(param.getClass());
+        String schema = EntitySqls.getTableSchema(clz);
         if (StringUtils.isBlank(schema)) {
             return defaultSchema;
         } else {
