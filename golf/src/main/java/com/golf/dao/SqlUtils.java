@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 import com.golf.dao.sql.QrySqlParser;
 import com.golf.dao.sql.SqlParser;
 import com.golf.dao.sql.SqlRunner;

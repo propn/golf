@@ -1,4 +1,4 @@
-package com.golf.dao.po;
+package com.golf.dao.entity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -13,7 +13,7 @@ package com.golf.rbac.po;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 
 /**
  * 客体表（OBJECTS）包括对象标识、对象名称。客体表是系统中所有受控对象的集合。

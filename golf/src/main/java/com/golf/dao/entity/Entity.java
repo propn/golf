@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golf.dao.po;
+package com.golf.dao.entity;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -17,8 +17,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.golf.dao.po.Entity;
-import com.golf.dao.po.EntitySqls;
+import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntitySqls;
 import com.golf.utils.ConvertUtils;
 import com.golf.utils.StringUtils;
 

@@ -13,7 +13,7 @@ package com.golf.rbac.po;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 
 /**
  * 操作算子表（OPERATIONS）包括操作标识、操作算子名称。系统中所有受控对象的操作算子构成操作算子表。

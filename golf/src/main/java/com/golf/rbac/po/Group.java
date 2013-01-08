@@ -13,7 +13,7 @@ package com.golf.rbac.po;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 
 /**
  * 　Group：用户组，权限分配的单位与载体。权限不考虑分配给特定的用户而给组。 组可以包括组(以实现权限的继承)，也可以包含用户，组内用户继承组的权限。<br>

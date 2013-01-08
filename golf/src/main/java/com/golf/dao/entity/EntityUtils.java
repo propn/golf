@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golf.dao.po;
+package com.golf.dao.entity;
 
 import java.sql.Connection;
 import java.util.ArrayList;

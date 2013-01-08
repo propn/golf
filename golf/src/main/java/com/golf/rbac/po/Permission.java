@@ -18,9 +18,9 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Entity;
-import com.golf.dao.po.EntitySqls;
-import com.golf.dao.po.EntityUtils;
+import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntitySqls;
+import com.golf.dao.entity.EntityUtils;
 import com.golf.utils.json.anno.Transient;
 
 /**
