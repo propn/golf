@@ -20,7 +20,7 @@ import com.golf.utils.cache.ExpiringCache;
  * @author Thunder.Hsu 2012-12-18
  */
 public abstract class Session {
-    private static final ExpiringCache<String, Map<String, Object>> globalCache = new ExpiringCache<String, Map<String, Object>>();
+    public static final ExpiringCache<String, Map<String, Object>> globalCache = new ExpiringCache<String, Map<String, Object>>();
     static {
         globalCache.setExpirationInterval(60);
         globalCache.setTimeToLive(1800);
@@ -30,6 +30,9 @@ public abstract class Session {
 
     public static void bindCtx(String sid) {
         sessionId.set(sid);
+        if (null == globalCache.get(sid)) {
+            globalCache.put(sid, new HashMap<String, Object>());
+        }
         ctx.set(globalCache.get(sid));
     }
 
@@ -52,12 +55,13 @@ public abstract class Session {
 
     @SuppressWarnings("unchecked")
     public static <T> T get(String key) {
+        // return (T)globalCache.get(sessionId.get()).get(key);
         return (T) ctx.get().get(key);
     }
 
     public static void put(String key, Object val) {
-        ctx.get().put(sessionId.get(), val);
-        globalCache.get(sessionId.get()).put(key, val);
+        ctx.get().put(key, val);
+        // globalCache.get(sessionId.get()).put(key, val);
     }
 
     public static void remove(String key) {
