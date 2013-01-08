@@ -16,7 +16,7 @@ import com.golf.dao.entity.EntitySqls;
 import com.golf.dao.entity.EntityUtils;
 import com.golf.dao.trans.Trans;
 import com.golf.rbac.entity.Group;
-import com.golf.rbac.entity.Objetcts;
+import com.golf.rbac.entity.Point;
 import com.golf.rbac.entity.Operation;
 import com.golf.rbac.entity.Permission;
 import com.golf.rbac.entity.Role;

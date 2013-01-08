@@ -20,8 +20,8 @@ import com.golf.dao.entity.Entity;
  * 
  * @author Thunder.Hsu 2012-12-20
  */
-@Table(schema = "golf", name = "OBJECTS")
-public class Objetcts extends Entity {
+@Table(schema = "golf", name = "POINT")
+public class Point extends Entity {
     /**
      * 
      */

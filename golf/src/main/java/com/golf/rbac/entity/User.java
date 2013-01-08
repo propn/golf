@@ -34,7 +34,7 @@ import com.golf.utils.json.anno.Transient;
  * 
  * @author Thunder.Hsu 2012-12-18
  */
-@Table(schema = "golf", name = "USERS")
+@Table(schema = "golf", name = "USER")
 @Path("/user")
 public class User extends Entity {
 

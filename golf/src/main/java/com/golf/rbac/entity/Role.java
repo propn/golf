@@ -28,7 +28,7 @@ import com.golf.utils.json.anno.Transient;
  * 
  * @author Thunder.Hsu 2012-12-18
  */
-@Table(schema = "golf", name = "ROLES")
+@Table(schema = "golf", name = "ROLE")
 public class Role extends Entity {
 
     /**

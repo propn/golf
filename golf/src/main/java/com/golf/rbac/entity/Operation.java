@@ -20,7 +20,7 @@ import com.golf.dao.entity.Entity;
  * 
  * @author Thunder.Hsu 2012-12-20
  */
-@Table(schema = "golf", name = "OPERATIONS")
+@Table(schema = "golf", name = "OPERATION")
 public class Operation extends Entity {
 
     /**

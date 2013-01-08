@@ -21,7 +21,7 @@ import com.golf.dao.entity.Entity;
  * 
  * @author Thunder.Hsu 2012-12-19
  */
-@Table(schema = "golf", name = "GROUPS")
+@Table(schema = "golf", name = "GROUP")
 public class Group extends Entity {
     private static final long serialVersionUID = -7401027991552704209L;
 

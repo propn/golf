@@ -28,7 +28,7 @@ import com.golf.utils.json.anno.Transient;
  * 
  * @author Thunder.Hsu 2012-12-18
  */
-@Table(schema = "golf", name = "PERMISSIONS")
+@Table(schema = "golf", name = "PERMISSION")
 public class Permission extends Entity {
 
     @Transient
@@ -66,7 +66,7 @@ public class Permission extends Entity {
     }
 
     //
-    public static void addPermission(Permission permission, Objetcts obj, Operation oper) throws Exception {
+    public static void addPermission(Permission permission, Point obj, Operation oper) throws Exception {
         permission.setObjetctCode(obj.getObjetctCode());
         permission.setOperationCode(oper.getOperationCode());
         permission.save();

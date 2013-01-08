@@ -25,6 +25,7 @@ public abstract class Session {
         globalCache.setExpirationInterval(60);
         globalCache.setTimeToLive(1800);
     }
+    
     private static ThreadLocal<String> sessionId = new ThreadLocal<String>();
     private static ThreadLocal<Map<String, Object>> ctx = new ThreadLocal<Map<String, Object>>();
 
