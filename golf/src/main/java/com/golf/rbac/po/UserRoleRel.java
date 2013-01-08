@@ -13,7 +13,7 @@ package com.golf.rbac.po;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 
 /**
  * 用户指派UA (User Assignment):是用户集USERS到角色集ROLES的一种多对多的关系,<br>
@@ -22,7 +22,7 @@ import com.golf.dao.po.Po;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "USER_ROLE_REL")
-public class UserRoleRel extends Po {
+public class UserRoleRel extends Entity {
     /**
      * 
      */

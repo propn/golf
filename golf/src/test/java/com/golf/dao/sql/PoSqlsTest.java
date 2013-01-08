@@ -16,7 +16,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.golf.dao.po.PoSqls;
+import com.golf.dao.po.EntitySqls;
 
 /**
  * @author Administrator
@@ -39,7 +39,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getInsertSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getInsertSql(java.lang.Class)}.
      */
     @Test
     public void testGetInsertSql() {
@@ -47,13 +47,13 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getSelectSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getSelectSql(java.lang.Class)}.
      * 
      * @throws Exception
      */
     @Test
     public void testGetSelectSql() throws Exception {
-        String a = PoSqls.getSelectSql(FileInfo.class);
+        String a = EntitySqls.getSelectSql(FileInfo.class);
         System.out.println(a);
         SqlParser sp = new QrySqlParser();
         FileInfo f = new FileInfo();
@@ -63,7 +63,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getUpdateSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getUpdateSql(java.lang.Class)}.
      */
     @Test
     public void testGetUpdateSql() {
@@ -71,7 +71,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getDeleteSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getDeleteSql(java.lang.Class)}.
      */
     @Test
     public void testGetDeleteSql() {

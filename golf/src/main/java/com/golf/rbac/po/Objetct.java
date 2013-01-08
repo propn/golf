@@ -13,7 +13,7 @@ package com.golf.rbac.po;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 
 /**
  * 客体表（OBJECTS）包括对象标识、对象名称。客体表是系统中所有受控对象的集合。
@@ -21,7 +21,7 @@ import com.golf.dao.po.Po;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "OBJECTS")
-public class Objetct extends Po {
+public class Objetct extends Entity {
     /**
      * 
      */

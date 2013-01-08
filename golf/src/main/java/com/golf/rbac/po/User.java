@@ -18,8 +18,8 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
-import com.golf.dao.po.PoSqls;
+import com.golf.dao.po.Entity;
+import com.golf.dao.po.EntitySqls;
 import com.golf.mvc.ReqCtx;
 import com.golf.mvc.anno.FormParam;
 import com.golf.mvc.anno.GET;
@@ -36,7 +36,7 @@ import com.golf.utils.json.anno.Transient;
  */
 @Table(schema = "golf", name = "USERS")
 @Path("/user")
-public class User extends Po {
+public class User extends Entity {
 
     /**
      * 
@@ -112,8 +112,8 @@ public class User extends Po {
         param.put("status", 0);
         //
         User user = null;
-        List<User> users = SqlUtils.queryList(User.class, PoSqls.getSelectSql(User.class),
-                PoSqls.getTableSchema(User.class), param);
+        List<User> users = SqlUtils.queryList(User.class, EntitySqls.getSelectSql(User.class),
+                EntitySqls.getTableSchema(User.class), param);
         if (users.isEmpty()) {
             user = null;
         } else {
@@ -142,7 +142,7 @@ public class User extends Po {
                 + "SELECT ROLE_ID FROM USER_ROLE_REL WHERE USER_ID=${userId})";
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("userId", this.userId);
-        permissionIds = SqlUtils.querySingleObjectList(Long.class, sql, PoSqls.getTableSchema(Role.class), param);
+        permissionIds = SqlUtils.querySingleObjectList(Long.class, sql, EntitySqls.getTableSchema(Role.class), param);
         return permissionIds.contains(permissionId);
     }
 
@@ -156,7 +156,7 @@ public class User extends Po {
                 + "SELECT ROLE_ID FROM USER_ROLE_REL WHERE USER_ID=${userId})";
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("userId", this.userId);
-        roles = SqlUtils.queryList(Role.class, sql, PoSqls.getTableSchema(Role.class), param);
+        roles = SqlUtils.queryList(Role.class, sql, EntitySqls.getTableSchema(Role.class), param);
         return roles;
     }
 

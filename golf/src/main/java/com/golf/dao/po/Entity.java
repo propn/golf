@@ -22,7 +22,7 @@ import com.golf.utils.json.Json;
  * @author Thunder.Hsu
  * 
  */
-public abstract class Po implements Serializable, Cloneable {
+public abstract class Entity implements Serializable, Cloneable {
 
     /**
      * 
@@ -55,8 +55,8 @@ public abstract class Po implements Serializable, Cloneable {
             if (null == v) {
                 continue;
             }
-            if (v instanceof Po) {
-                map.put(field.getName(), ((Po) v).toMap());
+            if (v instanceof Entity) {
+                map.put(field.getName(), ((Entity) v).toMap());
             } else {
                 // 默认值处理
                 if (field.getType() == long.class || field.getType() == int.class || field.getType() == double.class) {
@@ -81,10 +81,10 @@ public abstract class Po implements Serializable, Cloneable {
 
     // 数据库操作CRUD
     public void save() throws Exception {
-        PoUtils.intsert(this);
+        EntityUtils.intsert(this);
     }
 
-    public <T extends Po> T getOne() throws Exception {
+    public <T extends Entity> T getOne() throws Exception {
         List<T> pos = qryList();
         return null != pos && pos.size() > 0 ? pos.get(0) : null;
     }
@@ -104,8 +104,8 @@ public abstract class Po implements Serializable, Cloneable {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public <T extends Po> List<T> qryList() throws Exception {
-        return (List<T>) PoUtils.qryAll(this);
+    public <T extends Entity> List<T> qryList() throws Exception {
+        return (List<T>) EntityUtils.qryAll(this);
     }
 
     /**
@@ -122,11 +122,11 @@ public abstract class Po implements Serializable, Cloneable {
     }
 
     public int update() throws Exception {
-        return PoUtils.update(this);
+        return EntityUtils.update(this);
     }
 
     public int delete() throws Exception {
-        return PoUtils.delete(this);
+        return EntityUtils.delete(this);
     }
 
 }

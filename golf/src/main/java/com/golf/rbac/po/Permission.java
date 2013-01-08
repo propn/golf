@@ -18,9 +18,9 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
-import com.golf.dao.po.PoSqls;
-import com.golf.dao.po.PoUtils;
+import com.golf.dao.po.Entity;
+import com.golf.dao.po.EntitySqls;
+import com.golf.dao.po.EntityUtils;
 import com.golf.utils.json.anno.Transient;
 
 /**
@@ -29,7 +29,7 @@ import com.golf.utils.json.anno.Transient;
  * @author Thunder.Hsu 2012-12-18
  */
 @Table(schema = "golf", name = "PERMISSIONS")
-public class Permission extends Po {
+public class Permission extends Entity {
 
     @Transient
     private static final long serialVersionUID = -8409027515314245278L;
@@ -56,7 +56,7 @@ public class Permission extends Po {
             return permissionCache.get(objetctCode + ":" + operationCode);
         }
         //
-        List<Permission> permissions = PoUtils.qryList(Permission.class, null);
+        List<Permission> permissions = EntityUtils.qryList(Permission.class, null);
         permissionCache = new HashMap<String, Long>();
         for (Permission permission : permissions) {
             permissionCache.put(permission.getObjetctCode() + ":" + permission.getOperationCode(),
@@ -81,7 +81,7 @@ public class Permission extends Po {
         String sql = "DELETE FROM ROLE_PERMISSION_REL WHERE PERMISSION_ID=${permissionId}";
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("permissionId", permission.getPermissionId());
-        SqlUtils.excuteUpdate(sql, PoSqls.getTableSchema(RolePermissionRel.class), param);
+        SqlUtils.excuteUpdate(sql, EntitySqls.getTableSchema(RolePermissionRel.class), param);
         //
         permission.delete();
         if (null != permissionCache) {

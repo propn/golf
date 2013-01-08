@@ -20,7 +20,7 @@ import com.golf.dao.Person;
 public class PoSqlsTest {
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getInsertSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getInsertSql(java.lang.Class)}.
      */
     @Test
     public void testGetInsertSql() {
@@ -28,17 +28,17 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getSelectSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getSelectSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
     public void testGetSelectSql() throws Exception {
-        String ddl = PoSqls.getSelectSql(Person.class);
+        String ddl = EntitySqls.getSelectSql(Person.class);
         System.out.println(ddl);
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getUpdateSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getUpdateSql(java.lang.Class)}.
      */
     @Test
     public void testGetUpdateSql() {
@@ -46,7 +46,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getDeleteSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getDeleteSql(java.lang.Class)}.
      */
     @Test
     public void testGetDeleteSql() {
@@ -54,18 +54,18 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getDDL(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getDDL(java.lang.Class)}.
      * 
      * @throws Exception
      */
     @Test
     public void testGetDDL() throws Exception {
-        String ddl = PoSqls.getDDL(Person.class);
+        String ddl = EntitySqls.getDDL(Person.class);
         System.out.println(ddl);
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.PoSqls#getTableSchema(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.po.EntitySqls#getTableSchema(java.lang.Class)}.
      */
     @Test
     public void testGetTableSchema() {

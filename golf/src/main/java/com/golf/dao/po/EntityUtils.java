@@ -21,7 +21,7 @@ import com.golf.dao.trans.DbRouter;
  * 
  * @author Thunder.Hsu 2012-12-8
  */
-public class PoUtils {
+public class EntityUtils {
 
     /**
      * 
@@ -29,15 +29,15 @@ public class PoUtils {
      * @param po
      * @throws Exception
      */
-    public static <T extends Po> void buildSchema(Class<T> clz, boolean dropTable) throws Exception {
-        String table = PoSqls.getTableName(clz);
-        String schema = PoSqls.getTableSchema(clz);
+    public static <T extends Entity> void buildSchema(Class<T> clz, boolean dropTable) throws Exception {
+        String table = EntitySqls.getTableName(clz);
+        String schema = EntitySqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
         if (dropTable) {
             String dSql = "DROP TABLE IF EXISTS " + table;
             SqlRunner.excuteUpdate(conn, dSql, null);
         }
-        String cSql = PoSqls.getDDL(clz);
+        String cSql = EntitySqls.getDDL(clz);
         SqlRunner.excuteUpdate(conn, cSql, null);
     }
 
@@ -47,9 +47,9 @@ public class PoUtils {
      * @param obj
      * @throws Exception
      */
-    public static <T extends Po> void intsert(T obj) throws Exception {
-        Class<? extends Po> clz = obj.getClass();
-        String sql = PoSqls.getInsertSql(clz);
+    public static <T extends Entity> void intsert(T obj) throws Exception {
+        Class<? extends Entity> clz = obj.getClass();
+        String sql = EntitySqls.getInsertSql(clz);
         SqlParser filter = new InsertSqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
 //        String schema = PoSqls.getTableSchema(clz);
@@ -58,9 +58,9 @@ public class PoUtils {
         SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static <T extends Po> int delete(T obj) throws Exception {
-        Class<? extends Po> clz = obj.getClass();
-        String sql = PoSqls.getDeleteSql(clz);
+    public static <T extends Entity> int delete(T obj) throws Exception {
+        Class<? extends Entity> clz = obj.getClass();
+        String sql = EntitySqls.getDeleteSql(clz);
         SqlParser filter = new UpdateSqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
 //        String schema = PoSqls.getTableSchema(clz);
@@ -69,9 +69,9 @@ public class PoUtils {
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static <T extends Po> int update(T obj) throws Exception {
-        Class<? extends Po> clz = obj.getClass();
-        String sql = PoSqls.getUpdateSql(clz);
+    public static <T extends Entity> int update(T obj) throws Exception {
+        Class<? extends Entity> clz = obj.getClass();
+        String sql = EntitySqls.getUpdateSql(clz);
         SqlParser filter = new UpdateSqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
 //        String schema = PoSqls.getTableSchema(clz);
@@ -88,8 +88,8 @@ public class PoUtils {
      * @return
      * @throws Exception
      */
-    public static <T extends Po> List<T> qryList(Class<T> clz, Map<String, Object> param) throws Exception {
-        String sql = PoSqls.getSelectSql(clz);
+    public static <T extends Entity> List<T> qryList(Class<T> clz, Map<String, Object> param) throws Exception {
+        String sql = EntitySqls.getSelectSql(clz);
         SqlParser parser = new QrySqlParser();
         Object[] stmt = parser.parse(sql, param);
 //        String schema = PoSqls.getTableSchema(clz);
@@ -112,9 +112,9 @@ public class PoUtils {
      * @return
      * @throws Exception
      */
-    public static <T extends Po> List<T> qryAll(T obj) throws Exception {
+    public static <T extends Entity> List<T> qryAll(T obj) throws Exception {
         Class<?> clz = obj.getClass();
-        String sql = PoSqls.getSelectSql(clz);
+        String sql = EntitySqls.getSelectSql(clz);
         SqlParser filter = new QrySqlParser();
         Object[] param = filter.parse(sql, obj.toMap());
 //        String schema = PoSqls.getTableSchema(clz);

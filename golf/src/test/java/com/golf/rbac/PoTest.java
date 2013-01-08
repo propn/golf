@@ -12,8 +12,8 @@ package com.golf.rbac;
 
 import org.junit.Test;
 
-import com.golf.dao.po.PoSqls;
-import com.golf.dao.po.PoUtils;
+import com.golf.dao.po.EntitySqls;
+import com.golf.dao.po.EntityUtils;
 import com.golf.dao.trans.Trans;
 import com.golf.rbac.po.Group;
 import com.golf.rbac.po.Objetct;
@@ -31,7 +31,7 @@ public class PoTest {
 
     @Test
     public void test() throws Exception {
-        String groupSql = PoSqls.getDeleteSql(RolePermissionRel.class);
+        String groupSql = EntitySqls.getDeleteSql(RolePermissionRel.class);
         System.out.println(groupSql);
         Trans.transNest(new Trans() {
             @Override

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.golf.dao.Person;
 import com.golf.dao.Student;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 import com.golf.mvc.anno.Consumes;
 import com.golf.mvc.anno.CookieParam;
 import com.golf.mvc.anno.FormParam;

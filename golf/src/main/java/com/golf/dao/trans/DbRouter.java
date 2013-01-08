@@ -17,8 +17,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.golf.dao.po.Po;
-import com.golf.dao.po.PoSqls;
+import com.golf.dao.po.Entity;
+import com.golf.dao.po.EntitySqls;
 import com.golf.utils.ConvertUtils;
 import com.golf.utils.StringUtils;
 
@@ -43,12 +43,12 @@ public class DbRouter {
         return defaultSchema;
     }
 
-    public static <T extends Po> String getSchema(T obj) throws Exception {
+    public static <T extends Entity> String getSchema(T obj) throws Exception {
         return getSchema(obj.getClass(), obj.toMap());
     }
 
-    public static <T extends Po> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
-        String table = PoSqls.getTableName(param.getClass());
+    public static <T extends Entity> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
+        String table = EntitySqls.getTableName(param.getClass());
         Map<String, String> map = routerInfo.get(table);
         if (null != map) {
             // 单库
@@ -68,7 +68,7 @@ public class DbRouter {
                 return map.get("schema");
             }
         }
-        String schema = PoSqls.getTableSchema(param.getClass());
+        String schema = EntitySqls.getTableSchema(param.getClass());
         if (StringUtils.isBlank(schema)) {
             return defaultSchema;
         } else {

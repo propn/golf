@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 
 /**
  * @author Thunder.Hsu
@@ -23,7 +23,7 @@ import com.golf.dao.po.Po;
 @Table(schema = "golf", name = "Person")
 @XmlRootElement(name = "Person")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Person extends Po {
+public class Person extends Entity {
     @Id
     @Column(columnDefinition = "Long", nullable = false)
     @NotNull(message = "may not be null")

@@ -17,52 +17,65 @@ import com.golf.utils.cache.PartitionCache;
  * 
  * @author Thunder.Hsu 2012-12-14
  */
-public class PoSqls {
+public class EntitySqls {
 
     private static PartitionCache<String> cache = new PartitionCache<String>();
+
+    /**
+     * 通过列名找字段名
+     * 
+     * @param clz
+     * @param columnName
+     * @return
+     * @throws Exception
+     */
+    public static <T extends Entity> String getFieldNameByColumnName(Class<T> clz, String columnName) throws Exception {
+        String className = clz.getName();
+        if (cache.get(className).isEmpty()) {
+            init(clz);
+        }
+        return cache.get(className, columnName);
+    }
+
+    private static void init(Class<?> clz) throws Exception {
+        String className = clz.getName();
+        buildFidldColumnMapping(clz);
+        cache.put(className, "C", generalInsertSql(clz));
+        cache.put(className, "R", generalSelectSql(clz));
+        cache.put(className, "U", generalUpdateSql(clz));
+        cache.put(className, "D", generalDeleteSql(clz));
+    }
 
     public static String getInsertSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
-            cache.put(className, "C", generalInsertSql(clz));
-            cache.put(className, "R", generalSelectSql(clz));
-            cache.put(className, "U", generalUpdateSql(clz));
-            cache.put(className, "D", generalDeleteSql(clz));
+            init(clz);
         }
-        return cache.get(className, "C").toString();
+        return cache.get(className, "C");
     }
 
     public static String getSelectSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
-            cache.put(className, "C", generalInsertSql(clz));
-            cache.put(className, "R", generalSelectSql(clz));
-            cache.put(className, "U", generalUpdateSql(clz));
-            cache.put(className, "D", generalDeleteSql(clz));
+            init(clz);
         }
-        return cache.get(className, "R").toString();
+        return cache.get(className, "R");
     }
 
     public static String getUpdateSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
-            cache.put(className, "C", generalInsertSql(clz));
-            cache.put(className, "R", generalSelectSql(clz));
-            cache.put(className, "U", generalUpdateSql(clz));
-            cache.put(className, "D", generalDeleteSql(clz));
+            init(clz);
         }
-        return cache.get(className, "U").toString();
+        return cache.get(className, "U");
     }
 
     public static String getDeleteSql(Class<?> clz) throws Exception {
         String className = clz.getName();
         if (cache.get(className).isEmpty()) {
-            cache.put(className, "C", generalInsertSql(clz));
-            cache.put(className, "R", generalSelectSql(clz));
-            cache.put(className, "U", generalUpdateSql(clz));
-            cache.put(className, "D", generalDeleteSql(clz));
+            init(clz);
         }
-        return cache.get(className, "D").toString();
+        return cache.get(className, "D");
     }
 
     public static String getDDL(Class<?> clz) throws Exception {
@@ -136,6 +149,20 @@ public class PoSqls {
             sqlStr = sqlStr.replace(sqlStr.lastIndexOf(","), sqlStr.length(), ")");
         }
         return sqlStr.toString();
+    }
+
+    private static void buildFidldColumnMapping(Class<?> clz) {
+        String className = clz.getName();
+        List<Field> columnFields = getColumnFields(clz);
+        if (columnFields != null && columnFields.size() > 0) {
+            for (Field field : columnFields) {
+                String column = field.getAnnotation(Column.class).name().toUpperCase();
+                if (StringUtils.isBlank(column)) {
+                    column = StringUtils.camel4underline(field.getName());
+                }
+                cache.put(className, column, field.getName());
+            }
+        }
     }
 
     private static String generalInsertSql(Class<?> clz) throws Exception {
@@ -241,13 +268,6 @@ public class PoSqls {
                 }
                 sqlStr.append(column).append("=${").append(field.getName()).append("}").append("]");
             }
-            // for (Field field : columnFields) {
-            // String column = field.getAnnotation(Column.class).name().toUpperCase();
-            // if (StringUtils.isBlank(column)) {
-            // column = StringUtils.camel4underline(field.getName());
-            // }
-            // sqlStr.append(column).append("=${").append(field.getName()).append("}").append(" AND ");
-            // }
             sqlStr.append("]");
         }
         return sqlStr.toString();
@@ -305,4 +325,5 @@ public class PoSqls {
         }
         return list;
     }
+
 }

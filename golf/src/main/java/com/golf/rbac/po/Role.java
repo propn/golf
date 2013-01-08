@@ -18,8 +18,8 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
-import com.golf.dao.po.PoSqls;
+import com.golf.dao.po.Entity;
+import com.golf.dao.po.EntitySqls;
 import com.golf.utils.json.anno.Transient;
 
 /**
@@ -29,7 +29,7 @@ import com.golf.utils.json.anno.Transient;
  * @author Thunder.Hsu 2012-12-18
  */
 @Table(schema = "golf", name = "ROLES")
-public class Role extends Po {
+public class Role extends Entity {
 
     /**
      * 
@@ -57,7 +57,7 @@ public class Role extends Po {
         String sql = "SELECT PERMISSION_NAME permissionName,OBJETCT_CODE objetctCode,PERMISSION_ID permissionId,OPERATION_CODE operationCode FROM PERMISSIONS WHERE PERMISSION_ID IN(SELECT PERMISSION_ID permissionId,ROLE_ID roleId FROM ROLE_PERMISSION_REL WHERE ROLE_ID=${roleId})";
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("roleId", this.roleId);
-        permissions = SqlUtils.queryList(Permission.class, sql, PoSqls.getTableSchema(Permission.class), param);
+        permissions = SqlUtils.queryList(Permission.class, sql, EntitySqls.getTableSchema(Permission.class), param);
         return permissions;
     }
 

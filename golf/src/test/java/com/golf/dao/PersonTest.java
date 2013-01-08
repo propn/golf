@@ -1,6 +1,6 @@
 package com.golf.dao;
 
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 import com.golf.dao.trans.Trans;
 
 public class PersonTest {
@@ -15,7 +15,7 @@ public class PersonTest {
         System.out.println(p.get("age"));
 
         //
-        Po s = new Student();
+        Entity s = new Student();
         s.set("personName", "Thunder.hsu");
         s.set("age", 28);
         //

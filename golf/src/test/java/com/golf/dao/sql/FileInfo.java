@@ -13,14 +13,14 @@ package com.golf.dao.sql;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 
 /**
  * @author Thunder.Hsu
  * 
  */
 @Table(name = "FILE_INFO")
-public class FileInfo extends Po {
+public class FileInfo extends Entity {
 
     @Id
     @Column(name = "FILE_ID")

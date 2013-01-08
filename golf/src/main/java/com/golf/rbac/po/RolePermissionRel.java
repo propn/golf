@@ -13,7 +13,7 @@ package com.golf.rbac.po;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 
 /**
  * 权限指派PA (Permission Assignment):是权限集P到角色集ROLES的一种多对多的关系,<br>
@@ -22,7 +22,7 @@ import com.golf.dao.po.Po;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "ROLE_PERMISSION_REL")
-public class RolePermissionRel extends Po {
+public class RolePermissionRel extends Entity {
     /**
      * 
      */

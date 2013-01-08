@@ -5,14 +5,14 @@ import java.sql.Timestamp;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 
 
 /**
  * 
  */
 @Table(name = "sysNetProxyCfg")
-public class SysNetProxyCfg extends Po
+public class SysNetProxyCfg extends Entity
 {
 
     @Id

@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.golf.dao.Person;
-import com.golf.dao.po.Po;
+import com.golf.dao.po.Entity;
 import com.golf.dao.trans.Trans;
 
 public class TransTest1 {
@@ -67,13 +67,13 @@ public class TransTest1 {
 
         System.out.println("----------------------1-----------------------");
         try {
-            List<Po> ps = (List<Po>) Trans.transNew(new Trans() {
+            List<Entity> ps = (List<Entity>) Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
                     return p.qryList();
                 }
             });
-            for (Po po : ps) {
+            for (Entity po : ps) {
                 System.out.println(po.get("personName"));
             }
         } catch (Exception e) {
