@@ -13,7 +13,7 @@ package com.golf.dao.sql;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 
 /**
  * @author Thunder.Hsu

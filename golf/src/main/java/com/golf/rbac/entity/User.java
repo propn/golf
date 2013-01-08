@@ -8,7 +8,7 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.rbac.po;
+package com.golf.rbac.entity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +21,11 @@ import com.golf.dao.anno.Table;
 import com.golf.dao.entity.Entity;
 import com.golf.dao.entity.EntitySqls;
 import com.golf.mvc.ReqCtx;
+import com.golf.mvc.Session;
 import com.golf.mvc.anno.FormParam;
 import com.golf.mvc.anno.GET;
 import com.golf.mvc.anno.POST;
 import com.golf.mvc.anno.Path;
-import com.golf.rbac.SecurityMgr;
 import com.golf.utils.SecurityUtils;
 import com.golf.utils.json.anno.Transient;
 
@@ -74,25 +74,6 @@ public class User extends Entity {
     @Transient
     private List<Long> permissionIds;
 
-    @Transient
-    private Map<String, Object> ctx = new HashMap<String, Object>();// 保存Session信息
-
-    public void putVar(String key, Object value) {
-        ctx.put(key, value);
-    }
-
-    public Object getVar(String key) {
-        return ctx.get(key);
-    }
-
-    public void removeVar(String key) {
-        ctx.remove(key);
-    }
-
-    public void clearVars() {
-        ctx.clear();
-    }
-
     /**
      * 
      * @param userCode
@@ -118,8 +99,7 @@ public class User extends Entity {
             user = null;
         } else {
             user = users.get(0);
-            String sessionId = ReqCtx.getSessionId();
-            SecurityMgr.put(sessionId, user);
+            Session.bindUser(user);
         }
         return user;
     }
@@ -128,8 +108,7 @@ public class User extends Entity {
     @GET
     @POST
     public void logout() throws Exception {
-        String sessionId = ReqCtx.getSessionId();
-        SecurityMgr.remove(sessionId);
+        Session.destroy();
     }
 
     public boolean hasPermission(String objetctCode, String operationCode) throws Exception {

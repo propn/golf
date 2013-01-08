@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.golf.dao.Person;
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 import com.golf.dao.trans.Trans;
 
 public class TransTest3 {

@@ -15,7 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.golf.dao.Student;
-import com.golf.dao.po.EntitySqls;
+import com.golf.dao.entity.EntitySqls;
 
 /**
  * @author Thunder.Hsu
@@ -38,7 +38,7 @@ public class SqlUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getInsertSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getInsertSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
@@ -47,7 +47,7 @@ public class SqlUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getSelectSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getSelectSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
@@ -56,7 +56,7 @@ public class SqlUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getUpdateSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getUpdateSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
@@ -65,7 +65,7 @@ public class SqlUtilsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getDeleteSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getDeleteSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test

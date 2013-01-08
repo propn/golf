@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.po.Entity;
+import com.golf.dao.entity.Entity;
 
 
 /**

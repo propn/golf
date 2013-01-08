@@ -30,8 +30,7 @@ import com.golf.mvc.multipart.MultiParser;
 import com.golf.mvc.multipart.ParamPart;
 import com.golf.mvc.multipart.Part;
 import com.golf.mvc.multipart.UpFile;
-import com.golf.rbac.SecurityMgr;
-import com.golf.rbac.po.User;
+import com.golf.rbac.entity.User;
 import com.golf.utils.MultMap;
 import com.golf.utils.StringUtils;
 
@@ -90,10 +89,6 @@ public class ReqCtx {
             return null;
         }
         return (User) obj;
-    }
-
-    public static String getSessionId() {
-        return (String) getContext("sessionId");
     }
 
     // @PathParam
@@ -171,15 +166,6 @@ public class ReqCtx {
         context.put("HttpServletRequest", request);
         context.put("HttpServletResponse", response);
         context.put("Cookie[]", request.getCookies());
-        //
-        String sessionId = request.getSession().getId();
-        User user = SecurityMgr.get(sessionId);
-        if (null == user) {
-            user = new User();
-            SecurityMgr.put(sessionId, user);
-        }
-        context.put("User", user);
-        context.put("sessionId", sessionId);
         //
         String contentType = getContentType(request);
         if (null == contentType) {

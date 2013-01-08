@@ -56,7 +56,7 @@ public class BeanUtils {
     }
 
     public static void registBean(Set<Class<?>> clazzs) throws Exception {
-        for (Class clazz : clazzs) {
+        for (Class<?> clazz : clazzs) {
             registBean(clazz);
         }
     }
@@ -68,7 +68,7 @@ public class BeanUtils {
             if (field.isAnnotationPresent(Inject.class)) {
                 // 注入属性
                 String fieldName = entry.getKey();
-                Class clz = BeanUtils.getBean(fieldName, field.getType());
+                Class<?> clz = BeanUtils.getBean(fieldName, field.getType());
                 if (null != clz) {
                     field.set(obj, getInstance(clz));
                 } else {

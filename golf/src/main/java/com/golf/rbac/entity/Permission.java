@@ -8,7 +8,7 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.rbac.po;
+package com.golf.rbac.entity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +66,7 @@ public class Permission extends Entity {
     }
 
     //
-    public static void addPermission(Permission permission, Objetct obj, Operation oper) throws Exception {
+    public static void addPermission(Permission permission, Objetcts obj, Operation oper) throws Exception {
         permission.setObjetctCode(obj.getObjetctCode());
         permission.setOperationCode(oper.getOperationCode());
         permission.save();

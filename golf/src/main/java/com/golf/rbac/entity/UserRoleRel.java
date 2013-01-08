@@ -8,7 +8,7 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.rbac.po;
+package com.golf.rbac.entity;
 
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;

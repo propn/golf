@@ -13,6 +13,7 @@ package com.golf.dao.po;
 import org.junit.Test;
 
 import com.golf.dao.Person;
+import com.golf.dao.entity.EntitySqls;
 
 /**
  * @author Thunder.Hsu 2012-12-17
@@ -20,7 +21,7 @@ import com.golf.dao.Person;
 public class PoSqlsTest {
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getInsertSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getInsertSql(java.lang.Class)}.
      */
     @Test
     public void testGetInsertSql() {
@@ -28,7 +29,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getSelectSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getSelectSql(java.lang.Class)}.
      * @throws Exception 
      */
     @Test
@@ -38,7 +39,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getUpdateSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getUpdateSql(java.lang.Class)}.
      */
     @Test
     public void testGetUpdateSql() {
@@ -46,7 +47,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getDeleteSql(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getDeleteSql(java.lang.Class)}.
      */
     @Test
     public void testGetDeleteSql() {
@@ -54,7 +55,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getDDL(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getDDL(java.lang.Class)}.
      * 
      * @throws Exception
      */
@@ -65,7 +66,7 @@ public class PoSqlsTest {
     }
 
     /**
-     * Test method for {@link com.golf.dao.po.EntitySqls#getTableSchema(java.lang.Class)}.
+     * Test method for {@link com.golf.dao.entity.EntitySqls#getTableSchema(java.lang.Class)}.
      */
     @Test
     public void testGetTableSchema() {

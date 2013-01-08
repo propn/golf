@@ -21,7 +21,6 @@ import com.golf.mvc.anno.MediaType;
 import com.golf.mvc.view.Builder;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
-import com.golf.rbac.SecurityMgr;
 import com.golf.utils.StringUtils;
 
 /**
@@ -35,8 +34,8 @@ public class GolfFilter extends Golf implements Filter {
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
     private static final String CACHE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf)$";
     private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|html|jsp|jspx)$";
-    private static Pattern cachePattern = null;// console.\\S{0,}
-    private static Pattern ignoreFilePattern = null;
+    private static Pattern cachePattern = null;// httpCache
+    private static Pattern ignoreFilePattern = null;//
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
     // 开发调试环境
     private static boolean debug = "debug".equals(Golf.getProperty(Golf.RUNTIME, "debug")) ? true : false;
@@ -125,8 +124,9 @@ public class GolfFilter extends Golf implements Filter {
         request.setCharacterEncoding(Golf.charsetName);
         response.setCharacterEncoding(Golf.charsetName);
         // 更新用户最后访问时间
-        String sessionId = request.getSession().getId();
-        SecurityMgr.get(sessionId);
+        String sid = request.getSession().getId();
+        Session.bindCtx(sid);
+        // 
         String servletPath = request.getServletPath();
         // 静态文件设置缓存
         if (cachePattern.matcher(servletPath).matches() && !debug) {

@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.golf.mvc.ReqCtx;
+import com.golf.mvc.Session;
 import com.golf.mvc.anno.GET;
 import com.golf.mvc.anno.Path;
-import com.golf.rbac.SecurityMgr;
-import com.golf.rbac.po.User;
+import com.golf.rbac.entity.User;
 
 @Path("/captcha")
 public class Captcha {
@@ -75,8 +75,7 @@ public class Captcha {
             randomCode.append(strRand);
         }
         // 将四位数字的验证码保存到Session中。
-        User user = SecurityMgr.get(ReqCtx.getSessionId());
-        user.putVar("rand", randomCode.toString());
+        Session.put("rand", randomCode.toString());
         // 图象生效
         g.dispose();
         // 禁止图像缓存。

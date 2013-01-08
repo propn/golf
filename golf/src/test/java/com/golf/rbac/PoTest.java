@@ -12,17 +12,17 @@ package com.golf.rbac;
 
 import org.junit.Test;
 
-import com.golf.dao.po.EntitySqls;
-import com.golf.dao.po.EntityUtils;
+import com.golf.dao.entity.EntitySqls;
+import com.golf.dao.entity.EntityUtils;
 import com.golf.dao.trans.Trans;
-import com.golf.rbac.po.Group;
-import com.golf.rbac.po.Objetct;
-import com.golf.rbac.po.Operation;
-import com.golf.rbac.po.Permission;
-import com.golf.rbac.po.Role;
-import com.golf.rbac.po.RolePermissionRel;
-import com.golf.rbac.po.User;
-import com.golf.rbac.po.UserRoleRel;
+import com.golf.rbac.entity.Group;
+import com.golf.rbac.entity.Objetcts;
+import com.golf.rbac.entity.Operation;
+import com.golf.rbac.entity.Permission;
+import com.golf.rbac.entity.Role;
+import com.golf.rbac.entity.RolePermissionRel;
+import com.golf.rbac.entity.User;
+import com.golf.rbac.entity.UserRoleRel;
 
 /**
  * @author Thunder.Hsu 2012-12-20
