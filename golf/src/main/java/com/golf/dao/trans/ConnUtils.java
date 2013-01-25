@@ -22,14 +22,13 @@ import com.golf.Golf;
 public class ConnUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ConnUtils.class);
-
     /* 当前线程事务状态,transId序列 */
     private static final ThreadLocal<String> transStatus = new ThreadLocal<String>();
     /* {CurrentTransId,{schema,Connection}} */
     private static final ThreadLocal<Map<String, Map<String, Connection>>> connCtx = new ThreadLocal<Map<String, Map<String, Connection>>>();
     /* {transStatus,{schema,SavePoint}} */
     private static final ThreadLocal<Map<String, Map<String, Savepoint>>> savePointCtx = new ThreadLocal<Map<String, Map<String, Savepoint>>>();
-
+    
     static String getTransStatus() {
         return transStatus.get();
     }
@@ -115,16 +114,28 @@ public class ConnUtils {
 
                 log.debug("init schema[{}] Conn", schema);
                 conn = DsUtils.getDataSource(schema).getConnection();
-                conn.setAutoCommit(false);
-                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                //只读数据库连接
+                if(Trans.isReadonly()){
+                    conn.setReadOnly(true);
+                }else{
+                    conn.setReadOnly(false);
+                    conn.setAutoCommit(false);
+                    conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                }
                 connMap.put(schema, conn);
             } else {
                 conn = connMap.get(schema);
                 if (null == conn) {
                     log.debug("init schema[{}] conn ", schema);
                     conn = DsUtils.getDataSource(schema).getConnection();
-                    conn.setAutoCommit(false);
-                    conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                    //只读数据库连接
+                    if(Trans.isReadonly()){
+                        conn.setReadOnly(true);
+                    }else{
+                        conn.setReadOnly(false);
+                        conn.setAutoCommit(false);
+                        conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                    }
                     connMap.put(schema, conn);
                 }
             }
@@ -321,4 +332,6 @@ public class ConnUtils {
         connCache.remove(getCurrentTransId());
         log.debug("remove trans[{}] ", trans);
     }
+
+    
 }

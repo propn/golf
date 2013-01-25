@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.golf.dao.anno.ReadOnly;
 import com.golf.dao.trans.Trans;
 import com.golf.ioc.BeanUtils;
 import com.golf.mvc.anno.CookieParam;
@@ -52,28 +53,41 @@ public class Atom implements Callable<Object> {
         return rst;
     }
 
+    /**
+     * 
+     * @param res
+     * @return
+     * @throws Exception
+     */
     private Object invoke(final Resource res) throws Exception {
         long start = System.currentTimeMillis();
         Class<?> clz = res.getClz();
         final Object obj = BeanUtils.getInstance(clz);
         final Method method = res.getMethod();
-        Class[] argsClass = method.getParameterTypes();
+        // 自读事务标准
+        ReadOnly isReadOnly = method.getAnnotation(ReadOnly.class);
+        if (null == isReadOnly) {
+            Trans.setReadonly(false);
+        }else{
+            Trans.setReadonly(isReadOnly.value());
+        }
+        //
+        Class<?>[] argsClass = method.getParameterTypes();
         if (argsClass.length == 0) {
             log.debug("init method call cost time (millis):" + String.valueOf(System.currentTimeMillis() - start));
             Object rst = Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
-                    return method.invoke(obj, null);
+                    return method.invoke(obj, new Object[] {});
                 }
             });
             return rst;
         }
         // 动态构造参数
         final Object[] args = new Object[argsClass.length];// 函数入参
-
         // 按照参数类型进行绑定
         for (int i = 0; i < argsClass.length; i++) {
-            Class temp = argsClass[i];
+            Class<?> temp = argsClass[i];
             if (temp.equals(HttpServletRequest.class)) {
                 args[i] = ReqCtx.getContext("HttpServletRequest");
                 continue;
@@ -90,13 +104,11 @@ public class Atom implements Callable<Object> {
                 args[i] = ReqCtx.getContext("Cookie[]");
                 continue;
             }
-
             if (temp.equals(UpFile[].class)) {
                 args[i] = ReqCtx.getContext("UpFile[]");
                 continue;
             }
         }
-
         // 绑定基础对象参数PathParam/QueryParam/FormParam/HeaderParam/CookieParam
         Annotation[][] a = method.getParameterAnnotations();
         for (int i = 0; i < a.length; i++) {

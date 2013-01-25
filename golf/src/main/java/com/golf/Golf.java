@@ -22,6 +22,7 @@ import com.golf.utils.StringUtils;
  * 
  */
 public abstract class Golf {
+    
     public static final String charsetName = "UTF-8";
     public static final String CONFIG_FILE_NAME = "golf";/* 配置文件 */
     public static final String DATASOURCE_CONFIG_FILE = "dataSource.xml";/* 数据库配置文件 */

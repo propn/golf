@@ -22,7 +22,8 @@ import com.golf.utils.json.Json;
  * @author Thunder.Hsu
  * 
  */
-public abstract class Entity implements Serializable, Cloneable {
+@com.golf.dao.anno.Entity
+public abstract class Entity implements Serializable {
 
     /**
      * 

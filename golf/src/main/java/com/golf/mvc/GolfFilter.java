@@ -187,14 +187,14 @@ public class GolfFilter extends Golf implements Filter {
             // FutureTask
             throw new RuntimeException(e);
         }
-        Builder builder = BuilderFactory.getBuilder(mediaType, rst);
-        if (null == builder) {
-            builder = new ErrorViewBuilder();
-            builder.build(request, response, mediaType, new ServletException("系统不支持的视图" + mediaType + " "
+        Builder rstBuilder = BuilderFactory.getBuilder(mediaType, rst);
+        if (null == rstBuilder) {
+            rstBuilder = new ErrorViewBuilder();
+            rstBuilder.build(request, response, mediaType, new ServletException("系统不支持的视图" + mediaType + " "
                     + rst.getClass().getName()));
             return;
         }
-        builder.build(request, response, mediaType, rst);
+        rstBuilder.build(request, response, mediaType, rst);
     }
 
     private boolean validate(final HttpServletRequest request, HttpServletResponse response, Resource res)

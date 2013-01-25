@@ -16,6 +16,20 @@ public abstract class Trans implements Callable<Object> {
 
     private static final Logger log = LoggerFactory.getLogger(Trans.class);
 
+    // 只读事务
+    private static ThreadLocal<Boolean> readOnly = null;
+
+    public static void setReadonly(boolean isReadOnly) {
+        if(null == readOnly){//只能设置一次
+            readOnly = new ThreadLocal<Boolean>();
+            readOnly.set(isReadOnly);
+        }
+    }
+
+    public static Boolean isReadonly() {
+        return readOnly.get();
+    }
+
     /* 新建事务,独立Commit和rollbcak */
     static int NEW = 1;
     /* 嵌套事务,同一个Connection,由上下文事务一起Commit */
