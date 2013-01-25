@@ -50,29 +50,30 @@ public class DbRouter {
     public static <T extends Entity> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
         String table = EntitySqls.getTableName(clz);
         Map<String, String> map = routerInfo.get(table);
-        if (null != map) {
-            // 单库
-            String schema = map.get("schema");
-            if (null == map.get("exp")) {
-                return schema;
-            }
-            // 多库
-            String[] exps = map.get("exp").split("|");
-            String fieldName = exps[0];
-            String exp = exps[1];
-            long val = ConvertUtils.convert(param.get(fieldName), long.class);
-            schema = map.get(compute(exp, val));
-            if (null != schema) {
-                return schema;
+        //取默认
+        if (null == map || map.isEmpty()) {
+            String schema = EntitySqls.getTableSchema(clz);
+            if (StringUtils.isBlank(schema)) {
+                return defaultSchema;
             } else {
-                return map.get("schema");
+                return schema;
             }
         }
-        String schema = EntitySqls.getTableSchema(clz);
-        if (StringUtils.isBlank(schema)) {
-            return defaultSchema;
-        } else {
+        // 单库
+        String schema = map.get("schema");
+        if (null == map.get("exp")) {
             return schema;
+        }
+        // 多库
+        String[] exps = map.get("exp").split("|");
+        String fieldName = exps[0];
+        String exp = exps[1];
+        long val = ConvertUtils.convert(param.get(fieldName), long.class);
+        schema = map.get(compute(exp, val));
+        if (null != schema) {
+            return schema;
+        } else {
+            return map.get("schema");
         }
     }
 
