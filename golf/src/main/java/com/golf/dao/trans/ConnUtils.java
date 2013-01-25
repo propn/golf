@@ -102,8 +102,13 @@ public class ConnUtils {
 
             log.debug("init schema[{}] Conn ", schema);
             conn = DsUtils.getDataSource(schema).getConnection();
-            conn.setAutoCommit(false);
-            conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            if(Trans.isReadonly()){
+                conn.setReadOnly(true);
+            }else{
+                conn.setReadOnly(false);
+                conn.setAutoCommit(false);
+                conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            }
             connMap.put(schema, conn);
         } else {
             Map<String, Connection> connMap = connCache.get(currentTransId);
@@ -214,7 +219,9 @@ public class ConnUtils {
         for (Connection conn : connMap.values()) {
             if (conn != null) {
                 try {
-                    conn.commit();
+                    if(!Trans.isReadonly()){
+                        conn.commit();
+                    }
                 } catch (SQLException e) {
                     log.debug("Trans[{}] commit error!：", trans, e);
                 } finally {
@@ -257,7 +264,9 @@ public class ConnUtils {
                         Savepoint savepoint = savepointMap.get(schema);
                         if (null == savepoint) {
                             try {// 保存点建立之后创建的数据库连接
-                                conn.rollback();
+                                if(!Trans.isReadonly()){
+                                    conn.rollback();
+                                }
                             } catch (SQLException e) {
                                 log.debug("事务回滚失败：schema[{}] ", schema, e);
                             } finally {
@@ -270,7 +279,9 @@ public class ConnUtils {
                             }
                         } else {
                             try {
-                                conn.rollback(savepoint);
+                                if(!Trans.isReadonly()){
+                                    conn.rollback(savepoint);
+                                }
                             } catch (SQLException e) {
                                 log.debug("事务回滚失败：schema[{}] ", schema, e);
                             }
@@ -305,7 +316,9 @@ public class ConnUtils {
             Connection conn = entry.getValue();
             if (conn != null) {
                 try {
-                    conn.rollback();
+                    if(!Trans.isReadonly()){
+                        conn.rollback();
+                    }
                 } catch (SQLException e) {
                     log.debug("trans[{}] rollback error! ", trans, e);
                 } finally {
