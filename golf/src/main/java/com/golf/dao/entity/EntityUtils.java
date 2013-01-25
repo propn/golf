@@ -29,7 +29,7 @@ public class EntityUtils {
      * @param po
      * @throws Exception
      */
-    public static <T extends Entity> void buildSchema(Class<T> clz, boolean dropTable) throws Exception {
+    public static <T extends IEntity> void buildSchema(Class<T> clz, boolean dropTable) throws Exception {
         String table = EntitySqls.getTableName(clz);
         String schema = EntitySqls.getTableSchema(clz);
         Connection conn = ConnUtils.getConn(schema);
@@ -47,33 +47,33 @@ public class EntityUtils {
      * @param obj
      * @throws Exception
      */
-    public static <T extends Entity> void intsert(T obj) throws Exception {
-        Class<? extends Entity> clz = obj.getClass();
+    public static <T extends IEntity> void intsert(T obj) throws Exception {
+        Class<? extends IEntity> clz = obj.getClass();
         String sql = EntitySqls.getInsertSql(clz);
         SqlParser filter = new InsertSqlParser();
-        Object[] param = filter.parse(sql, obj.toMap());
+        Object[] param = filter.parse(sql, obj.getHelper().toMap());
         // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static <T extends Entity> int delete(T obj) throws Exception {
-        Class<? extends Entity> clz = obj.getClass();
+    public static <T extends IEntity> int delete(T obj) throws Exception {
+        Class<? extends IEntity> clz = obj.getClass();
         String sql = EntitySqls.getDeleteSql(clz);
         SqlParser filter = new UpdateSqlParser();
-        Object[] param = filter.parse(sql, obj.toMap());
+        Object[] param = filter.parse(sql, obj.getHelper().toMap());
         // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         return SqlRunner.excuteUpdate(conn, (String) param[0], (Object[]) param[1]);
     }
 
-    public static <T extends Entity> int update(T obj) throws Exception {
-        Class<? extends Entity> clz = obj.getClass();
+    public static <T extends IEntity> int update(T obj) throws Exception {
+        Class<? extends IEntity> clz = obj.getClass();
         String sql = EntitySqls.getUpdateSql(clz);
         SqlParser filter = new UpdateSqlParser();
-        Object[] param = filter.parse(sql, obj.toMap());
+        Object[] param = filter.parse(sql, obj.getHelper().toMap());
         // String schema = PoSqls.getTableSchema(clz);
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
@@ -88,7 +88,7 @@ public class EntityUtils {
      * @return
      * @throws Exception
      */
-    public static <T extends Entity> List<T> qryList(Class<T> clz, Map<String, Object> param) throws Exception {
+    public static <T extends IEntity> List<T> qryList(Class<T> clz, Map<String, Object> param) throws Exception {
         String sql = EntitySqls.getSelectSql(clz);
         SqlParser parser = new QrySqlParser();
         Object[] stmt = parser.parse(sql, param);
@@ -100,7 +100,7 @@ public class EntityUtils {
         List<T> rst = new ArrayList<T>();
         for (Map<String, Object> map : maps) {
             T po = clz.newInstance();
-            po.set(map);
+            po.getHelper().set(map);
             rst.add(po);
         }
         return rst;
@@ -112,11 +112,11 @@ public class EntityUtils {
      * @return
      * @throws Exception
      */
-    public static <T extends Entity> List<T> qryAll(T obj) throws Exception {
-        Class<? extends Entity> clz = obj.getClass();
+    public static <T extends IEntity> List<T> qryAll(T obj) throws Exception {
+        Class<? extends IEntity> clz = obj.getClass();
         String sql = EntitySqls.getSelectSql(clz);
         SqlParser filter = new QrySqlParser();
-        Object[] param = filter.parse(sql, obj.toMap());
+        Object[] param = filter.parse(sql, obj.getHelper().toMap());
         String schema = DbRouter.getSchema(obj);
         Connection conn = ConnUtils.getConn(schema);
         List<Map<String, Object>> maps = SqlRunner.qryMapList(conn, (String) param[0], (Object[]) param[1]);
@@ -125,7 +125,7 @@ public class EntityUtils {
         for (Map<String, Object> map : maps) {
             @SuppressWarnings("unchecked")
             T po = (T) clz.newInstance();
-            po.set(map);
+            po.getHelper().set(map);
             rst.add(po);
         }
         return rst;

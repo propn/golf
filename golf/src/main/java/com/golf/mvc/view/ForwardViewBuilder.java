@@ -26,7 +26,7 @@ import com.golf.mvc.anno.MediaType;
  * @author Thunder.Hsu
  * 
  */
-public class ForwardViewBuilder implements Builder {
+public class ForwardViewBuilder implements ViewBuilder {
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
             throws IOException, ServletException {

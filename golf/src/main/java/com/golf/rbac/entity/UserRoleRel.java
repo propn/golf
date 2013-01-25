@@ -13,7 +13,8 @@ package com.golf.rbac.entity;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * 用户指派UA (User Assignment):是用户集USERS到角色集ROLES的一种多对多的关系,<br>
@@ -22,7 +23,7 @@ import com.golf.dao.entity.Entity;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "USER_ROLE_REL")
-public class UserRoleRel extends Entity {
+public class UserRoleRel implements IEntity {
     /**
      * 
      */
@@ -50,6 +51,15 @@ public class UserRoleRel extends Entity {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

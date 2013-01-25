@@ -5,14 +5,15 @@ import java.sql.Timestamp;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 
 /**
  * 
  */
 @Table(name = "sysNetProxyCfg")
-public class SysNetProxyCfg extends Entity
+public class SysNetProxyCfg implements IEntity
 {
 
     @Id
@@ -82,5 +83,14 @@ public class SysNetProxyCfg extends Entity
     public SysNetProxyCfg()
     {
         super();
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

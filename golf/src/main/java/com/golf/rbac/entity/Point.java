@@ -13,7 +13,8 @@ package com.golf.rbac.entity;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * 客体表（OBJECTS）包括对象标识、对象名称。客体表是系统中所有受控对象的集合。
@@ -21,7 +22,7 @@ import com.golf.dao.entity.Entity;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "POINT")
-public class Point extends Entity {
+public class Point implements IEntity {
     /**
      * 
      */
@@ -48,5 +49,14 @@ public class Point extends Entity {
 
     public void setObjetctName(String objetctName) {
         this.objetctName = objetctName;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

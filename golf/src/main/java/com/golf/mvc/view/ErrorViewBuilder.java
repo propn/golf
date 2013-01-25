@@ -24,7 +24,7 @@ import com.golf.mvc.anno.MediaType;
  * @author Administrator
  * 
  */
-public class ErrorViewBuilder implements Builder {
+public class ErrorViewBuilder implements ViewBuilder {
 
     /*
      * (non-Javadoc)

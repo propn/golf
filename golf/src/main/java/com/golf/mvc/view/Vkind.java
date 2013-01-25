@@ -15,5 +15,5 @@ package com.golf.mvc.view;
  * 
  */
 public enum Vkind {
-    forward, redirect, freeMarker
+    forward, redirect
 }

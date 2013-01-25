@@ -13,7 +13,8 @@ package com.golf.rbac.entity;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * 操作算子表（OPERATIONS）包括操作标识、操作算子名称。系统中所有受控对象的操作算子构成操作算子表。
@@ -21,7 +22,7 @@ import com.golf.dao.entity.Entity;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "OPERATION")
-public class Operation extends Entity {
+public class Operation implements IEntity {
 
     /**
      * 
@@ -49,6 +50,15 @@ public class Operation extends Entity {
 
     public void setOperationName(String operationName) {
         this.operationName = operationName;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

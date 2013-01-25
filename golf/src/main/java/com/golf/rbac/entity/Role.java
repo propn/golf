@@ -18,8 +18,9 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
 import com.golf.dao.entity.EntitySqls;
+import com.golf.dao.entity.IEntity;
 import com.golf.utils.json.anno.Transient;
 
 /**
@@ -29,7 +30,7 @@ import com.golf.utils.json.anno.Transient;
  * @author Thunder.Hsu 2012-12-18
  */
 @Table(schema = "golf", name = "ROLE")
-public class Role extends Entity {
+public class Role implements IEntity {
 
     /**
      * 
@@ -65,7 +66,7 @@ public class Role extends Entity {
         RolePermissionRel rpr = new RolePermissionRel();
         rpr.setRoleId(roleId);
         rpr.setPermissionId(permission.getPermissionId());
-        rpr.save();
+        rpr.getHelper().save();
         if (null != permissions) {
             permissions.add(permission);
         }
@@ -75,7 +76,7 @@ public class Role extends Entity {
         RolePermissionRel rpr = new RolePermissionRel();
         rpr.setRoleId(roleId);
         rpr.setPermissionId(permission.getPermissionId());
-        rpr.delete();
+        rpr.getHelper().delete();
         if (null != permissions) {
             getPermission();
         }
@@ -103,6 +104,15 @@ public class Role extends Entity {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

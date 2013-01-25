@@ -57,7 +57,7 @@ public class PoSqlsTest {
         System.out.println(a);
         SqlParser sp = new QrySqlParser();
         FileInfo f = new FileInfo();
-        Map m = f.toMap();
+        Map m = f.getHelper().toMap();
         a = sp.dealOptParam(a, m);
         System.out.println(a);
     }

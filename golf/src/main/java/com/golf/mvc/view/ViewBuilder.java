@@ -12,24 +12,25 @@ package com.golf.mvc.view;
 
 import java.io.IOException;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.golf.Golf;
-import com.golf.mvc.anno.MediaType;
-
 /**
- * @author Administrator
- *
+ * @author Thunder.Hsu
+ * 
  */
-public class FreeMarkerViewBuilder implements Builder {
+public interface ViewBuilder {
 
-    @Override
+    /**
+     * 
+     * @param request
+     * @param response
+     * @param mediaType
+     * @param rst
+     * @throws IOException
+     * @throws ServletException
+     */
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)
-            throws IOException {
-        response.setCharacterEncoding(Golf.charsetName);
-        response.setContentType(MediaType.TEXT_HTML);
-
-    }
-
+            throws IOException, ServletException;
 }

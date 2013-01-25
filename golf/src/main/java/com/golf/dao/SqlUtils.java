@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.IEntity;
 import com.golf.dao.sql.QrySqlParser;
 import com.golf.dao.sql.SqlParser;
 import com.golf.dao.sql.SqlRunner;
@@ -48,7 +48,7 @@ public class SqlUtils {
         return rst;
     }
 
-    public static <T extends Entity> List<T> queryList(Class<T> clz, final String sql, final String schema,
+    public static <T extends IEntity> List<T> queryList(Class<T> clz, final String sql, final String schema,
             Map<String, Object> param) throws Exception {
         SqlParser parser = new QrySqlParser();
         Object[] stmt = parser.parse(sql, param);
@@ -57,7 +57,7 @@ public class SqlUtils {
         List<T> rst = new ArrayList<T>();
         for (Map<String, Object> map : rstm) {
             T po = clz.newInstance();
-            po.set(map);
+            po.getHelper().set(map);
             rst.add(po);
         }
         return rst;

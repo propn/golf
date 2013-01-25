@@ -28,7 +28,7 @@ public abstract class Golf {
     public static final String CONFIG_FILE_NAME = "golf";/* 配置文件 */
     public static final String DATASOURCE_CONFIG_FILE = "dataSource.xml";/* 数据库配置文件 */
     public static final String DATABASE_ROUTER_FILE = "dbRouter.xml";/* 数据源路由配置文件 */
-    public static final String DEFAULT_SCHEMA =DbRouter.getdefaultSchema();/*默认数据源*/
+//    public static final String DEFAULT_SCHEMA =DbRouter.getdefaultSchema();/*默认数据源*/
     public static final String RUNTIME = "runtime";// 运行环境/调试环境
 
     private static final Logger log = LoggerFactory.getLogger(Golf.class);

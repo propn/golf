@@ -13,7 +13,8 @@ package com.golf.rbac.entity;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * 　Group：用户组，权限分配的单位与载体。权限不考虑分配给特定的用户而给组。 组可以包括组(以实现权限的继承)，也可以包含用户，组内用户继承组的权限。<br>
@@ -22,7 +23,8 @@ import com.golf.dao.entity.Entity;
  * @author Thunder.Hsu 2012-12-19
  */
 @Table(schema = "golf", name = "GROUP")
-public class Group extends Entity {
+public class Group implements IEntity {
+    
     private static final long serialVersionUID = -7401027991552704209L;
 
     @Id
@@ -57,6 +59,14 @@ public class Group extends Entity {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        return new EntityHelper(this);
     }
 
 }

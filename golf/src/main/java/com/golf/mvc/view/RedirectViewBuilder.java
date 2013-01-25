@@ -25,7 +25,7 @@ import com.golf.mvc.anno.MediaType;
  * @author Thunder.Hsu
  * 
  */
-public class RedirectViewBuilder implements Builder {
+public class RedirectViewBuilder implements ViewBuilder {
 
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)

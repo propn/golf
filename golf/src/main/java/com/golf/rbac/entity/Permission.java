@@ -18,9 +18,10 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
 import com.golf.dao.entity.EntitySqls;
 import com.golf.dao.entity.EntityUtils;
+import com.golf.dao.entity.IEntity;
 import com.golf.utils.json.anno.Transient;
 
 /**
@@ -29,7 +30,7 @@ import com.golf.utils.json.anno.Transient;
  * @author Thunder.Hsu 2012-12-18
  */
 @Table(schema = "golf", name = "PERMISSION")
-public class Permission extends Entity {
+public class Permission implements IEntity {
 
     @Transient
     private static final long serialVersionUID = -8409027515314245278L;
@@ -69,7 +70,7 @@ public class Permission extends Entity {
     public static void addPermission(Permission permission, Point obj, Operation oper) throws Exception {
         permission.setObjetctCode(obj.getObjetctCode());
         permission.setOperationCode(oper.getOperationCode());
-        permission.save();
+        permission.getHelper().save();
         if (null != permissionCache) {
             permissionCache.put(permission.getObjetctCode() + ":" + permission.getOperationCode(),
                     permission.getPermissionId());
@@ -83,7 +84,7 @@ public class Permission extends Entity {
         param.put("permissionId", permission.getPermissionId());
         SqlUtils.excuteUpdate(sql, EntitySqls.getTableSchema(RolePermissionRel.class), param);
         //
-        permission.delete();
+        permission.getHelper().delete();
         if (null != permissionCache) {
             permissionCache.remove(permission.getObjetctCode() + ":" + permission.getOperationCode());
         }
@@ -119,6 +120,15 @@ public class Permission extends Entity {
 
     public void setOperationCode(String operationCode) {
         this.operationCode = operationCode;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

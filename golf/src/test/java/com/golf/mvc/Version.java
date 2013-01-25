@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.golf.dao.Person;
 import com.golf.dao.Student;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
 import com.golf.mvc.anno.Consumes;
 import com.golf.mvc.anno.CookieParam;
 import com.golf.mvc.anno.FormParam;
@@ -49,7 +49,7 @@ public class Version {
         p.setAge(age);
         p.setPersonId(personId);
         p.setPersonName(personName);
-        p.save();
+        p.getHelper().save();
         return p;
     }
 
@@ -59,7 +59,7 @@ public class Version {
         // System.out.println(person.toJson());
         Person p = new Person();
         p.setPersonId("1");
-        List<Person> ps = p.qryList();
+        List<Person> ps = p.getHelper().qryList();
         return ps;
     }
 
@@ -75,17 +75,17 @@ public class Version {
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Student getStudent() throws Exception {
         Person teacher = new Person();
-        teacher.set("personId", "03023001");
-        teacher.set("personName", "常继科");
-        teacher.set("age", 28);
+        teacher.getHelper().set("personId", "03023001");
+        teacher.getHelper().set("personName", "常继科");
+        teacher.getHelper().set("age", 28);
 
         Student st = new Student();
-        st.set("grade", 2003);
-        st.set("major", "computer");
-        st.set("Counselor", teacher);
-        st.set("personId", "03023152");
-        st.set("personName", "徐雷");
-        st.set("age", 18);
+        st.getHelper().set("grade", 2003);
+        st.getHelper().set("major", "computer");
+        st.getHelper().set("Counselor", teacher);
+        st.getHelper().set("personId", "03023152");
+        st.getHelper().set("personName", "徐雷");
+        st.getHelper().set("age", 18);
         return st;
     }
 

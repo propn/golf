@@ -22,7 +22,7 @@ import com.golf.mvc.anno.MediaType;
 /**
  * @author Thunder.Hsu 2012-12-29
  */
-public class EmptyViewBuilder implements Builder {
+public class EmptyViewBuilder implements ViewBuilder {
 
     /*
      * (non-Javadoc)

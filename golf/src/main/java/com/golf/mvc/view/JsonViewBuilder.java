@@ -24,7 +24,7 @@ import com.golf.utils.json.Json;
  * 
  * @author Thunder.Hsu 2012-12-8
  */
-public class JsonViewBuilder implements Builder {
+public class JsonViewBuilder implements ViewBuilder {
 
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)

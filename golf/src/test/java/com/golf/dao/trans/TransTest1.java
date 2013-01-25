@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.golf.dao.Person;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
 import com.golf.dao.trans.Trans;
 
 public class TransTest1 {
@@ -15,9 +15,9 @@ public class TransTest1 {
 
         final Person p = new Person();
         try {
-            p.set("personId", "1");
-            p.set("personName", "徐雷");
-            p.set("age", 28);
+            p.getHelper().set("personId", "1");
+            p.getHelper().set("personName", "徐雷");
+            p.getHelper().set("age", 28);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
@@ -27,7 +27,7 @@ public class TransTest1 {
             Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
-                    p.delete();
+                    p.getHelper().delete();
                     return null;
                 }
 
@@ -41,7 +41,7 @@ public class TransTest1 {
             Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
-                    p.save();
+                    p.getHelper().save();
                     return null;
                 }
             });
@@ -54,8 +54,8 @@ public class TransTest1 {
             Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
-                    p.set("personName", "东升");
-                    p.update();
+                    p.getHelper().set("personName", "东升");
+                    p.getHelper().update();
                     return null;
                     // throw new Exception();
                 }
@@ -67,13 +67,13 @@ public class TransTest1 {
 
         System.out.println("----------------------1-----------------------");
         try {
-            List<Entity> ps = (List<Entity>) Trans.transNew(new Trans() {
+            List<EntityHelper> ps = (List<EntityHelper>) Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
-                    return p.qryList();
+                    return p.getHelper().qryList();
                 }
             });
-            for (Entity po : ps) {
+            for (EntityHelper po : ps) {
                 System.out.println(po.get("personName"));
             }
         } catch (Exception e) {

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
-import com.golf.mvc.view.Builder;
+import com.golf.mvc.view.ViewBuilder;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
 import com.golf.utils.StringUtils;
@@ -187,7 +187,7 @@ public class GolfFilter extends Golf implements Filter {
             // FutureTask
             throw new RuntimeException(e);
         }
-        Builder rstBuilder = BuilderFactory.getBuilder(mediaType, rst);
+        ViewBuilder rstBuilder = BuilderFactory.getBuilder(mediaType, rst);
         if (null == rstBuilder) {
             rstBuilder = new ErrorViewBuilder();
             rstBuilder.build(request, response, mediaType, new ServletException("系统不支持的视图" + mediaType + " "

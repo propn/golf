@@ -13,14 +13,15 @@ package com.golf.dao.sql;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * @author Thunder.Hsu
  * 
  */
 @Table(name = "FILE_INFO")
-public class FileInfo extends Entity {
+public class FileInfo implements IEntity {
 
     @Id
     @Column(name = "FILE_ID")
@@ -62,6 +63,14 @@ public class FileInfo extends Entity {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        return new EntityHelper(this) ;
     }
 
 }

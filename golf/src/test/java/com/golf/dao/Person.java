@@ -14,7 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * @author Thunder.Hsu
@@ -23,7 +24,7 @@ import com.golf.dao.entity.Entity;
 @Table(schema = "golf", name = "Person")
 @XmlRootElement(name = "Person")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Person extends Entity {
+public class Person implements IEntity {
     @Id
     @Column(columnDefinition = "Long", nullable = false)
     @NotNull(message = "may not be null")
@@ -69,6 +70,16 @@ public class Person extends Entity {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        return new EntityHelper(this);
     }
 
 }

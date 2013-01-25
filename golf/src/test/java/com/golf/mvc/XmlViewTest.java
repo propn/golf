@@ -14,25 +14,25 @@ public class XmlViewTest {
         try {
 
             Person teacher = new Person();
-            teacher.set("personId", "03023001");
-            teacher.set("personName", "常继科");
-            teacher.set("age", 28);
+            teacher.getHelper().set("personId", "03023001");
+            teacher.getHelper().set("personName", "常继科");
+            teacher.getHelper().set("age", 28);
 
             Student st = new Student();
-            st.set("grade", 2003);
-            st.set("major", "computer");
-            st.set("Counselor", teacher);
-            st.set("personId", "03023152");
-            st.set("personName", "徐雷");
-            st.set("age", 18);
+            st.getHelper().set("grade", 2003);
+            st.getHelper().set("major", "computer");
+            st.getHelper().set("Counselor", teacher);
+            st.getHelper().set("personId", "03023152");
+            st.getHelper().set("personName", "徐雷");
+            st.getHelper().set("age", 18);
             // marshaller.marshal(st, System.out);
             System.out.println(JaxbUtils.toXml(st));
 
             Teacher t = new Teacher();
-            t.set("personId", "03023001");
-            t.set("personName", "333继科");
-            t.set("age", 43);
-            t.set("hight", 12);
+            t.getHelper().set("personId", "03023001");
+            t.getHelper().set("personName", "333继科");
+            t.getHelper().set("age", 43);
+            t.getHelper().set("hight", 12);
 
             System.out.println(JaxbUtils.toXml(t));
 

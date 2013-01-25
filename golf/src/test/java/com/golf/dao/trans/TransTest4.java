@@ -21,7 +21,7 @@ public class TransTest4 {
         Trans.transNew(new Trans() {
             @Override
             public Object call() throws Exception {
-                p.delete();
+                p.getHelper().delete();
                 return null;
             }
         });
@@ -33,7 +33,7 @@ public class TransTest4 {
             Trans.transNew(new Trans() {
                 @Override
                 public Object call() throws Exception {
-                    p.save();
+                    p.getHelper().save();
                     System.out.println("------------------------------------nest");
                     System.out.println("update 东升 begin ");
                     try {
@@ -41,7 +41,7 @@ public class TransTest4 {
                             @Override
                             public Object call() throws Exception {
                                 p.setPersonName("东升");
-                                p.update();
+                                p.getHelper().update();
                                 // return null;
                                 throw new Exception();
                             }
@@ -62,7 +62,7 @@ public class TransTest4 {
         List<Person> list = (List<Person>) Trans.transNew(new Trans() {
             @Override
             public Object call() throws Exception {
-                return p.qryList();
+                return p.getHelper().qryList();
             }
         });
         for (Person person : list) {

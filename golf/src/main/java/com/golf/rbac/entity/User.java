@@ -18,8 +18,9 @@ import com.golf.dao.SqlUtils;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
 import com.golf.dao.entity.EntitySqls;
+import com.golf.dao.entity.IEntity;
 import com.golf.mvc.ReqCtx;
 import com.golf.mvc.Session;
 import com.golf.mvc.anno.FormParam;
@@ -36,7 +37,7 @@ import com.golf.utils.json.anno.Transient;
  */
 @Table(schema = "golf", name = "USER")
 @Path("/user")
-public class User extends Entity {
+public class User implements IEntity {
 
     /**
      * 
@@ -144,7 +145,7 @@ public class User extends Entity {
         UserRoleRel urr = new UserRoleRel();
         urr.setUserId(userId);
         urr.setRoleId(role.getRoleId());
-        urr.save();
+        urr.getHelper().save();
     }
 
     //
@@ -152,7 +153,7 @@ public class User extends Entity {
         UserRoleRel urr = new UserRoleRel();
         urr.setUserId(userId);
         urr.setRoleId(role.getRoleId());
-        urr.delete();
+        urr.getHelper().delete();
     }
 
     public Long getUserId() {
@@ -209,6 +210,15 @@ public class User extends Entity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

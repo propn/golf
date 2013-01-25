@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.golf.Golf;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
+import com.golf.dao.trans.DbRouter;
 import com.golf.utils.RefUtils;
 import com.golf.utils.StringUtils;
 import com.golf.utils.cache.PartitionCache;
@@ -31,7 +31,7 @@ public class EntitySqls {
      * @return
      * @throws Exception
      */
-    public static <T extends Entity> String getFieldName(Class<T> clz, String columnName) throws Exception {
+    public static <T extends IEntity> String getFieldName(Class<T> clz, String columnName) throws Exception {
         String className = clz.getName();
         if (sqlCache.get(className).isEmpty()) {
             build(clz);
@@ -47,7 +47,7 @@ public class EntitySqls {
      * @return
      * @throws Exception
      */
-    public static <T extends Entity> String getColumnName(Class<T> clz, String fieldName) throws Exception {
+    public static <T extends IEntity> String getColumnName(Class<T> clz, String fieldName) throws Exception {
         String className = clz.getName();
         if (sqlCache.get(className).isEmpty()) {
             build(clz);
@@ -55,7 +55,7 @@ public class EntitySqls {
         return fieldColumnMap.get(className, fieldName);
     }
 
-    private static <T extends Entity> void build(Class<T> clz) throws Exception {
+    private static <T extends IEntity> void build(Class<T> clz) throws Exception {
         String className = clz.getName();
         buildFields(clz);
         sqlCache.put(className, "C", generalInsertSql(clz));
@@ -64,7 +64,7 @@ public class EntitySqls {
         sqlCache.put(className, "D", generalDeleteSql(clz));
     }
 
-    public static <T extends Entity> String getInsertSql(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getInsertSql(Class<T> clz) throws Exception {
         String className = clz.getName();
         if (sqlCache.get(className).isEmpty()) {
             build(clz);
@@ -72,7 +72,7 @@ public class EntitySqls {
         return sqlCache.get(className, "C");
     }
 
-    public static <T extends Entity> String getSelectSql(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getSelectSql(Class<T> clz) throws Exception {
         String className = clz.getName();
         if (sqlCache.get(className).isEmpty()) {
             build(clz);
@@ -80,7 +80,7 @@ public class EntitySqls {
         return sqlCache.get(className, "R");
     }
 
-    public static <T extends Entity> String getUpdateSql(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getUpdateSql(Class<T> clz) throws Exception {
         String className = clz.getName();
         if (sqlCache.get(className).isEmpty()) {
             build(clz);
@@ -88,7 +88,7 @@ public class EntitySqls {
         return sqlCache.get(className, "U");
     }
 
-    public static <T extends Entity> String getDeleteSql(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getDeleteSql(Class<T> clz) throws Exception {
         String className = clz.getName();
         if (sqlCache.get(className).isEmpty()) {
             build(clz);
@@ -96,7 +96,7 @@ public class EntitySqls {
         return sqlCache.get(className, "D");
     }
 
-    public static <T extends Entity> String getDDL(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getDDL(Class<T> clz) throws Exception {
         return generalDDL(clz);
     }
 
@@ -109,7 +109,7 @@ public class EntitySqls {
      * @return
      * @throws Exception
      */
-    private static <T extends Entity> String generalDDL(Class<T> clz) throws Exception {
+    private static <T extends IEntity> String generalDDL(Class<T> clz) throws Exception {
         String tableName = getTableName(clz);
         StringBuffer sqlStr = new StringBuffer("CREATE TABLE " + tableName + " (");
         List<Field> columnFields = getColumnFields(clz);
@@ -163,7 +163,7 @@ public class EntitySqls {
         return sqlStr.toString();
     }
 
-    private static <T extends Entity> void buildFields(Class<T> clz) throws Exception {
+    private static <T extends IEntity> void buildFields(Class<T> clz) throws Exception {
         String className = clz.getName();
         List<Field> columnFields = getColumnFields(clz);
         if (columnFields != null && columnFields.size() > 0) {
@@ -175,7 +175,7 @@ public class EntitySqls {
         }
     }
 
-    private static <T extends Entity> String generalInsertSql(Class<T> clz) throws Exception {
+    private static <T extends IEntity> String generalInsertSql(Class<T> clz) throws Exception {
         String tableName = getTableName(clz);
         StringBuffer sqlStr = new StringBuffer("INSERT INTO " + tableName + " (");
         StringBuffer valueStr = new StringBuffer(" VALUES (");
@@ -192,7 +192,7 @@ public class EntitySqls {
         return sqlStr.append(valueStr).toString();
     }
 
-    private static <T extends Entity> String generalDeleteSql(Class<T> clz) throws Exception {
+    private static <T extends IEntity> String generalDeleteSql(Class<T> clz) throws Exception {
         StringBuffer sqlStr = new StringBuffer("DELETE FROM ");
         sqlStr.append(getTableName(clz));
         sqlStr.append(" WHERE ");
@@ -210,7 +210,7 @@ public class EntitySqls {
         return sqlStr.toString();
     }
 
-    private static <T extends Entity> String generalUpdateSql(Class<T> clz) throws Exception {
+    private static <T extends IEntity> String generalUpdateSql(Class<T> clz) throws Exception {
         String tableName = getTableName(clz);
         StringBuffer sqlStr = new StringBuffer("UPDATE " + tableName + " SET ");
 
@@ -236,7 +236,7 @@ public class EntitySqls {
         return sqlStr.toString();
     }
 
-    private static <T extends Entity> String generalSelectSql(Class<T> clz) throws Exception {
+    private static <T extends IEntity> String generalSelectSql(Class<T> clz) throws Exception {
         StringBuffer sqlStr = new StringBuffer("SELECT ");
         List<Field> columnFields = getColumnFields(clz);
         if (columnFields != null && columnFields.size() > 0) {
@@ -265,7 +265,7 @@ public class EntitySqls {
         return sqlStr.toString();
     }
 
-    public static <T extends Entity> String getTableSchema(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getTableSchema(Class<T> clz) throws Exception {
         String className = clz.getName();
         if (null == sqlCache.get(className).get("S")) {
             String schema = null;
@@ -273,14 +273,14 @@ public class EntitySqls {
                 schema = ((Table) clz.getAnnotation(Table.class)).schema().toUpperCase();
             }
             if ("".equals(schema)) {
-                schema = Golf.DEFAULT_SCHEMA;
+                schema = DbRouter.getdefaultSchema();
             }
             sqlCache.put(className, "S", schema);
         }
         return sqlCache.get(className).get("S");
     }
 
-    public static <T extends Entity> String getTableName(Class<T> clz) throws Exception {
+    public static <T extends IEntity> String getTableName(Class<T> clz) throws Exception {
         String table = null;
         if (clz.isAnnotationPresent(Table.class)) {
             table = ((Table) clz.getAnnotation(Table.class)).name().toUpperCase();
@@ -291,7 +291,7 @@ public class EntitySqls {
         return table;
     }
 
-    private static <T extends Entity> List<Field> getIdFields(Class<T> clz) {
+    private static <T extends IEntity> List<Field> getIdFields(Class<T> clz) {
         Map<String, Field> map = RefUtils.getFields(clz);
         Object[] fields = map.values().toArray();
 
@@ -305,7 +305,7 @@ public class EntitySqls {
         return list;
     }
 
-    private static <T extends Entity> List<Field> getColumnFields(Class<T> clz) {
+    private static <T extends IEntity> List<Field> getColumnFields(Class<T> clz) {
         List<Field> list = new ArrayList<Field>();
         Map<String, Field> map = RefUtils.getFields(clz);
         Object[] fields = map.values().toArray();

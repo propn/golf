@@ -17,8 +17,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.golf.dao.entity.Entity;
 import com.golf.dao.entity.EntitySqls;
+import com.golf.dao.entity.IEntity;
 import com.golf.utils.ConvertUtils;
 import com.golf.utils.StringUtils;
 
@@ -43,11 +43,11 @@ public class DbRouter {
         return defaultSchema;
     }
 
-    public static <T extends Entity> String getSchema(T obj) throws Exception {
-        return getSchema(obj.getClass(), obj.toMap());
+    public static <T extends IEntity> String getSchema(T obj) throws Exception {
+        return getSchema(obj.getClass(), obj.getHelper().toMap());
     }
 
-    public static <T extends Entity> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
+    public static <T extends IEntity> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
         String table = EntitySqls.getTableName(clz);
         Map<String, String> map = routerInfo.get(table);
         //取默认

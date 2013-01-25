@@ -13,7 +13,8 @@ package com.golf.rbac.entity;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.entity.Entity;
+import com.golf.dao.entity.EntityHelper;
+import com.golf.dao.entity.IEntity;
 
 /**
  * 权限指派PA (Permission Assignment):是权限集P到角色集ROLES的一种多对多的关系,<br>
@@ -22,7 +23,7 @@ import com.golf.dao.entity.Entity;
  * @author Thunder.Hsu 2012-12-20
  */
 @Table(schema = "golf", name = "ROLE_PERMISSION_REL")
-public class RolePermissionRel extends Entity {
+public class RolePermissionRel implements IEntity {
     /**
      * 
      */
@@ -50,6 +51,15 @@ public class RolePermissionRel extends Entity {
 
     public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
+    }
+
+    /* (non-Javadoc)
+     * @see com.golf.dao.entity.IEntity#getHelper()
+     */
+    @Override
+    public EntityHelper getHelper() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

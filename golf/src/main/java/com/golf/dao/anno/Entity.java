@@ -6,12 +6,6 @@ import java.lang.annotation.Retention;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/**
- * Specifies that the class is an entity. This annotation is 
- * applied to the entity class.
- *
- * @since Java Persistence 1.0
- */
 @Target(TYPE) 
 @Retention(RUNTIME)
 @Inherited

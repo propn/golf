@@ -25,7 +25,7 @@ import com.golf.utils.JaxbUtils;
  * @author Administrator
  * 
  */
-public class XmlViewBuilder implements Builder {
+public class XmlViewBuilder implements ViewBuilder {
 
     /*
      * (non-Javadoc)
