@@ -22,7 +22,7 @@ public class SAXHandler extends DefaultHandler {
     private static class InternalElement {
         String name;
         StringBuffer value;
-        ArrayList children;
+        ArrayList<InternalElement> children;
         InternalElement parent;
         String namespaceUri;
     }
@@ -44,8 +44,8 @@ public class SAXHandler extends DefaultHandler {
         this.trimWhitespaces = trimWhitespaces;
     }
 
-    public Map getMap() {
-        HashMap out = new HashMap();
+    public Map<Object, Object> getMap() {
+        Map<Object, Object> out = new HashMap<Object, Object>();
         createMap(currentElement, out);
         return out;
     }
@@ -57,7 +57,7 @@ public class SAXHandler extends DefaultHandler {
 
         if (currentElement != null) {
             if (currentElement.children == null) {
-                currentElement.children = new ArrayList();
+                currentElement.children = new ArrayList<InternalElement>();
             }
             currentElement.children.add(newElement);
         } else {
@@ -100,7 +100,7 @@ public class SAXHandler extends DefaultHandler {
         throw e;
     }
 
-    private void createMap(InternalElement element, HashMap out) {
+    private void createMap(InternalElement element, Map<Object, Object> out) {
         if (element == null) {
             throw new IllegalArgumentException("element is null");
         }
@@ -113,31 +113,26 @@ public class SAXHandler extends DefaultHandler {
             put(out, element.name, (element.value != null) ? (trimWhitespaces ? element.value.toString().trim()
                     : element.value.toString()) : StringUtils.EMPTY_STR);
         } else {
-            HashMap m = new HashMap();
-
-            for (Iterator i = element.children.iterator(); i.hasNext();)
-                createMap((InternalElement) i.next(), m);
-
+            Map<Object, Object> m = new HashMap<Object, Object>();
+            for (Iterator<InternalElement> i = element.children.iterator(); i.hasNext();) {
+                createMap(i.next(), m);
+            }
             put(out, element.name, m);
         }
     }
 
-    private void put(HashMap m, Object key, Object value) {
+    @SuppressWarnings("unchecked")
+    private void put(Map<Object, Object> m, Object key, Object value) {
         Object o = m.get(key);
-
         if (o == null) {
             m.put(key, value);
-
             return;
         }
-
         if (o instanceof List) {
-            ((List) o).add(value);
-
+            ((List<Object>) o).add(value);
             return;
         }
-
-        ArrayList l = new ArrayList();
+        List<Object> l = new ArrayList<Object>();
         l.add(o);
         l.add(value);
         m.put(key, l);

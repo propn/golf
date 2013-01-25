@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.golf.Golf;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
@@ -273,7 +274,7 @@ public class EntitySqls {
                 schema = ((Table) clz.getAnnotation(Table.class)).schema().toUpperCase();
             }
             if ("".equals(schema)) {
-                schema = DbRouter.getdefaultSchema();
+                schema = Golf.DEFAULT_SCHEMA;
             }
             sqlCache.put(className, "S", schema);
         }

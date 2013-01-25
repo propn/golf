@@ -13,6 +13,7 @@ package com.golf.e.h2;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import com.golf.Golf;
 import com.golf.dao.SqlUtils;
 import com.golf.dao.trans.DbRouter;
 
@@ -34,7 +35,7 @@ public class H2Func {
      */
     public static void main(String[] args) throws Exception {
         String sql = "CREATE ALIAS TO_DATE FOR \"com.golf.e.h2.H2Func.to_date\"";
-        SqlUtils.excuteInNewTrans(sql, DbRouter.getdefaultSchema());
+        SqlUtils.excuteInNewTrans(sql, Golf.DEFAULT_SCHEMA);
     }
 
 }

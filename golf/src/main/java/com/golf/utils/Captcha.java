@@ -13,11 +13,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.golf.mvc.ReqCtx;
 import com.golf.mvc.Session;
 import com.golf.mvc.anno.GET;
 import com.golf.mvc.anno.Path;
-import com.golf.rbac.entity.User;
 
 @Path("/captcha")
 public class Captcha {

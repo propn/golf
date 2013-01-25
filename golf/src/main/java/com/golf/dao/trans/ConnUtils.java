@@ -85,7 +85,7 @@ public class ConnUtils {
                 currentTransId);
 
         if (null == schema) {
-            schema = DbRouter.getdefaultSchema();
+            schema = Golf.DEFAULT_SCHEMA;
         }
 
         Connection conn = null;

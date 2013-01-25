@@ -13,7 +13,7 @@ import com.golf.utils.cache.PartitionCache;
  * 
  */
 public class RefUtils {
-    
+
     private static PartitionCache<Field> fieldsCache = new PartitionCache<Field>();
     private static PartitionCache<Method> methodsCache = new PartitionCache<Method>();
 

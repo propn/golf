@@ -21,6 +21,7 @@ public class ConvertUtils {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
 
+    @SuppressWarnings("unchecked")
     public static <T> T convert(Object obj, Class<T> clz) throws Exception {
         if (null == obj) {
             return getDefaultValue(clz);
