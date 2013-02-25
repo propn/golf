@@ -15,8 +15,8 @@ import com.golf.ioc.BeanUtils;
 import com.golf.mvc.ResUtils;
 import com.golf.utils.ClassUtils;
 import com.golf.utils.ConfigUtils;
-import com.golf.utils.JaxbUtils;
 import com.golf.utils.StringUtils;
+import com.golf.utils.jaxb.JaxbUtils;
 
 /**
  * @author Thunder.Hsu

@@ -29,7 +29,7 @@ public class BuilderFactory {
      * @return
      * @throws Exception
      */
-    public static ViewBuilder getBuilder(String mediaType, Object rst) throws ServletException {
+    public static ViewRender getBuilder(String mediaType, Object rst) throws ServletException {
 
         if (null == rst) {
             return new EmptyViewBuilder();

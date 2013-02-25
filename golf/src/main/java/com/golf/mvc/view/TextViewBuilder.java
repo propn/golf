@@ -22,7 +22,7 @@ import com.golf.Golf;
  * @author Thunder.Hsu
  * 
  */
-public class TextViewBuilder implements ViewBuilder {
+public class TextViewBuilder implements ViewRender {
     /*
      * (non-Javadoc)
      * 

@@ -8,7 +8,7 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.utils;
+package com.golf.utils.jaxb;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
+import com.golf.utils.ClassUtils;
 
 /**
  * 

@@ -19,13 +19,13 @@ import javax.xml.bind.JAXBException;
 
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
-import com.golf.utils.JaxbUtils;
+import com.golf.utils.jaxb.JaxbUtils;
 
 /**
  * @author Administrator
  * 
  */
-public class XmlViewBuilder implements ViewBuilder {
+public class XmlViewBuilder implements ViewRender {
 
     /*
      * (non-Javadoc)

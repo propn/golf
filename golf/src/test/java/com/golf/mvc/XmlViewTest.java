@@ -5,7 +5,7 @@ import javax.xml.bind.JAXBException;
 import com.golf.dao.Person;
 import com.golf.dao.Student;
 import com.golf.dao.Teacher;
-import com.golf.utils.JaxbUtils;
+import com.golf.utils.jaxb.JaxbUtils;
 import com.golf.utils.json.Json;
 
 public class XmlViewTest {

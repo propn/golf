@@ -25,7 +25,7 @@ import com.golf.Golf;
  * @author Thunder.Hsu
  * 
  */
-public class FileViewBuilder implements ViewBuilder {
+public class FileViewBuilder implements ViewRender {
 
     @Override
     public void build(HttpServletRequest request, HttpServletResponse response, String mediaType, Object rst)

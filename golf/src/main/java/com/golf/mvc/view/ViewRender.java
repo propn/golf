@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Thunder.Hsu
  * 
  */
-public interface ViewBuilder {
+public interface ViewRender {
 
     /**
      * 
