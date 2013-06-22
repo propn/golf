@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  
+  <persistence-unit name="TestSSH2PU" transaction-type="RESOURCE_LOCAL">
+    <provider>oracle.toplink.essentials.PersistenceProvider</provider>
+    <class>com.hadeslee.jpaentity.Department</class>
+    <class>com.hadeslee.jpaentity.Person</class>
+    <properties>
+      <property name="toplink.jdbc.user" value="sa"/>
+      <property name="toplink.jdbc.password" value="hadeslee"/>
+      <property name="toplink.jdbc.url" value="jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=testSSH"/>
+      <property name="toplink.jdbc.driver" value="com.microsoft.jdbc.sqlserver.SQLServerDriver"/>
+      <property name="toplink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
+  
+  <persistence-unit name="TestSSH1PU2" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>com.hadeslee.jpaentity.Department</class>
+    <class>com.hadeslee.jpaentity.Person</class>
+   <properties>
+        <property name="hibernate.connection.driver_class" value="com.microsoft.jdbc.sqlserver.SQLServerDriver"/>
+        <property name="hibernate.connection.url" value="jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=testSSH"></property>
+        <property name="hibernate.connection.username" value="sa"></property>
+        <property name="hibernate.connection.password" value="hadeslee"></property>
+        <property name="hibernate.show_sql" value="true"></property>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"></property>
+        <property name="hibernate.current_session_context_class" value="thread"></property>
+    </properties>
+  </persistence-unit>
+</persistence>

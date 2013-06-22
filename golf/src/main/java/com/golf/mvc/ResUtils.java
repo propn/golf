@@ -135,7 +135,7 @@ public class ResUtils {
         if (null == consumes && clz.isAnnotationPresent(Consumes.class)) {
             consumes = clz.getAnnotation(Consumes.class).value();
         }
-        res.setConsumes(StringUtils.array2Strig(consumes, '|'));
+        res.setConsumes(StringUtils.join(consumes, "|"));
 
         String[] produces = null;
         if (method.isAnnotationPresent(Produces.class)) {

@@ -17,14 +17,14 @@ import com.golf.dao.trans.ConnUtils;
 import com.golf.dao.trans.DbRouter;
 
 /**
- * JPA工具类
+ * 实体DAO工具类
  * 
  * @author Thunder.Hsu 2012-12-8
  */
-public class EntityUtils {
+public class EntityDao {
 
     /**
-     * 
+     * 建表
      * @param <T>
      * @param po
      * @throws Exception

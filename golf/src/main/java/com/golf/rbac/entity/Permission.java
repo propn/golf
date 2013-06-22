@@ -20,7 +20,7 @@ import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
 import com.golf.dao.entity.EntityHelper;
 import com.golf.dao.entity.EntitySqls;
-import com.golf.dao.entity.EntityUtils;
+import com.golf.dao.entity.EntityDao;
 import com.golf.dao.entity.IEntity;
 import com.golf.utils.json.anno.Transient;
 
@@ -57,7 +57,7 @@ public class Permission implements IEntity {
             return permissionCache.get(objetctCode + ":" + operationCode);
         }
         //
-        List<Permission> permissions = EntityUtils.qryList(Permission.class, null);
+        List<Permission> permissions = EntityDao.qryList(Permission.class, null);
         permissionCache = new HashMap<String, Long>();
         for (Permission permission : permissions) {
             permissionCache.put(permission.getObjetctCode() + ":" + permission.getOperationCode(),

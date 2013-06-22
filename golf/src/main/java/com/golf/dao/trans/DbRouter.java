@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.golf.Golf;
 import com.golf.dao.entity.EntitySqls;
 import com.golf.dao.entity.IEntity;
 import com.golf.utils.ConvertUtils;
@@ -50,7 +51,7 @@ public class DbRouter {
     public static <T extends IEntity> String getSchema(Class<T> clz, Map<String, Object> param) throws Exception {
         String table = EntitySqls.getTableName(clz);
         Map<String, String> map = routerInfo.get(table);
-        //取默认
+        // 取默认
         if (null == map || map.isEmpty()) {
             String schema = EntitySqls.getTableSchema(clz);
             if (StringUtils.isBlank(schema)) {
@@ -109,9 +110,12 @@ public class DbRouter {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder docbuilder = dbf.newDocumentBuilder();// 创建解析者
         // 初始化数据源
-        InputStream is = ClassLoader.getSystemResourceAsStream("dbrouter.xml");
+        InputStream is = ClassLoader.getSystemResourceAsStream(Golf.DATABASE_ROUTER_FILE);
         if (null == is) {
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("dbrouter.xml");
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Golf.DATABASE_ROUTER_FILE);
+        }
+        if (null == is){
+            throw new RuntimeException("数据库分库配置文件"+Golf.DATABASE_ROUTER_FILE +"文件不存在!");
         }
         Document doc = docbuilder.parse(is);
         // 全局默认库
@@ -126,7 +130,7 @@ public class DbRouter {
             // 表名
             String table = ele.getAttribute("table");
             if (null == table) {
-                throw new Exception("dbrouter.xml格式错误!表名不能为空!");
+                throw new Exception(Golf.DATABASE_ROUTER_FILE + "格式错误!表名不能为空!");
             }
             routerInfo.put(table, map);
             // 唯一数据库
@@ -154,15 +158,4 @@ public class DbRouter {
         }
         return routerInfo;
     }
-
-    public static void main(String[] args) throws Exception {
-        for (Entry<String, Map<String, String>> entry : routerInfo.entrySet()) {
-            System.out.println("-------------------------------------");
-            System.out.println(entry.getKey());
-            Map<String, String> value = entry.getValue();
-            System.out.println(value);
-        }
-        System.out.println("-------------------------------------");
-    }
-
 }

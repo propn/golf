@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.golf.mvc.session.Session;
+
 /**
  * @author Thunder.Hsu 2013-1-8
  */

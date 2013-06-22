@@ -8,7 +8,7 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.mvc;
+package com.golf.mvc.session;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,9 @@ import com.golf.utils.cache.ExpiringCache;
  * @author Thunder.Hsu 2012-12-18
  */
 public abstract class Session {
+    
     public static final ExpiringCache<String, Map<String, Object>> globalCache = new ExpiringCache<String, Map<String, Object>>();
+    
     static {
         globalCache.setExpirationInterval(60);
         globalCache.setTimeToLive(1800);

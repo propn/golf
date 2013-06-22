@@ -9,7 +9,6 @@ import com.golf.Golf;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
-import com.golf.dao.trans.DbRouter;
 import com.golf.utils.RefUtils;
 import com.golf.utils.StringUtils;
 import com.golf.utils.cache.PartitionCache;
@@ -58,6 +57,7 @@ public class EntitySqls {
 
     private static <T extends IEntity> void build(Class<T> clz) throws Exception {
         String className = clz.getName();
+        sqlCache.put(className, "", "");
         buildFields(clz);
         sqlCache.put(className, "C", generalInsertSql(clz));
         sqlCache.put(className, "R", generalSelectSql(clz));
@@ -164,12 +164,22 @@ public class EntitySqls {
         return sqlStr.toString();
     }
 
+    /**
+     * 字段列名关系
+     * @param clz
+     * @throws Exception
+     */
     private static <T extends IEntity> void buildFields(Class<T> clz) throws Exception {
         String className = clz.getName();
         List<Field> columnFields = getColumnFields(clz);
         if (columnFields != null && columnFields.size() > 0) {
             for (Field field : columnFields) {
-                String column = getColumnName(clz, field.getName());
+                Column annotation = field.getAnnotation(Column.class);
+                String column = annotation.name();
+                if(StringUtils.isBlank(column)){
+                    column=StringUtils.camel4underline(field.getName());
+                }
+                column=column.toUpperCase();
                 columnFieldMap.put(className, column, field.getName());
                 fieldColumnMap.put(className, field.getName(), column);
             }

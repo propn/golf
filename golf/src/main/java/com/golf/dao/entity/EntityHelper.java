@@ -4,7 +4,6 @@
 package com.golf.dao.entity;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,14 +18,18 @@ import com.golf.utils.jaxb.JaxbUtils;
 import com.golf.utils.json.Json;
 
 /**
+ * 
  * @author Thunder.Hsu
  * 
  */
-public class EntityHelper implements Serializable {
+public class EntityHelper {
+
     IEntity entity = null;
-    public EntityHelper(IEntity entity){
-        this.entity=entity;
+
+    public EntityHelper(IEntity entity) {
+        this.entity = entity;
     }
+
     // 属性
     public Object get(String fieldName) throws Exception {
         Object value = RefUtils.getFieldValue(entity, fieldName);
@@ -79,7 +82,12 @@ public class EntityHelper implements Serializable {
 
     // 数据库操作CRUD
     public void save() throws Exception {
-        EntityUtils.intsert(entity);
+        EntityDao.intsert(entity);
+    }
+
+    public <T extends IEntity> T getById(Object... ids) throws Exception {
+        List<T> pos = qryList();
+        return null != pos && pos.size() > 0 ? pos.get(0) : null;
     }
 
     public <T extends IEntity> T getOne() throws Exception {
@@ -103,7 +111,7 @@ public class EntityHelper implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public <T extends IEntity> List<T> qryList() throws Exception {
-        return (List<T>) EntityUtils.qryAll(entity);
+        return (List<T>) EntityDao.qryAll(entity);
     }
 
     /**
@@ -120,11 +128,11 @@ public class EntityHelper implements Serializable {
     }
 
     public int update() throws Exception {
-        return EntityUtils.update(entity);
+        return EntityDao.update(entity);
     }
 
     public int delete() throws Exception {
-        return EntityUtils.delete(entity);
+        return EntityDao.delete(entity);
     }
 
 }

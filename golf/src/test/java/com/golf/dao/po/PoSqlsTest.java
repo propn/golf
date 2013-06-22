@@ -34,8 +34,8 @@ public class PoSqlsTest {
      */
     @Test
     public void testGetSelectSql() throws Exception {
-        String ddl = EntitySqls.getSelectSql(Person.class);
-        System.out.println(ddl);
+//        String ddl = EntitySqls.getSelectSql(Person.class);
+//        System.out.println(ddl);
     }
 
     /**
@@ -61,8 +61,8 @@ public class PoSqlsTest {
      */
     @Test
     public void testGetDDL() throws Exception {
-        String ddl = EntitySqls.getDDL(Person.class);
-        System.out.println(ddl);
+//        String ddl = EntitySqls.getDDL(Person.class);
+//        System.out.println(ddl);
     }
 
     /**

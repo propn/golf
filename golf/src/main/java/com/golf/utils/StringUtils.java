@@ -145,7 +145,7 @@ public class StringUtils {
         return (str.length() == 0) ? null : str;
     }
 
-    public static String array2Strig(String[] array, char split) {
+    public static String join(String[] array, String split) {
         if (null == array) {
             return null;
         }
@@ -156,7 +156,7 @@ public class StringUtils {
         return sb.substring(0, sb.length() - 1);
     }
 
-    public static String list2Stirng(List<?> args, char split) {
+    public static String join(List<?> args, String split) {
         if (null == args || args.isEmpty()) {
             return null;
         }

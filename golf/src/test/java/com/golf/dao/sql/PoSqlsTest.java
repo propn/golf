@@ -53,13 +53,13 @@ public class PoSqlsTest {
      */
     @Test
     public void testGetSelectSql() throws Exception {
-        String a = EntitySqls.getSelectSql(FileInfo.class);
-        System.out.println(a);
-        SqlParser sp = new QrySqlParser();
-        FileInfo f = new FileInfo();
-        Map m = f.getHelper().toMap();
-        a = sp.dealOptParam(a, m);
-        System.out.println(a);
+//        String a = EntitySqls.getSelectSql(FileInfo.class);
+//        System.out.println(a);
+//        SqlParser sp = new QrySqlParser();
+//        FileInfo f = new FileInfo();
+//        Map m = f.getHelper().toMap();
+//        a = sp.dealOptParam(a, m);
+//        System.out.println(a);
     }
 
     /**

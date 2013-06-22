@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
+import com.golf.mvc.session.Session;
 import com.golf.mvc.view.ViewRender;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
@@ -32,8 +33,8 @@ import com.golf.utils.StringUtils;
 public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
-    private static final String CACHE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf)$";
-    private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|html|jsp|jspx)$";
+    private static final String CACHE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|htc)$";
+    private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|html|jsp|jspx|htc)$";
     private static Pattern cachePattern = null;// httpCache
     private static Pattern ignoreFilePattern = null;//
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
@@ -92,7 +93,7 @@ public class GolfFilter extends Golf implements Filter {
         String[] pkgs = null;
         if (null == packages) {
             pkgs = getPkgs();
-            log.debug("Packages : [{}]", StringUtils.array2Strig(pkgs, ';'));
+            log.debug("Packages : [{}]", StringUtils.join(pkgs, ";"));
         } else {
             pkgs = packages.split(";");
             log.debug("Packages : " + packages);
