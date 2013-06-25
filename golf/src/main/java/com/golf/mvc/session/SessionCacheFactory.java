@@ -5,7 +5,6 @@ package com.golf.mvc.session;
 
 import com.golf.mvc.session.imp.ExpiringSessionCache;
 import com.golf.mvc.session.imp.GoogleSessionCache;
-import com.golf.mvc.session.imp.ISessionCache;
 
 /**
  * @author Thunder.Hsu 2013-6-24

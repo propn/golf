@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
 import com.golf.mvc.session.ISession;
+import com.golf.mvc.session.Session;
 import com.golf.mvc.session.SessionManager;
-import com.golf.mvc.session.imp.Session;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
 import com.golf.mvc.view.ViewRender;
@@ -35,14 +35,16 @@ import com.golf.utils.StringUtils;
 public class GolfFilter extends Golf implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GolfFilter.class);
+    /*浏览器缓存文件类型*/
     private static final String CACHE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|htc)$";
+    /*GolfMVC忽略处理文件类型*/
     private static final String IGNORE_FILE = "^(.+[.])(png|gif|jpg|ttf|woff|eot|svg|js|css|jpeg|ico|swf|html|jsp|jspx|htc)$";
-    private static Pattern cachePattern = null;// httpCache
-    private static Pattern ignoreFilePattern = null;//
+    /*GolfMVC忽略路径*/
     private static Pattern ignorePathPattern = null;// console.\\S{0,}
+    private static Pattern ignoreFilePattern = null;//
+    private static Pattern cachePattern = null;// httpCache
     // 开发调试环境
     private static boolean debug = "debug".equals(Golf.getProperty(Golf.RUNTIME, "debug")) ? true : false;
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         long begin = System.currentTimeMillis();
@@ -58,7 +60,7 @@ public class GolfFilter extends Golf implements Filter {
         } else {
             cachePattern = Pattern.compile(cacheFile, Pattern.CASE_INSENSITIVE);
         }
-        // 忽略文件
+        // GolfMVC忽略文件
         String regexFile = filterConfig.getInitParameter("ignore_file");
         if (null == regexFile) {
             ignoreFilePattern = Pattern.compile(IGNORE_FILE, Pattern.CASE_INSENSITIVE);
@@ -66,7 +68,7 @@ public class GolfFilter extends Golf implements Filter {
         } else {
             ignoreFilePattern = Pattern.compile(regexFile, Pattern.CASE_INSENSITIVE);
         }
-        // 忽略路径
+        // GolfMVC忽略路径
         String ignore_path = filterConfig.getInitParameter("ignore_path");
         if (null != ignore_path) {
             String paths[] = ignore_path.split(";");
@@ -127,11 +129,11 @@ public class GolfFilter extends Golf implements Filter {
         request.setCharacterEncoding(Golf.charsetName);
         response.setCharacterEncoding(Golf.charsetName);
         // 更新用户最后访问时间
-        String sessionId = request.getSession().getId();
-        ISession session = SessionManager.getSession(sessionId);
+        String sId = request.getSession().getId();
+        ISession session = SessionManager.getSession(sId);
         if (null == session) {
             session = new Session();
-            session.setSessionId(sessionId);
+            session.setId(sId);
             SessionManager.setSession(session);
         }
         //

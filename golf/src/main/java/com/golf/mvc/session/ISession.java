@@ -1,31 +1,28 @@
 package com.golf.mvc.session;
 
-import java.io.Serializable;
+import java.util.Enumeration;
 
 import com.golf.rbac.entity.User;
 
-public interface ISession extends Serializable {
+public interface ISession {
 
-    public String getSessionId();
+    public String getId();
 
-    public void setSessionId(String sessionId);
+    public void setId(String sId);
 
-    /**
-     * 当前用户
-     * 
-     * @return
-     */
+    public <T> T getAttribute(String name);
+
+    public void setAttribute(String name, Object value);
+
+    public void removeAttribute(String name);
+
+    public Enumeration getAttributeNames();
+
+    public void invalidate();
+
+    //
     public User getUser();
 
     public void setUser(User user);
-
-    /**
-     * 
-     * @param key
-     * @return
-     */
-    public <T> T get(String key);
-
-    void put(String key, Object val);
 
 }

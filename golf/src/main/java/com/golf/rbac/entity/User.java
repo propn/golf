@@ -103,7 +103,7 @@ public class User implements IEntity {
     @GET
     @POST
     public void logout() throws Exception {
-        SessionManager.invalidateSession(SessionManager.getSession().getSessionId());
+        SessionManager.invalidateSession(SessionManager.getSession().getId());
     }
 
     public boolean hasPermission(String objetctCode, String operationCode) throws Exception {

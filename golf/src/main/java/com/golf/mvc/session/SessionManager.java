@@ -3,7 +3,6 @@
  */
 package com.golf.mvc.session;
 
-import com.golf.mvc.session.imp.ISessionCache;
 
 /**
  * Session管理器
@@ -31,7 +30,7 @@ public class SessionManager {
     }
 
     public static ISession setSession(ISession session) {
-        sessionCache.put(session.getSessionId(), session);
+        sessionCache.put(session.getId(), session);
         ctx.set(session);
         return session;
     }
@@ -42,7 +41,7 @@ public class SessionManager {
     }
 
     public static void expSession(ISession session) {
-        sessionCache.invalidate(session.getSessionId());
+        sessionCache.invalidate(session.getId());
     }
 
 }

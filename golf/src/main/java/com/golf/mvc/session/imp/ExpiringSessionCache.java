@@ -12,6 +12,7 @@ package com.golf.mvc.session.imp;
 
 import com.golf.cache.imp.ExpiringCache;
 import com.golf.mvc.session.ISession;
+import com.golf.mvc.session.ISessionCache;
 
 /**
  * @author Thunder.Hsu 2012-12-18

@@ -3,6 +3,7 @@ package com.golf.mvc.session.imp;
 import java.util.concurrent.TimeUnit;
 
 import com.golf.mvc.session.ISession;
+import com.golf.mvc.session.ISessionCache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalCause;

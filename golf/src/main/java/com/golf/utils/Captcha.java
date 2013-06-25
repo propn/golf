@@ -73,7 +73,7 @@ public class Captcha {
             randomCode.append(strRand);
         }
         // 将四位数字的验证码保存到Session中。
-        SessionManager.getSession().put("rand", randomCode.toString());
+        SessionManager.getSession().setAttribute("rand", randomCode.toString());
         // 图象生效
         g.dispose();
         // 禁止图像缓存。

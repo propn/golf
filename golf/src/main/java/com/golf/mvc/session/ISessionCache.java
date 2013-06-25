@@ -1,4 +1,4 @@
-package com.golf.mvc.session.imp;
+package com.golf.mvc.session;
 
 import com.golf.cache.ICache;
 
