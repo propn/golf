@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.golf.utils.cache.PartitionCache;
+import com.golf.cache.imp.PartitionCache;
 
 /**
  * 反射工具类

@@ -1,4 +1,4 @@
-package com.golf.utils.cache;
+package com.golf.cache.imp;
 
 import java.util.HashMap;
 import java.util.Map;

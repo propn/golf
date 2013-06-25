@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.golf.Golf;
+import com.golf.cache.imp.PartitionCache;
 import com.golf.dao.anno.Column;
 import com.golf.dao.anno.Id;
 import com.golf.dao.anno.Table;
 import com.golf.utils.RefUtils;
 import com.golf.utils.StringUtils;
-import com.golf.utils.cache.PartitionCache;
 
 /**
  * 

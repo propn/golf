@@ -15,6 +15,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.golf.cache.imp.PartitionCache;
 import com.golf.mvc.anno.Consumes;
 import com.golf.mvc.anno.DELETE;
 import com.golf.mvc.anno.GET;
@@ -27,7 +28,6 @@ import com.golf.mvc.anno.Produces;
 import com.golf.utils.ClassUtils;
 import com.golf.utils.RefUtils;
 import com.golf.utils.StringUtils;
-import com.golf.utils.cache.PartitionCache;
 
 /**
  * @author Thunder.Hsu

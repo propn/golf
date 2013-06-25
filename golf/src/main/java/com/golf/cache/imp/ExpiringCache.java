@@ -8,7 +8,7 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.utils.cache;
+package com.golf.cache.imp;
 
 import java.util.Collection;
 import java.util.Map;
@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import com.golf.cache.imp.safeexpiringcache.SafeExpiringCache;
 
 /**
  * A map with expiration. <br>

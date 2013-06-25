@@ -1,4 +1,4 @@
-package com.golf.utils.cache;
+package com.golf.cache.imp.safeexpiringcache;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -22,6 +22,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+
+import com.golf.cache.imp.safeexpiringcache.SafeExpiringCache.ExpirationPolicy;
+
 
 /**
  * A thread-safe map that expires entries. Optional features include expiration policies, variable entry settings, and

@@ -21,12 +21,11 @@ import com.golf.dao.anno.Table;
 import com.golf.dao.entity.EntityHelper;
 import com.golf.dao.entity.EntitySqls;
 import com.golf.dao.entity.IEntity;
-import com.golf.mvc.ReqCtx;
 import com.golf.mvc.anno.FormParam;
 import com.golf.mvc.anno.GET;
 import com.golf.mvc.anno.POST;
 import com.golf.mvc.anno.Path;
-import com.golf.mvc.session.Session;
+import com.golf.mvc.session.SessionManager;
 import com.golf.utils.SecurityUtils;
 import com.golf.utils.json.anno.Transient;
 
@@ -38,11 +37,6 @@ import com.golf.utils.json.anno.Transient;
 @Table(schema = "golf", name = "USER")
 @Path("/user")
 public class User implements IEntity {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -98300522688849208L;
 
     @Id
     @Column(columnDefinition = "BIGINT")
@@ -100,7 +94,7 @@ public class User implements IEntity {
             user = null;
         } else {
             user = users.get(0);
-            Session.bindUser(user);
+            SessionManager.getSession().setUser(user);
         }
         return user;
     }
@@ -109,7 +103,7 @@ public class User implements IEntity {
     @GET
     @POST
     public void logout() throws Exception {
-        Session.destroy();
+        SessionManager.invalidateSession(SessionManager.getSession().getSessionId());
     }
 
     public boolean hasPermission(String objetctCode, String operationCode) throws Exception {
@@ -212,7 +206,9 @@ public class User implements IEntity {
         this.password = password;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.golf.dao.entity.IEntity#getHelper()
      */
     @Override

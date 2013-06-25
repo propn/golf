@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 
 import com.golf.Golf;
 import com.golf.mvc.anno.MediaType;
-import com.golf.mvc.session.Session;
-import com.golf.mvc.view.ViewRender;
+import com.golf.mvc.session.ISession;
+import com.golf.mvc.session.SessionManager;
+import com.golf.mvc.session.imp.Session;
 import com.golf.mvc.view.BuilderFactory;
 import com.golf.mvc.view.ErrorViewBuilder;
+import com.golf.mvc.view.ViewRender;
 import com.golf.utils.StringUtils;
 
 /**
@@ -125,9 +127,14 @@ public class GolfFilter extends Golf implements Filter {
         request.setCharacterEncoding(Golf.charsetName);
         response.setCharacterEncoding(Golf.charsetName);
         // 更新用户最后访问时间
-        String sid = request.getSession().getId();
-        Session.bindCtx(sid);
-        // 
+        String sessionId = request.getSession().getId();
+        ISession session = SessionManager.getSession(sessionId);
+        if (null == session) {
+            session = new Session();
+            session.setSessionId(sessionId);
+            SessionManager.setSession(session);
+        }
+        //
         String servletPath = request.getServletPath();
         // 静态文件设置缓存
         if (cachePattern.matcher(servletPath).matches() && !debug) {

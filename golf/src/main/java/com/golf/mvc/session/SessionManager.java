@@ -3,14 +3,7 @@
  */
 package com.golf.mvc.session;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalCause;
-import com.google.common.cache.RemovalListener;
-import com.google.common.cache.RemovalNotification;
+import com.golf.mvc.session.imp.ISessionCache;
 
 /**
  * Session管理器
@@ -19,43 +12,37 @@ import com.google.common.cache.RemovalNotification;
  * 
  */
 public class SessionManager {
-    
-    
 
-}
+    /* 静态变量:SessionCache */
+    public static ISessionCache<String, ISession> sessionCache = SessionCacheFactory.getGoogleSessionCache();
+    /* 线程变量:当前Session对象 */
+    static ThreadLocal<ISession> ctx = new ThreadLocal<ISession>();
 
-class CacheBuild {
-
-    /**
-     * 构造Cache对象
-     * 
-     * @return
-     */
-    public static <K, V> Cache<String, Map<String, Object>> buildCache() {
-
-        RemovalListener<String, Map<String, Object>> listener = new SessionRemovalListener();
-
-        Cache<String, Map<String, Object>> cache = CacheBuilder.newBuilder().maximumSize(200)
-                .expireAfterAccess(30, TimeUnit.MINUTES).removalListener(listener).build();
-
-        return cache;
+    public static void clearSessionCache() {
+        sessionCache.invalidateAll();
     }
 
-}
-
-/**
- * Cache超时清理
- * 
- * @author Thunder.Hsu 2013-6-22
- */
-class SessionRemovalListener implements RemovalListener<String, Map<String, Object>> {
-    @Override
-    public void onRemoval(RemovalNotification<String, Map<String, Object>> notification) {
-        if (notification.getCause() == RemovalCause.EXPIRED) {
-            Map<String, Object> session = notification.getValue();
-
-        } else {
-
-        }
+    public static ISession getSession() {
+        return ctx.get();
     }
+
+    public static ISession getSession(String sessionId) {
+        return sessionCache.get(sessionId);
+    }
+
+    public static ISession setSession(ISession session) {
+        sessionCache.put(session.getSessionId(), session);
+        ctx.set(session);
+        return session;
+    }
+
+    public static void invalidateSession(String sessionId) {
+        sessionCache.invalidate(sessionId);
+        ctx.set(null);
+    }
+
+    public static void expSession(ISession session) {
+        sessionCache.invalidate(session.getSessionId());
+    }
+
 }

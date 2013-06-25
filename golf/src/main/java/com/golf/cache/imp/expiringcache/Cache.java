@@ -8,7 +8,8 @@
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  */
-package com.golf.utils.cache;
+package com.golf.cache.imp.expiringcache;
+
 
 /**
  * @author Thunder.Hsu 2012-12-21
